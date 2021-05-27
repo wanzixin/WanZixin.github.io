@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>正则表达式 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="正则表达式是一种用来匹配字符串强有力的武器。Java内置了强大的正则表达式的支持。本章我们会详细介绍如何在Java程序中使用正则表达式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式">
+<meta property="og:url" content="https://wanzixin.github.io/2021/05/27/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="正则表达式是一种用来匹配字符串强有力的武器。Java内置了强大的正则表达式的支持。本章我们会详细介绍如何在Java程序中使用正则表达式。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-05-27T11:39:51.000Z">
+<meta property="article:modified_time" content="2021-05-27T11:40:29.876Z">
+<meta property="article:author" content="WanZixin">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/LifeStyle">Lifestyle</a>
+            
+            <a class="navbar-item "
+               href="/categories/Music">Music</a>
+            
+            <a class="navbar-item "
+               href="/categories/Technology">Technology</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#正则表达式简介">1&nbsp;&nbsp;<b>正则表达式简介</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#匹配规则">2&nbsp;&nbsp;<b>匹配规则</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#匹配任意字符">2.1&nbsp;&nbsp;匹配任意字符</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#匹配数字">2.2&nbsp;&nbsp;匹配数字</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#匹配常用字符">2.3&nbsp;&nbsp;匹配常用字符</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#匹配空格字符">2.4&nbsp;&nbsp;匹配空格字符</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#匹配非数字">2.5&nbsp;&nbsp;匹配非数字</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#重复匹配">2.6&nbsp;&nbsp;重复匹配</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结">2.7&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#复杂匹配规则">3&nbsp;&nbsp;<b>复杂匹配规则</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#匹配开头和结尾">3.1&nbsp;&nbsp;匹配开头和结尾</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#匹配指定范围">3.2&nbsp;&nbsp;匹配指定范围</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#或规则匹配">3.3&nbsp;&nbsp;或规则匹配</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用括号">3.4&nbsp;&nbsp;使用括号</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结-1">3.5&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#分组匹配">4&nbsp;&nbsp;<b>分组匹配</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Pattern">4.1&nbsp;&nbsp;Pattern</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#非贪婪匹配">5&nbsp;&nbsp;<b>非贪婪匹配</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#搜索和替换">6&nbsp;&nbsp;<b>搜索和替换</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#分割字符串">6.1&nbsp;&nbsp;分割字符串</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#搜索字符串">6.2&nbsp;&nbsp;搜索字符串</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#替换字符串">6.3&nbsp;&nbsp;替换字符串</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#反向引用">6.4&nbsp;&nbsp;反向引用</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            正则表达式
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>May 27 2021</span>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            30 minutes read (About 4513 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>正则表达式是一种用来匹配字符串强有力的武器。Java内置了强大的正则表达式的支持。本章我们会详细介绍如何在Java程序中使用正则表达式。<span id="more"></span></p>
+<h2 id="正则表达式简介"><a href="#正则表达式简介" class="headerlink" title="正则表达式简介"></a>正则表达式简介</h2><p>在了解正则表达式之前，我们先看几个非常常见的问题：</p>
+<ul>
+<li>如何判断字符串是否是有效的电话号码？例如：<code>010-1234567</code>，<code>123ABC456</code>，<code>13510001000</code>等；</li>
+<li>如何判断字符串是否是有效的电子邮件地址？例如：<code>test@example.com</code>，<code>test#example</code>等；</li>
+<li>如何判断字符串是否是有效的时间？例如：<code>12:34</code>，<code>09:60</code>，<code>99:99</code>等。</li>
+</ul>
+<p>一种直观的想法是通过程序判断，这种方法需要为每种用例创建规则，然后用代码实现。下面是判断手机号的代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">isValidMobileNumber</span><span class="hljs-params">(String s)</span> </span>{</span><br><span class="line">    <span class="hljs-comment">// 是否是11位？</span></span><br><span class="line">    <span class="hljs-keyword">if</span> (s.length() != <span class="hljs-number">11</span>) {</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-comment">// 每一位都是0~9：</span></span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>; i&lt;s.length(); i++) {</span><br><span class="line">        <span class="hljs-keyword">char</span> c = s.charAt(i);</span><br><span class="line">        <span class="hljs-keyword">if</span> (c &lt; <span class="hljs-string">'0'</span> || c &gt; <span class="hljs-string">'9'</span>) {</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上述代码仅仅做了非常粗略的判断，并未考虑首位数字不能为<code>0</code>等更详细的情况。</p>
+<p>除了判断手机号，我们还需要判断电子邮件地址、电话、邮编等等：</p>
+<ul>
+<li>boolean isValidMobileNumber(String s) { … }</li>
+<li>boolean isValidEmail(String s) { … }</li>
+<li>boolean isValidPhoneNumber(String s) { … }</li>
+<li>boolean isValidZipCode(String s) { … }</li>
+<li>…</li>
+</ul>
+<p>为每一种判断逻辑编写代码实在是太繁琐了。有没有更简单的方法？</p>
+<p>有！用正则表达式。</p>
+<p>正则表达式可以用字符串来描述规则，并用来匹配字符串。例如，判断手机号，我们用正则表达式<code>\d{11}</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">isValidMobileNumber</span><span class="hljs-params">(String s)</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> s.matches(<span class="hljs-string">"\\d{11}"</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用正则表达式的好处有哪些呢？一个正则表达式就是一个描述规则的字符串，所以，只需要编写正确的规则，我们就可以让正则表达式引擎去判断目标字符串是否符合规则。</p>
+<p>正则表达式是一套标准，它可以用于任何语言。Java标准库<code>java.util.regex</code>包内置了正则表达式引擎，在Java程序中使用正则表达式非常简单。</p>
+<p>举个例子：要判断用户输入的年份是否是<code>20##</code>年，我们先写出规则如下：</p>
+<p>一共有4个字符，分别是：<code>2</code>，<code>0</code>，<code>0~9任意数字</code>，<code>0~9任意数字</code>。</p>
+<p>对应的正则表达式就是：<code>20\d\d</code>，其中<code>\d</code>表示任意一个数字。</p>
+<p>把正则表达式转换为Java字符串就变成了<code>20\\d\\d</code>，注意Java字符串用<code>\\</code>表示<code>\</code>。</p>
+<p>最后，用正则表达式匹配一个字符串的代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{</span><br><span class="line">        String regex = <span class="hljs-string">"20\\d\\d"</span>;</span><br><span class="line">        System.out.println(<span class="hljs-string">"2019"</span>.matches(regex)); <span class="hljs-comment">// true</span></span><br><span class="line">        System.out.println(<span class="hljs-string">"2100"</span>.matches(regex)); <span class="hljs-comment">// false</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="匹配规则"><a href="#匹配规则" class="headerlink" title="匹配规则"></a>匹配规则</h2><p>正则表达式的匹配规则是从左到右按规则匹配。我们首先来看如何使用正则表达式来做精确匹配。</p>
+<p>对于正则表达式<code>abc</code>来说，它只能精确地匹配字符串<code>"abc"</code>，不能匹配<code>"ab"</code>，<code>"Abc"</code>，<code>"abcd"</code>等其他任何字符串。</p>
+<p>如果正则表达式有特殊字符，那就需要用<code>\</code>转义。例如，正则表达式<code>a\&amp;c</code>，其中<code>\&amp;</code>是用来匹配特殊字符<code>&amp;</code>的，它能精确匹配字符串<code>"a&amp;c"</code>，但不能匹配<code>"ac"</code>、<code>"a-c"</code>、<code>"a&amp;&amp;c"</code>等。</p>
+<p>要注意正则表达式在Java代码中也是一个字符串，所以，对于正则表达式<code>a\&amp;c</code>来说，对应的Java字符串是<code>"a\\&amp;c"</code>，因为<code>\</code>也是Java字符串的转义字符，两个<code>\\</code>实际上表示的是一个<code>\</code>。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String re2 = <span class="hljs-string">"a\\&amp;c"</span>; <span class="hljs-comment">// 对应的正则是a\&amp;c</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果想匹配非ASCII字符，例如中文，那就用<code>\u####</code>的十六进制表示，例如：<code>a\u548cc</code>匹配字符串<code>"a和c"</code>，中文字符<code>和</code>的Unicode编码是<code>548c</code>。</p>
+<h3 id="匹配任意字符"><a href="#匹配任意字符" class="headerlink" title="匹配任意字符"></a>匹配任意字符</h3><p>精确匹配实际上用处不大，因为我们直接用<code>String.equals()</code>就可以做到。大多数情况下，我们想要的匹配规则更多的是模糊匹配。我们可以用<code>.</code>匹配任意一个字符。</p>
+<p>例如，正则表达式<code>a.c</code>中间的<code>.</code>可以匹配一个任意字符，例如，下面的字符串都可以被匹配：</p>
+<ul>
+<li><code>"abc"</code>，因为<code>.</code>可以匹配字符<code>b</code>；</li>
+<li><code>"a&amp;c"</code>，因为<code>.</code>可以匹配字符<code>&amp;</code>；</li>
+<li><code>"acc"</code>，因为<code>.</code>可以匹配字符<code>c</code>。</li>
+</ul>
+<p>但它不能匹配<code>"ac"</code>、<code>"a&amp;&amp;c"</code>，因为<code>.</code>匹配一个字符且仅限一个字符。</p>
+<h3 id="匹配数字"><a href="#匹配数字" class="headerlink" title="匹配数字"></a>匹配数字</h3><p>如果我们只想匹配<code>0</code>~`9<code>之间的数字，可以用</code>\d<code>匹配。例如，正则表达式</code>00\d`可以匹配：</p>
+<ul>
+<li><code>"007"</code>，因为<code>\d</code>可以匹配字符<code>7</code>；</li>
+<li><code>"008"</code>，因为<code>\d</code>可以匹配字符<code>8</code>。</li>
+</ul>
+<p>它不能匹配<code>"00A"</code>，<code>"0077"</code>，因为<code>\d</code>仅限单个数字字符。</p>
+<h3 id="匹配常用字符"><a href="#匹配常用字符" class="headerlink" title="匹配常用字符"></a>匹配常用字符</h3><p>用<code>\w</code>可以匹配一个字母、数字或下划线，w的意思是word。例如，<code>java\w</code>可以匹配：</p>
+<ul>
+<li><code>"javac"</code>，因为<code>\w</code>可以匹配英文字符<code>c</code>；</li>
+<li><code>"java9"</code>，因为<code>\w</code>可以匹配数字字符<code>9</code>；。</li>
+<li><code>"java_"</code>，因为<code>\w</code>可以匹配下划线<code>_</code>。</li>
+</ul>
+<p>它不能匹配<code>"java#"</code>，<code>"java "</code>，因为<code>\w</code>不能匹配<code>#</code>、空格等字符。</p>
+<h3 id="匹配空格字符"><a href="#匹配空格字符" class="headerlink" title="匹配空格字符"></a>匹配空格字符</h3><p>用<code>\s</code>可以匹配一个空格字符，注意空格字符不但包括空格<code> </code>，还包括tab字符（在Java中用<code>\t</code>表示）。例如，<code>a\sc</code>可以匹配：</p>
+<ul>
+<li><code>"a c"</code>，因为<code>\s</code>可以匹配空格字符<code> </code>；</li>
+<li><code>"a c"</code>，因为<code>\s</code>可以匹配tab字符<code>\t</code>。</li>
+</ul>
+<p>它不能匹配<code>"ac"</code>，<code>"abc"</code>等。</p>
+<h3 id="匹配非数字"><a href="#匹配非数字" class="headerlink" title="匹配非数字"></a>匹配非数字</h3><p>用<code>\d</code>可以匹配一个数字，而<code>\D</code>可以匹配一个非数字。例如，<code>00\D</code>可以匹配：</p>
+<ul>
+<li><code>"00A"</code>，因为<code>\D</code>可以匹配非数字字符<code>A</code>；</li>
+<li><code>"00#"</code>，因为<code>\D</code>可以匹配非数字字符<code>#</code>。</li>
+</ul>
+<p><code>00\d</code>可以匹配的字符串<code>"007"</code>，<code>"008"</code>等，<code>00\D</code>是不能匹配的。</p>
+<p>类似的，<code>\W</code>可以匹配<code>\w</code>不能匹配的字符，<code>\S</code>可以匹配<code>\s</code>不能匹配的字符，这几个正好是反着来的。</p>
+<h3 id="重复匹配"><a href="#重复匹配" class="headerlink" title="重复匹配"></a>重复匹配</h3><p>我们用<code>\d</code>可以匹配一个数字，例如，<code>A\d</code>可以匹配<code>"A0"</code>，<code>"A1"</code>，如果要匹配多个数字，比如<code>"A380"</code>，怎么办？修饰符<code>*</code>可以匹配任意个字符，包括0个字符。我们用<code>A\d*</code>可以匹配：</p>
+<ul>
+<li><code>A</code>：因为<code>\d*</code>可以匹配0个数字；</li>
+<li><code>A0</code>：因为<code>\d*</code>可以匹配1个数字<code>0</code>；</li>
+<li><code>A380</code>：因为<code>\d*</code>可以匹配多个数字<code>380</code>。</li>
+</ul>
+<p>修饰符<code>+</code>至少可以匹配至少一个字符。我们用<code>A\d+</code>可以匹配：</p>
+<ul>
+<li><code>A0</code>：因为<code>\d+</code>可以匹配1个数字<code>0</code>；</li>
+<li><code>A380</code>：因为<code>\d+</code>可以匹配多个数字<code>380</code>。</li>
+</ul>
+<p>但它无法匹配<code>"A"</code>，因为修饰符<code>+</code>要求至少一个字符。</p>
+<p>修饰符<code>?</code>可以匹配0个或1个字符。我们用<code>A\d?</code>可以匹配：</p>
+<ul>
+<li><code>A</code>：因为<code>\d?</code>可以匹配0个数字；</li>
+<li><code>A0</code>：因为<code>\d?</code>可以匹配1个数字<code>0</code>。</li>
+</ul>
+<p>但它无法匹配<code>"A33"</code>，因为修饰符<code>?</code>超过1个字符就不能匹配了。</p>
+<p>如果我们想精确指定n个字符怎么办？用修饰符<code>{n}</code>就可以。我们用<code>A\d{3}</code>可以匹配：</p>
+<ul>
+<li><code>A380</code>：因为<code>\d{3}</code>可以匹配3个数字<code>380</code>。</li>
+</ul>
+<p>如果我们想匹配n~m个字符怎么办？用修饰符<code>{n,m}</code>就可以。我们用<code>A\d{3,5}</code>可以匹配：</p>
+<ul>
+<li><code>A380</code>：因为<code>\d{3,5}</code>可以匹配3个数字<code>380</code>；</li>
+<li><code>A3800</code>：因为<code>\d{3,5}</code>可以匹配4个数字<code>3800</code>；</li>
+<li><code>A38000</code>：因为<code>\d{3,5}</code>可以匹配5个数字<code>38000</code>。</li>
+</ul>
+<p>如果没有上限，那么修饰符<code>{n,}</code>就可以匹配至少n个字符。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>单个字符的匹配规则如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">正则表达式</th>
+<th align="center">规则</th>
+<th align="center">可以匹配</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>A</code></td>
+<td align="center">指定字符</td>
+<td align="center"><code>A</code></td>
+</tr>
+<tr>
+<td align="center"><code>\u548c</code></td>
+<td align="center">指定Unicode字符</td>
+<td align="center"><code>和</code></td>
+</tr>
+<tr>
+<td align="center"><code>.</code></td>
+<td align="center">任意字符</td>
+<td align="center"><code>a</code>，<code>b</code>，<code>&amp;</code>，<code>0</code></td>
+</tr>
+<tr>
+<td align="center"><code>\d</code></td>
+<td align="center">数字0~9</td>
+<td align="center"><code>0</code>~`9`</td>
+</tr>
+<tr>
+<td align="center"><code>\w</code></td>
+<td align="center">大小写字母，数字和下划线</td>
+<td align="center"><code>a</code><del><code>z</code>，<code>A</code></del><code>Z</code>，<code>0</code>~`9<code>，</code>_`</td>
+</tr>
+<tr>
+<td align="center"><code>\s</code></td>
+<td align="center">空格、Tab键</td>
+<td align="center">空格，Tab</td>
+</tr>
+<tr>
+<td align="center"><code>\D</code></td>
+<td align="center">非数字</td>
+<td align="center"><code>a</code>，<code>A</code>，<code>&amp;</code>，<code>_</code>，……</td>
+</tr>
+<tr>
+<td align="center"><code>\W</code></td>
+<td align="center">非\w</td>
+<td align="center"><code>&amp;</code>，<code>@</code>，<code>中</code>，……</td>
+</tr>
+<tr>
+<td align="center"><code>\S</code></td>
+<td align="center">非\s</td>
+<td align="center"><code>a</code>，<code>A</code>，<code>&amp;</code>，<code>_</code>，……</td>
+</tr>
+</tbody></table>
+<p>多个字符的匹配规则如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">正则表达式</th>
+<th align="center">规则</th>
+<th align="center">可以匹配</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>A*</code></td>
+<td align="center">任意个数字符</td>
+<td align="center">空，<code>A</code>，<code>AA</code>，<code>AAA</code>，……</td>
+</tr>
+<tr>
+<td align="center"><code>A+</code></td>
+<td align="center">至少1个字符</td>
+<td align="center"><code>A</code>，<code>AA</code>，<code>AAA</code>，……</td>
+</tr>
+<tr>
+<td align="center"><code>A?</code></td>
+<td align="center">0个或1个字符</td>
+<td align="center">空，<code>A</code></td>
+</tr>
+<tr>
+<td align="center"><code>A{3}</code></td>
+<td align="center">指定个数字符</td>
+<td align="center"><code>AAA</code></td>
+</tr>
+<tr>
+<td align="center"><code>A{2,3}</code></td>
+<td align="center">指定范围个数字符</td>
+<td align="center"><code>AA</code>，<code>AAA</code></td>
+</tr>
+<tr>
+<td align="center"><code>A{2,}</code></td>
+<td align="center">至少n个字符</td>
+<td align="center"><code>AA</code>，<code>AAA</code>，<code>AAAA</code>，……</td>
+</tr>
+<tr>
+<td align="center"><code>A{0,3}</code></td>
+<td align="center">最多n个字符</td>
+<td align="center">空，<code>A</code>，<code>AA</code>，<code>AAA</code></td>
+</tr>
+</tbody></table>
+<h2 id="复杂匹配规则"><a href="#复杂匹配规则" class="headerlink" title="复杂匹配规则"></a>复杂匹配规则</h2><h3 id="匹配开头和结尾"><a href="#匹配开头和结尾" class="headerlink" title="匹配开头和结尾"></a>匹配开头和结尾</h3><p>我们用<code>^</code>表示开头，<code>$</code>表示结尾。例如<code>^A\d{3}$</code>，可以匹配<code>"A001"</code>、<code>"A380"</code>。</p>
+<h3 id="匹配指定范围"><a href="#匹配指定范围" class="headerlink" title="匹配指定范围"></a>匹配指定范围</h3><p>如果我们规定一个7～8位数字的电话号码不能以0开头，应该怎么写匹配规则呢？<code>\d{7,8}</code></p>
+<p>是不行的，因为第一个<code>\d</code>可以匹配到<code>0</code>。</p>
+<p>使用<code>[...]</code>可以匹配范围内的字符，例如<code>[123456789]</code>可以匹配<code>1</code>~`9<code>，这样就可以写出上述电话号码的规则：</code>[123456789]\d{6,7}<code>。把所有的字符列出来太麻烦，还有一种写法，</code>[1-9]`就可以。</p>
+<p>要匹配大小写不限的十六进制数，比如<code>1A2b3c</code>，我们可以这样写：<code>[0-9a-fA-F]</code>，它表示一共可以匹配以下任意范围的字符：</p>
+<ul>
+<li><code>0-9</code>：字符<code>0</code>~`9`；</li>
+<li><code>a-f</code>：字符<code>a</code>~`f`；</li>
+<li><code>A-F</code>：字符<code>A</code>~`F`。</li>
+</ul>
+<p>如果要匹配6位十六进制数，前面介绍的<code>{n}</code>仍然可以继续配合使用：<code>[0-9a-fA-F]{6}</code>。</p>
+<p><code>[...]</code>还有一种排除法，即不包含指定范围的字符。假定我们要匹配任意字符，但不包括数字，可以写<code>[^1-9]{3}</code>：</p>
+<ul>
+<li>可以匹配<code>"ABC"</code>，因为不包含字符<code>1</code>~`9`；</li>
+<li>可以匹配<code>"A00"</code>，因为不包含字符<code>1</code>~`9`；</li>
+<li>不能匹配<code>"A01"</code>，因为包含字符<code>1</code>；</li>
+<li>不能匹配<code>"A05"</code>，因为包含字符<code>5</code>。</li>
+</ul>
+<h3 id="或规则匹配"><a href="#或规则匹配" class="headerlink" title="或规则匹配"></a>或规则匹配</h3><p>用<code>|</code>连接的两个正则规则是或规则，例如，<code>AB|CD</code>表示可以匹配<code>AB</code>或<code>CD</code>。</p>
+<h3 id="使用括号"><a href="#使用括号" class="headerlink" title="使用括号"></a>使用括号</h3><p>我们想要匹配字符串<code>learn java</code>、<code>learn php</code>和<code>learn go</code>怎么办？一个最简单的规则是<code>learn\sjava|learn\sphp|learn\sgo</code>，但是这个规则太复杂了，可以把公共部分提出来，然后用<code>(...)</code>把子规则括起来表示成<code>learn\s(java|php|go)</code>。</p>
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p>复杂匹配规则主要有：</p>
+<table>
+<thead>
+<tr>
+<th align="center">正则表达式</th>
+<th align="center">规则</th>
+<th align="center">可以匹配</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">^</td>
+<td align="center">开头</td>
+<td align="center">字符串开头</td>
+</tr>
+<tr>
+<td align="center">$</td>
+<td align="center">结尾</td>
+<td align="center">字符串结束</td>
+</tr>
+<tr>
+<td align="center">[ABC]</td>
+<td align="center">[…]内任意字符</td>
+<td align="center">A，B，C</td>
+</tr>
+<tr>
+<td align="center">[A-F0-9xy]</td>
+<td align="center">指定范围的字符</td>
+<td align="center"><code>A</code>，……，<code>F</code>，<code>0</code>，……，<code>9</code>，<code>x</code>，<code>y</code></td>
+</tr>
+<tr>
+<td align="center">[^A-F]</td>
+<td align="center">指定范围外的任意字符</td>
+<td align="center">非<code>A</code>~`F`</td>
+</tr>
+<tr>
+<td align="center">AB|CD|EF</td>
+<td align="center">AB或CD或EF</td>
+<td align="center"><code>AB</code>，<code>CD</code>，<code>EF</code></td>
+</tr>
+</tbody></table>
+<h2 id="分组匹配"><a href="#分组匹配" class="headerlink" title="分组匹配"></a>分组匹配</h2><p>我们前面讲到的<code>(...)</code>可以用来把一个子规则括起来，这样写<code>learn\s(java|php|go)</code>就可以更方便地匹配长字符串了。实际上，<code>(...)</code>还有一个重要作用，就是分组匹配。</p>
+<p>我们来看一下如何用正则匹配<code>区号-电话号</code>这个规则，利用前面的知识：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\d{3,4}-\d{6,8}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>虽然这个正则匹配规则很简单，但是往往匹配成功后，下一步是提取区号和电话号，分别存入数据库。于是问题来了：如何提取匹配的子串？</p>
+<p>当然可以用String提供的<code>indexOf()</code>和<code>substring()</code>这些方法，但它们从正则匹配的字符串中提取子串没有通用性。正确的方法是用<code>(...)</code>先把要提取的规则分组，把上述正则表达式变为：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(\d{3,4})-{\d{6,8}}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>那么匹配后，如何按括号提取子串呢？</p>
+<p>现在我们没法用<code>String.matches()</code>这样简单的判断方法了，必须引入<code>java.util.regex</code>，用<code>Pattern</code>对象匹配，匹配后获得一个<code>Matcher</code>对象，如果匹配成功，就可以直接从<code>Matcher.group(index)</code>返回子串。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> java.util.regex.*;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{</span><br><span class="line">  Pattern p = Pattern.compile(<span class="hljs-string">"(\\d{3,4})\\-(\\d{7,8})"</span>);</span><br><span class="line">  Matcher m = p.matcher(<span class="hljs-string">"010-12345678"</span>);</span><br><span class="line">  <span class="hljs-keyword">if</span> (m.matches()) {</span><br><span class="line">    String g1 = m.group(<span class="hljs-number">1</span>);</span><br><span class="line">    String g2 = m.group(<span class="hljs-number">2</span>);</span><br><span class="line">    System.out.println(g1);</span><br><span class="line">    System.out.println(g2);</span><br><span class="line">  } <span class="hljs-keyword">else</span> {</span><br><span class="line">  	System.out.println(<span class="hljs-string">"匹配失败!"</span>);</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>要特别注意，<code>Matcher.group(index)</code>方法的参数用1表示第一个子串，2表示第二个子串。如果我们传入0，会得到什么呢？答案是整个正则匹配到的字符串。</p>
+<h3 id="Pattern"><a href="#Pattern" class="headerlink" title="Pattern"></a>Pattern</h3><p>我们在前面的代码中用到的正则表达式代码是<code>String.matches()</code>方法，而我们在分组提取的代码中用的是<code>java.util.regex</code>包里面的<code>Pattern</code>类和<code>Matcher</code>类。实际上这两种代码本质上是一样的，因为<code>String.matches()</code>方法内部调用的就是<code>Pattern</code>和<code>Matcher</code>类的方法。</p>
+<p>但是反复使用<code>String.matches()</code>对同一个正则表达式进行多次匹配效率较低，因为每次都会创建出一样的<code>Pattern</code>对象。完全可以先创建出一个<code>Pattern</code>对象，然后反复使用，就可以实现编译一次，多次匹配。</p>
+<p>使用<code>Matcher</code>时，必须首先调用<code>matches()</code>判断是否匹配成功，成功后，才能调用<code>group()</code>提取子串。利用提取子串的功能，我们很容易地就获得了区号和电话号两部分字符串。</p>
+<h2 id="非贪婪匹配"><a href="#非贪婪匹配" class="headerlink" title="非贪婪匹配"></a>非贪婪匹配</h2><p>介绍非贪婪匹配之前，我们先看一个简单的问题。给定一个字符串表示的数字，判断该数字末尾0的个数。例如：</p>
+<ul>
+<li><code>"123000"</code>：3个<code>0</code></li>
+<li><code>"10100"</code>：2个<code>0</code></li>
+<li><code>"1001"</code>：0个<code>0</code></li>
+</ul>
+<p>可以很容易地写出该正则表达式：<code>(\d+)(0*)</code>。我们期望的分组匹配结果是：</p>
+<table>
+<thead>
+<tr>
+<th align="center">input</th>
+<th align="center"><code>\d+</code></th>
+<th align="center"><code>0*</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">123000</td>
+<td align="center">“123”</td>
+<td align="center">“000”</td>
+</tr>
+<tr>
+<td align="center">10100</td>
+<td align="center">“101”</td>
+<td align="center">“00”</td>
+</tr>
+<tr>
+<td align="center">1001</td>
+<td align="center">“1001”</td>
+<td align="center">“”</td>
+</tr>
+</tbody></table>
+<p>但实际上的分组匹配结果是：</p>
+<table>
+<thead>
+<tr>
+<th align="center">input</th>
+<th align="center"><code>\d+</code></th>
+<th align="center"><code>0*</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">123000</td>
+<td align="center">“123000”</td>
+<td align="center">“”</td>
+</tr>
+<tr>
+<td align="center">10100</td>
+<td align="center">“10100”</td>
+<td align="center">“”</td>
+</tr>
+<tr>
+<td align="center">1001</td>
+<td align="center">“1001”</td>
+<td align="center">“”</td>
+</tr>
+</tbody></table>
+<p>仔细观察上述结果，实际上它是完全合理的，因为<code>\d+</code>确实可以匹配一个及以上的数字字符。这是因为正则表达式默认使用贪婪匹配：任何一个正则，它总是尽可能多地向后匹配。所以，<code>\d+</code>总是会把后面的0包含进来。</p>
+<p>要让<code>\d+</code>尽量少匹配，让<code>0*</code>尽量多匹配，我们就必须让<code>\d+</code>使用非贪婪匹配。在规则<code>\d+</code>后面加个<code>?</code>即可表示非贪婪匹配。改写后的正则表达式为<code>(\d+?)(0*)</code>。</p>
+<p>因此，给定一个规则，加上<code>?</code>后就变成了非贪婪匹配。</p>
+<p>我们再来看个例子。我们再来看这个正则表达式<code>(\d??)(9*)</code>，注意<code>\d?</code>表示匹配0个或1个数字，后面第二个<code>?</code>表示非贪婪匹配，因此，给定字符串<code>"9999"</code>，匹配到的两个子串分别是<code>""</code>和<code>"9999"</code>，因为对于<code>\d?</code>来说，可以匹配1个<code>9</code>，也可以匹配0个<code>9</code>，但是因为后面的<code>?</code>表示非贪婪匹配，它就会尽可能少的匹配，结果是匹配了0个<code>9</code>。</p>
+<h2 id="搜索和替换"><a href="#搜索和替换" class="headerlink" title="搜索和替换"></a>搜索和替换</h2><h3 id="分割字符串"><a href="#分割字符串" class="headerlink" title="分割字符串"></a>分割字符串</h3><p>使用正则表达式分割字符串可以实现更灵活的功能。<code>String.split()</code>方法传入的正是正则表达式。如果我们想让用户输入一组标签，然后把标签提取出来，因为用户的输入往往是不规范的，这时，使用合适的正则表达式，就可以消除多个空格、混合<code>,</code>和<code>;</code>这些不规范的输入，直接提取出规范的字符串。</p>
+<h3 id="搜索字符串"><a href="#搜索字符串" class="headerlink" title="搜索字符串"></a>搜索字符串</h3><p>我们来看一个例子。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> java.util.regex.*;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{</span><br><span class="line">        String s = <span class="hljs-string">"the quick brown fox jumps over the lazy dog."</span>;</span><br><span class="line">        Pattern p = Pattern.compile(<span class="hljs-string">"\\wo\\w"</span>);</span><br><span class="line">        Matcher m = p.matcher(s);</span><br><span class="line">        <span class="hljs-keyword">while</span> (m.find()) {</span><br><span class="line">            String sub = s.substring(m.start(), m.end());</span><br><span class="line">            System.out.println(sub);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>我们获取到<code>Matcher</code>对象后，不需要调用<code>matches()</code>方法（因为匹配整个串肯定返回false），而是反复调用<code>find()</code>方法，在整个串中搜索能匹配上<code>\\wo\\w</code>规则的子串，并打印出来。这种方式比<code>String.indexOf()</code>要灵活得多，因为我们搜索的规则是3个字符：中间必须是<code>o</code>，前后两个必须是字符<code>[A-Za-z0-9_]</code>。</p>
+<h3 id="替换字符串"><a href="#替换字符串" class="headerlink" title="替换字符串"></a>替换字符串</h3><p>使用正则表达式替换字符串可以直接调用<code>String.replaceAll()</code>，它的第一个参数是正则表达式，第二个参数是待替换的字符串。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{        String s = <span class="hljs-string">"The     quick\t\t brown   fox  jumps   over the  lazy dog."</span>;        String r = s.replaceAll(<span class="hljs-string">"\\s+"</span>, <span class="hljs-string">" "</span>); <span class="hljs-comment">// \s匹配空格字符和tab字符，把不规范的连续空格分隔的句子变成了规范的句子        System.out.println(r); // "The quick brown fox jumps over the lazy dog."    }}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="反向引用"><a href="#反向引用" class="headerlink" title="反向引用"></a>反向引用</h3><p>如果我们要把搜索到的指定字符串按规则替换，比如前后各加一个<code>&lt;b&gt;xxxx&lt;/b&gt;</code>，这个时候，使用<code>replaceAll()</code>的时候，我们传入的第二个参数可以使用<code>$1</code>、<code>$2</code>来反向引用匹配到的子串。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{        String s = <span class="hljs-string">"the quick brown fox jumps over the lazy dog."</span>;        String r = s.replaceAll(<span class="hljs-string">"\\s([a-z]{4})\\s"</span>, <span class="hljs-string">" &lt;b&gt;$1&lt;/b&gt; "</span>);        System.out.println(r);<span class="hljs-comment">// the quick brown fox jumps &lt;b&gt;over&lt;/b&gt; the &lt;b&gt;lazy&lt;/b&gt; dog.    }}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>它实际上把任何4字符单词的前后用<code>&lt;b&gt;xxxx&lt;/b&gt;</code>括起来。实现替换的关键是<code>&lt;b&gt;$1&lt;/b&gt;</code>，它用匹配的分组子串<code>([a-z]{4})</code>替换了<code>$1</code>。</p>
+</body></html>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Java/">#Java</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2021/05/27/%E5%8A%A0%E5%AF%86%E4%B8%8E%E5%AE%89%E5%85%A8/">加密与安全</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2021/05/27/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">单元测试</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
