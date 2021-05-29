@@ -24,7 +24,7 @@
 <meta property="og:description" content="Maven是一个Java项目管理和构建工具，它可以定义项目结构、项目依赖，并使用统一的方式进行自动化构建，是Java项目不可缺少的工具。本章我们详细介绍如何使用Maven。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-27T11:45:16.000Z">
-<meta property="article:modified_time" content="2021-05-27T11:48:08.320Z">
+<meta property="article:modified_time" content="2021-05-27T12:34:46.849Z">
 <meta property="article:author" content="WanZixin">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -123,6 +123,20 @@
                 <div class="navbar-dropdown is-right">
                     
                     
+                    
+                    
+                    <a class="navbar-item" href="#Maven介绍">1&nbsp;&nbsp;<b>Maven介绍</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Maven项目结构">1.1&nbsp;&nbsp;Maven项目结构</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#依赖管理">2&nbsp;&nbsp;<b>依赖管理</b></a>
+                    
                 </div>
             </div>
             
@@ -157,14 +171,34 @@
         <span class="column is-narrow">
             
             
-            a few seconds read (About 73 words)
+            5 minutes read (About 752 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
         <html><head></head><body><p>Maven是一个Java项目管理和构建工具，它可以定义项目结构、项目依赖，并使用统一的方式进行自动化构建，是Java项目不可缺少的工具。本章我们详细介绍如何使用Maven。<span id="more"></span></p>
-</body></html>
+<h2 id="Maven介绍"><a href="#Maven介绍" class="headerlink" title="Maven介绍"></a>Maven介绍</h2><p>我们先来看看一个Java项目需要的东西。首先，我们需要确定引入哪些依赖包。其次，我们要确定项目的目录结构。例如，<code>src</code>目录存放Java源码，<code>resources</code>目录存放配置文件，<code>bin</code>目录存放编译后的生成的<code>.class</code>文件。此外，我们还需要配置环境，比如JDK的版本，编译打包流程，当前代码的版本号。最后，除了使用IDE编译外，我们还必须能通过命令行工具进行编译，才能让项目在一个独立的服务器上编译、测试、部署。</p>
+<p>这些工作难度不大，但是非常繁琐和耗时。</p>
+<p>Maven就是专门为Java项目打造的管理和构建工具。它的主要功能有：</p>
+<ul>
+<li>提供了一套标准化的项目结构</li>
+<li>提供了一套标准化的构建流程（编译、测试、打包、发布……）</li>
+<li>提供了一套依赖管理机制</li>
+</ul>
+<h3 id="Maven项目结构"><a href="#Maven项目结构" class="headerlink" title="Maven项目结构"></a>Maven项目结构</h3><p>一个使用Maven管理的普通的Java项目，它的目录结构默认如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a-maven-project</span><br><span class="line">├── pom.xml</span><br><span class="line">├── src</span><br><span class="line">│   ├── main</span><br><span class="line">│   │   ├── java</span><br><span class="line">│   │   └── resources</span><br><span class="line">│   └── test</span><br><span class="line">│       ├── java</span><br><span class="line">│       └── resources</span><br><span class="line">└── target</span><br></pre></td></tr></tbody></table></figure>
+
+<p>根目录<code>a-maven-project</code>是项目名，它有一个项目描述文件<code>pom.xml</code>，<code>src/main/java</code>是存放Java源码的目录，<code>src/main/resources</code>是存放资源文件的目录，<code>src/test/java</code>是存放测试源码的目录，<code>src/test/resources</code>是存放测试资源的目录，最后，所有编译、打包生成的文件都在<code>target</code>目录里。</p>
+<p>所有的目录结构都是约定好的标准结构，千万不要随意修改目录结构。标准结构无需任何配置就可以正常使用。</p>
+<p>我们来看一下最关键的<code>pom.xml</code>，它长得像下面这样：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;project ...&gt;</span><br><span class="line">	&lt;modelVersion&gt;<span class="hljs-number">4.0</span><span class="hljs-number">.0</span>&lt;/modelVersion&gt;</span><br><span class="line">	&lt;groupId&gt;com.itranswarp.learnjava&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;hello&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;<span class="hljs-number">1.0</span>&lt;/version&gt;</span><br><span class="line">	&lt;packaging&gt;jar&lt;/packaging&gt;</span><br><span class="line">	&lt;properties&gt;</span><br><span class="line">        ...</span><br><span class="line">	&lt;/properties&gt;</span><br><span class="line">	&lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;commons-logging&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;commons-logging&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;<span class="hljs-number">1.2</span>&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">	&lt;/dependencies&gt;</span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中，<code>groupId</code>类似Java的包名，通常是公司或组织的名称，<code>artifactId</code>类似于Java的类名，通常是项目名称，再加上<code>version</code>。一个Maven工程就是由<code>groupId</code>，<code>artifactId</code>和<code>version</code>作为唯一标识。我们在引用其他第三方库时，也是通过这三个变量确定，例如，依赖<code>commons-logging</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;commons-logging&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;commons-logging&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;<span class="hljs-number">1.2</span>&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用<code>&lt;dependency&gt;</code>声明一个依赖后，Maven就会自动下载这个依赖包并把它放到classpath中。</p>
+<h2 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h2></body></html>
     
     </div>
     
