@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>网络编程 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="网络编程是Java最擅长的方向之一，使用Java进行网络编程时，由虚拟机实现了底层复杂的网络协议，Java程序只需要调用Java标准库提供的接口，就可以简单高效的编写网络程序。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络编程">
+<meta property="og:url" content="https://wanzixin.github.io/2021/05/29/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="网络编程是Java最擅长的方向之一，使用Java进行网络编程时，由虚拟机实现了底层复杂的网络协议，Java程序只需要调用Java标准库提供的接口，就可以简单高效的编写网络程序。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-05-29T14:15:02.000Z">
+<meta property="article:modified_time" content="2021-05-30T08:28:46.068Z">
+<meta property="article:author" content="WanZixin">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/LifeStyle">Lifestyle</a>
+            
+            <a class="navbar-item "
+               href="/categories/Music">Music</a>
+            
+            <a class="navbar-item "
+               href="/categories/Technology">Technology</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#网络编程基础">1&nbsp;&nbsp;<b>网络编程基础</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#IP地址">1.1&nbsp;&nbsp;IP地址</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#域名">1.2&nbsp;&nbsp;域名</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#网络模型">1.3&nbsp;&nbsp;网络模型</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#常用协议">1.4&nbsp;&nbsp;常用协议</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#TCP编程">2&nbsp;&nbsp;<b>TCP编程</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#服务器端">2.1&nbsp;&nbsp;服务器端</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#客户端">2.2&nbsp;&nbsp;客户端</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Socket流">2.3&nbsp;&nbsp;Socket流</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结">2.4&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#UDP编程">3&nbsp;&nbsp;<b>UDP编程</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#服务器端-1">3.1&nbsp;&nbsp;服务器端</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#客户端-1">3.2&nbsp;&nbsp;客户端</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结-1">3.3&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#发送Email">4&nbsp;&nbsp;<b>发送Email</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#准备SMTP登录信息">4.1&nbsp;&nbsp;准备SMTP登录信息</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#发送邮件">4.2&nbsp;&nbsp;发送邮件</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#发送HTML邮件">4.3&nbsp;&nbsp;发送HTML邮件</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#发送附件">4.4&nbsp;&nbsp;发送附件</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#发送内嵌图片的HTML邮件">4.5&nbsp;&nbsp;发送内嵌图片的HTML邮件</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#常见问题">4.6&nbsp;&nbsp;常见问题</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#接受Email">5&nbsp;&nbsp;<b>接受Email</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#HTTP编程">6&nbsp;&nbsp;<b>HTTP编程</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#HTTP编程-1">6.1&nbsp;&nbsp;HTTP编程</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#RMI远程调用">7&nbsp;&nbsp;<b>RMI远程调用</b></a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            网络编程
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>May 29 2021</span>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            an hour read (About 11599 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>网络编程是Java最擅长的方向之一，使用Java进行网络编程时，由虚拟机实现了底层复杂的网络协议，Java程序只需要调用Java标准库提供的接口，就可以简单高效的编写网络程序。<span id="more"></span>本节我们详细介绍如何用Java进行网络编程。</p>
+<h2 id="网络编程基础"><a href="#网络编程基础" class="headerlink" title="网络编程基础"></a>网络编程基础</h2><p>在学习Java网络编程之前，我们先来了解什么是计算机网络。</p>
+<p>计算机网络是指两台或更多的计算机组成的网络，在同一个网络中，任意两台计算机都可以直接通信，因为所有计算机都需要遵循同一种网络协议。</p>
+<p>那什么是互联网呢？互联网是网络的网络（internet），即把很多计算机网络连接起来，形成一个全球统一的互联网。</p>
+<p>对某个特定的计算机网络来说，它可能使用网络协议ABC，而另一个计算机网络可能使用网络协议XYZ。如果计算机网络各自的通讯协议不统一，就没法把不同的网络连接起来形成互联网。因此，为了把计算机网络接入互联网，就必须使用TCP/IP协议。</p>
+<p>TCP/IP协议泛指互联网协议，其中最重要的两个协议是TCP协议和IP协议。只有使用TCP/IP协议的计算机才能够联入互联网，使用其他网络协议（例如NetBIOS、AppleTalk协议等）是无法联入互联网的。</p>
+<h3 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h3><p>在互联网中，一个IP地址用于唯一标识一个网络接口（Network Interface）。一台联入互联网的计算机肯定有一个IP地址，但也可能有多个IP地址。</p>
+<p>IP地址分为IPv4和IPv6两种。IPv4采用32位地址，类似<code>101.202.99.12</code>，而IPv6采用128位地址，类似<code>2001:0DA8:100A:0000:0000:1020:F2F3:1428</code>。IPv4地址总共有232个（大约42亿），而IPv6地址则总共有2128个（大约340万亿亿亿亿），IPv4的地址目前已耗尽，而IPv6的地址是根本用不完的。</p>
+<p>IP地址又分为公网IP地址和内网IP地址。公网IP地址可以直接被访问，内网IP地址只能在内网访问。内网IP地址类似于：</p>
+<ul>
+<li>192.168.x.x</li>
+<li>10.x.x.x</li>
+</ul>
+<p>有一个特殊的IP地址，称之为本机地址，它总是<code>127.0.0.1</code>。</p>
+<p>IPv4地址实际上是一个32位整数。例如：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">106717964 = 0x65ca630c</span><br><span class="line">          = 65  ca  63 0c</span><br><span class="line">          = 101.202.99.12</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果一台计算机只有一个网卡，并且接入了网络，那么，它有一个本机地址<code>127.0.0.1</code>，还有一个IP地址，例如<code>101.202.99.12</code>，可以通过这个IP地址接入网络。</p>
+<p>如果一台计算机有两块网卡，那么除了本机地址，它可以有两个IP地址，可以分别接入两个网络。通常连接两个网络的设备是路由器或者交换机，它至少有两个IP地址，分别接入不同的网络，让网络之间连接起来。</p>
+<p>如果两台计算机位于同一个网络，那么他们之间可以直接通信，因为他们的IP地址前段是相同的，也就是网络号是相同的。网络号是IP地址通过子网掩码过滤后得到的。例如：</p>
+<p>某台计算机的IP是<code>101.202.99.2</code>，子网掩码是<code>255.255.255.0</code>，那么计算该计算机的网络号是：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">IP = 101.202.99.2</span><br><span class="line">Mask = 255.255.255.0</span><br><span class="line">Network = IP &amp; Mask = 101.202.99.0</span><br></pre></td></tr></tbody></table></figure>
+
+<p>每台计算机都需要正确配置IP地址和子网掩码，根据这两个就可以计算网络号，如果两台计算机计算出的网络号相同，说明两台计算机在同一个网络，可以直接通信。如果两台计算机计算出的网络号不同，那么两台计算机不在同一个网络，不能直接通信，它们之间必须通过路由器或者交换机这样的网络设备间接通信，我们把这种设备称为网关。</p>
+<p>网关的作用就是连接多个网络，负责把来自一个网络的数据包发到另一个网络，这个过程叫路由。</p>
+<p>所以，一台计算机的一个网卡会有3个关键配置：</p>
+<ul>
+<li>IP地址</li>
+<li>子网掩码</li>
+<li>网关的IP地址</li>
+</ul>
+<h3 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h3><p>因为直接记忆IP地址非常困难，所以我们通常使用域名访问某个特定的服务。域名解析服务器DNS负责把域名翻译成对应的IP，客户端再根据IP地址访问服务器。有一个特殊的本机域名<code>localhost</code>，它对应的IP地址总是本机地址<code>127.0.0.1</code>。</p>
+<h3 id="网络模型"><a href="#网络模型" class="headerlink" title="网络模型"></a>网络模型</h3><p>由于计算机网络从底层的传输到高层的软件设计十分复杂，要合理地设计计算机网络模型，必须采用分层模型，每一层负责处理自己的操作。OSI（Open System Interconnect）网络模型是ISO组织定义的一个计算机互联的标准模型，注意它只是一个定义，目的是为了简化网络各层的操作，提供标准接口便于实现和维护。这个模型从上到下依次是：</p>
+<ul>
+<li>应用层，提供应用程序之间的通信；</li>
+<li>表示层：处理数据格式，加解密等等；</li>
+<li>会话层：负责建立和维护会话；</li>
+<li>传输层：负责提供端到端的可靠传输；</li>
+<li>网络层：负责根据目标地址选择路由来传输数据；</li>
+<li>链路层和物理层负责把数据进行分片并且真正通过物理网络传输，例如，无线网、光纤等。</li>
+</ul>
+<p>互联网实际使用的TCP/IP模型并不是对应到OSI的7层模型，而是大致对应OSI的5层模型。</p>
+<h3 id="常用协议"><a href="#常用协议" class="headerlink" title="常用协议"></a>常用协议</h3><p>IP协议是一个分组交换，它不保证可靠传输。而TCP协议是传输控制协议，它是面向连接的协议，支持可靠传输和双向通信。TCP协议是建立在IP协议之上的，简单地说，IP协议只负责发数据包，不保证顺序和正确性，而TCP协议负责控制数据包传输，它在传输数据之前需要先建立连接，建立连接后才能传输数据，传输完后还需要断开连接。TCP协议之所以能保证数据的可靠传输，是通过接收确认、超时重传这些机制实现的。并且，TCP协议允许双向通信，即通信双方可以同时发送和接收数据。</p>
+<p>TCP协议也是应用最广泛的协议，许多高级协议都是建立在TCP协议之上的，例如HTTP、SMTP等。</p>
+<p>UDP协议（User Datagram Protocol）是一种数据报文协议，它是无连接协议，不保证可靠传输。因为UDP协议在通信前不需要建立连接，因此它的传输效率比TCP高，而且UDP协议比TCP协议要简单得多。</p>
+<p>选择UDP协议时，传输的数据通常是能容忍丢失的，例如，一些语音视频通信的应用会选择UDP协议。</p>
+<h2 id="TCP编程"><a href="#TCP编程" class="headerlink" title="TCP编程"></a>TCP编程</h2><p>在开发网络应用程序时，我们又会遇到Socket这个概念。Socket是一个抽象概念，一个应用程序通过一个Socket来建立一个远程连接，而Socket内部通过TCP/IP协议把数据传输到网络。</p>
+<p>Socket、TCP和部分IP的功能都是由操作系统提供的，不同的编程语言只是提供了对操作系统调用的简单的封装。</p>
+<p>为什么需要Socket进行网络通信？因为仅仅通过IP地址进行通信是不够的，同一台计算机同一时间会运行多个网络应用程序，例如浏览器、QQ、邮件客户端等。当操作系统接收到一个数据包的时候，如果只有IP地址，它没法判断应该发给哪个应用程序，所以，操作系统抽象出Socket接口，每个应用程序需要各自对应到不同的Socket，数据包才能根据Socket正确地发到对应的应用程序。</p>
+<p>一个Socket就是由IP地址和端口号（范围是0～65535）组成，可以把Socket简单理解为IP地址加端口号。端口号总是由操作系统分配，它是一个0～65535之间的数字，其中，小于1024的端口属于<em>特权端口</em>，需要管理员权限，大于1024的端口可以由任意用户的应用程序打开。</p>
+<p>使用Socket进行网络编程时，本质上就是两个进程之间的网络通信。其中一个进程必须充当服务器端，它会主动监听某个指定的端口，另一个进程必须充当客户端，它必须主动连接服务器的IP地址和指定端口，如果连接成功，服务器端和客户端就成功地建立了一个TCP连接，双方后续就可以随时发送和接收数据。</p>
+<p>因此，当Socket连接成功地在服务器端和客户端之间建立后：</p>
+<ul>
+<li>对服务器端来说，它的Socket是指定的IP地址和指定的端口号；</li>
+<li>对客户端来说，它的Socket是它所在计算机的IP地址和一个由操作系统分配的随机端口号。</li>
+</ul>
+<h3 id="服务器端"><a href="#服务器端" class="headerlink" title="服务器端"></a>服务器端</h3><p>要使用Socket编程，我们首先要编写服务器端程序。Java标准库提供了<code>ServerSocket</code>来实现对指定IP和指定端口的监听。<code>ServerSocket</code>的典型实现代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Server</span> </span>{</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException </span>{</span><br><span class="line">        ServerSocket ss = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">6666</span>); <span class="hljs-comment">// 监听指定端口</span></span><br><span class="line">        System.out.println(<span class="hljs-string">"server is running..."</span>);</span><br><span class="line">        <span class="hljs-keyword">for</span> (;;) {</span><br><span class="line">            Socket sock = ss.accept();</span><br><span class="line">            System.out.println(<span class="hljs-string">"connected from "</span> + sock.getRemoteSocketAddress());</span><br><span class="line">            Thread t = <span class="hljs-keyword">new</span> Handler(sock);</span><br><span class="line">            t.start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Handler</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Thread</span> </span>{</span><br><span class="line">    Socket sock;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Handler</span><span class="hljs-params">(Socket sock)</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">this</span>.sock = sock;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Override</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">try</span> (InputStream input = <span class="hljs-keyword">this</span>.sock.getInputStream()) {</span><br><span class="line">            <span class="hljs-keyword">try</span> (OutputStream output = <span class="hljs-keyword">this</span>.sock.getOutputStream()) {</span><br><span class="line">                handle(input, output);</span><br><span class="line">            }</span><br><span class="line">        } <span class="hljs-keyword">catch</span> (Exception e) {</span><br><span class="line">            <span class="hljs-keyword">try</span> {</span><br><span class="line">                <span class="hljs-keyword">this</span>.sock.close();</span><br><span class="line">            } <span class="hljs-keyword">catch</span> (IOException ioe) {</span><br><span class="line">            }</span><br><span class="line">            System.out.println(<span class="hljs-string">"client disconnected."</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">handle</span><span class="hljs-params">(InputStream input, OutputStream output)</span> <span class="hljs-keyword">throws</span> IOException </span>{</span><br><span class="line">        <span class="hljs-keyword">var</span> writer = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(output, StandardCharsets.UTF_8));</span><br><span class="line">        <span class="hljs-keyword">var</span> reader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(input, StandardCharsets.UTF_8));</span><br><span class="line">        writer.write(<span class="hljs-string">"hello\n"</span>);</span><br><span class="line">        writer.flush();</span><br><span class="line">        <span class="hljs-keyword">for</span> (;;) {</span><br><span class="line">            String s = reader.readLine();</span><br><span class="line">            <span class="hljs-keyword">if</span> (s.equals(<span class="hljs-string">"bye"</span>)) {</span><br><span class="line">                writer.write(<span class="hljs-string">"bye\n"</span>);</span><br><span class="line">                writer.flush();</span><br><span class="line">                <span class="hljs-keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">            writer.write(<span class="hljs-string">"ok: "</span> + s + <span class="hljs-string">"\n"</span>);</span><br><span class="line">            writer.flush();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>服务器端通过代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ServerSocket ss = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">6666</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在指定端口<code>6666</code>监听。这里我们没有指定IP地址，表示在计算机的所有网络接口上进行监听。</p>
+<p>如果<code>ServerSocket</code>监听成功，我们就使用一个无限循环来处理客户端的连接：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">for</span> (;;) {</span><br><span class="line">    Socket sock = ss.accept();</span><br><span class="line">    Thread t = <span class="hljs-keyword">new</span> Handler(sock);</span><br><span class="line">    t.start();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意到代码<code>ss.accept()</code>表示每当有新的客户端连接进来后，就返回一个<code>Socket</code>实例，这个<code>Socket</code>实例就是用来和刚连接的客户端进行通信的。由于客户端很多，要实现并发处理，我们就必须为每个新的<code>Socket</code>创建一个新线程来处理，这样，主线程的作用就是接收新的连接，每当收到新连接后，就创建一个新线程进行处理。</p>
+<p>我们在多线程编程的章节中介绍过线程池，这里也完全可以利用线程池来处理客户端连接，能大大提高运行效率。</p>
+<p>如果没有客户端连接进来，<code>accept()</code>方法会阻塞并一直等待。如果有多个客户端同时连接进来，<code>ServerSocket</code>会把连接扔到队列里，然后一个一个处理。对于Java程序而言，只需要通过循环不断调用<code>accept()</code>就可以获取新的连接。</p>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><p>相比服务器端，客户端程序就要简单很多。一个典型的客户端程序如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Client</span> </span>{</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException </span>{</span><br><span class="line">        Socket sock = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">"localhost"</span>, <span class="hljs-number">6666</span>); <span class="hljs-comment">// 连接指定服务器和端口</span></span><br><span class="line">        <span class="hljs-keyword">try</span> (InputStream input = sock.getInputStream()) {</span><br><span class="line">            <span class="hljs-keyword">try</span> (OutputStream output = sock.getOutputStream()) {</span><br><span class="line">                handle(input, output);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        sock.close();</span><br><span class="line">        System.out.println(<span class="hljs-string">"disconnected."</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">handle</span><span class="hljs-params">(InputStream input, OutputStream output)</span> <span class="hljs-keyword">throws</span> IOException </span>{</span><br><span class="line">        <span class="hljs-keyword">var</span> writer = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(output, StandardCharsets.UTF_8));</span><br><span class="line">        <span class="hljs-keyword">var</span> reader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(input, StandardCharsets.UTF_8));</span><br><span class="line">        Scanner scanner = <span class="hljs-keyword">new</span> Scanner(System.in);</span><br><span class="line">        System.out.println(<span class="hljs-string">"[server] "</span> + reader.readLine());</span><br><span class="line">        <span class="hljs-keyword">for</span> (;;) {</span><br><span class="line">            System.out.print(<span class="hljs-string">"&gt;&gt;&gt; "</span>); <span class="hljs-comment">// 打印提示</span></span><br><span class="line">            String s = scanner.nextLine(); <span class="hljs-comment">// 读取一行输入</span></span><br><span class="line">            writer.write(s);</span><br><span class="line">            writer.newLine();</span><br><span class="line">            writer.flush();</span><br><span class="line">            String resp = reader.readLine();</span><br><span class="line">            System.out.println(<span class="hljs-string">"&lt;&lt;&lt; "</span> + resp);</span><br><span class="line">            <span class="hljs-keyword">if</span> (resp.equals(<span class="hljs-string">"bye"</span>)) {</span><br><span class="line">                <span class="hljs-keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>客户端程序通过：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Socket sock = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">"localhost"</span>, <span class="hljs-number">6666</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>连接到服务器端，注意上述代码的服务器地址是<code>"localhost"</code>，表示本机地址，端口号是<code>6666</code>。如果连接成功，将返回一个<code>Socket</code>实例，用于后续通信。</p>
+<h3 id="Socket流"><a href="#Socket流" class="headerlink" title="Socket流"></a>Socket流</h3><p>当Socket连接创建成功后，无论是服务器端，还是客户端，我们都使用<code>Socket</code>实例进行网络通信。因为TCP是一种基于流的协议，因此，Java标准库使用<code>InputStream</code>和<code>OutputStream</code>来封装Socket的数据流，这样我们使用Socket的流，和普通IO流类似：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 用于读取网络数据:</span></span><br><span class="line">InputStream in = sock.getInputStream();</span><br><span class="line"><span class="hljs-comment">// 用于写入网络数据:</span></span><br><span class="line">OutputStream out = sock.getOutputStream();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后我们重点来看看，为什么写入网络数据时，要调用<code>flush()</code>方法。</p>
+<p>如果不调用<code>flush()</code>，我们很可能会发现，客户端和服务器都收不到数据，这并不是Java标准库的设计问题，而是我们以流的形式写入数据的时候，并不是一写入就立刻发送到网络，而是先写入内存缓冲区，直到缓冲区满了以后，才会一次性真正发送到网络，这样设计的目的是为了提高传输效率。如果缓冲区的数据很少，而我们又想强制把这些数据发送到网络，就必须调用<code>flush()</code>强制把缓冲区数据发送出去。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>使用Java进行TCP编程时，需要使用Socket模型：</p>
+<ul>
+<li>服务器端用<code>ServerSocket</code>监听指定端口；</li>
+<li>客户端使用<code>Socket(InetAddress, port)</code>连接服务器；</li>
+<li>服务器端用<code>accept()</code>接收连接并返回<code>Socket</code>；</li>
+<li>双方通过<code>Socket</code>打开<code>InputStream</code>/<code>OutputStream</code>读写数据；</li>
+<li>服务器端通常使用多线程同时处理多个客户端连接，利用线程池可大幅提升效率；</li>
+<li><code>flush()</code>用于强制输出缓冲区到网络。</li>
+</ul>
+<h2 id="UDP编程"><a href="#UDP编程" class="headerlink" title="UDP编程"></a>UDP编程</h2><p>和TCP编程相比，UDP编程就简单的多，因为UDP没有创建连接，数据包也是一次收发一个，所以没有流的概念。在Java中使用UDP编程，仍然需要使用Socket，因为应用程序在使用UDP时必须指定网络接口（IP）和端口号。注意，UDP端口和TCP端口虽然都使用0～65535，但他们是两套独立的端口，即一个应用程序TCP占用了端口1234，不影响另一个应用程序用UDP占用端口1234。</p>
+<h3 id="服务器端-1"><a href="#服务器端-1" class="headerlink" title="服务器端"></a>服务器端</h3><p>在服务器端，使用UDP也需要监听指定的端口。Java提供了<code>DatagramSocket</code>来实现这个功能。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">DatagramSocket ds = <span class="hljs-keyword">new</span> DatagramSocket(<span class="hljs-number">6666</span>); <span class="hljs-comment">// 监听指定端口</span></span><br><span class="line"><span class="hljs-keyword">for</span> (;;) { <span class="hljs-comment">// 无限循环</span></span><br><span class="line">    <span class="hljs-comment">// 数据缓冲区:</span></span><br><span class="line">    <span class="hljs-keyword">byte</span>[] buffer = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">1024</span>];</span><br><span class="line">    DatagramPacket packet = <span class="hljs-keyword">new</span> DatagramPacket(buffer, buffer.length);</span><br><span class="line">    ds.receive(packet); <span class="hljs-comment">// 收取一个UDP数据包</span></span><br><span class="line">    <span class="hljs-comment">// 收取到的数据存储在buffer中，由packet.getOffset(), packet.getLength()指定起始位置和长度</span></span><br><span class="line">    <span class="hljs-comment">// 将其按UTF-8编码转换为String:</span></span><br><span class="line">    String s = <span class="hljs-keyword">new</span> String(packet.getData(), packet.getOffset(), packet.getLength(), StandardCharsets.UTF_8);</span><br><span class="line">    <span class="hljs-comment">// 发送数据:</span></span><br><span class="line">    <span class="hljs-keyword">byte</span>[] data = <span class="hljs-string">"ACK"</span>.getBytes(StandardCharsets.UTF_8);</span><br><span class="line">    packet.setData(data);</span><br><span class="line">    ds.send(packet);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当服务器收到一个<code>DatagramPacket</code>后，通常必须立刻回复一个或多个UDP包。因为客户端地址在<code>DatagramPacket</code>中，每次收到的<code>DatagramPacket</code>可能是不同的客户端，如果不回复，某个客户端就收不到任何UDP包。</p>
+<h3 id="客户端-1"><a href="#客户端-1" class="headerlink" title="客户端"></a>客户端</h3><p>和服务端相比，客户端使用UDP时，只需要直接向服务器端发送UDP包，然后接受返回的UDP包。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">DatagramSocket ds = <span class="hljs-keyword">new</span> DatagramSocket();</span><br><span class="line">ds.setSoTimeout(<span class="hljs-number">1000</span>);</span><br><span class="line">ds.connect(InetAddress.getByName(<span class="hljs-string">"localhost"</span>), <span class="hljs-number">6666</span>); <span class="hljs-comment">// 连接指定服务器和端口</span></span><br><span class="line"><span class="hljs-comment">// 发送:</span></span><br><span class="line"><span class="hljs-keyword">byte</span>[] data = <span class="hljs-string">"Hello"</span>.getBytes();</span><br><span class="line">DatagramPacket packet = <span class="hljs-keyword">new</span> DatagramPacket(data, data.length);</span><br><span class="line">ds.send(packet);</span><br><span class="line"><span class="hljs-comment">// 接收:</span></span><br><span class="line"><span class="hljs-keyword">byte</span>[] buffer = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">1024</span>];</span><br><span class="line">packet = <span class="hljs-keyword">new</span> DatagramPacket(buffer, buffer.length);</span><br><span class="line">ds.receive(packet);</span><br><span class="line">String resp = <span class="hljs-keyword">new</span> String(packet.getData(), packet.getOffset(), packet.getLength());</span><br><span class="line">ds.disconnect();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>客户端创建<code>DatagramSocket</code>实例时并不需要指定端口，而是由操作系统自动指定一个当前未使用的端口。紧接着，调用<code>setSoTimeout(1000)</code>设定超时1秒，意思是后续接收UDP包时，等待时间最多不会超过1秒，否则在没有收到UDP包时，客户端会无限等待下去。这一点和服务器端不一样，服务器端可以无限等待，因为它本来就被设计成长时间运行。</p>
+<p>注意到客户端的<code>DatagramSocket</code>还调用了一个<code>connect()</code>方法“连接”到指定的服务器端。不是说UDP是无连接的协议吗？为啥这里需要<code>connect()</code>？</p>
+<p>这个<code>connect()</code>方法不是真连接，它是为了在客户端的<code>DatagramSocket</code>实例中保存服务器端的IP和端口号，确保这个<code>DatagramSocket</code>实例只能往指定的地址和端口发送UDP包，不能往其他地址和端口发送。这么做不是UDP的限制，而是Java内置了安全检查。</p>
+<p>如果客户端希望向两个不同的服务器发送UDP包，那么它必须创建两个<code>DatagramSocket</code>实例。</p>
+<p>后续的收发数据和服务器端是一致的。通常来说，客户端必须先发UDP包，因为客户端不发UDP包，服务器端就根本不知道客户端的地址和端口号。</p>
+<p>如果客户端认为通信结束，就可以调用<code>disconnect()</code>断开连接。注意到<code>disconnect()</code>也不是真正地断开连接，它只是清除了客户端<code>DatagramSocket</code>实例记录的远程服务器地址和端口号，这样，<code>DatagramSocket</code>实例就可以连接另一个服务器端。</p>
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p>使用UDP协议通信时，服务器和客户端双方无需建立连接：</p>
+<ul>
+<li>服务器端用<code>DatagramSocket(port)</code>监听端口；</li>
+<li>客户端使用<code>DatagramSocket.connect()</code>指定远程地址和端口；</li>
+<li>双方通过<code>receive()</code>和<code>send()</code>读写数据；</li>
+<li><code>DatagramSocket</code>没有IO流接口，数据被直接写入<code>byte[]</code>缓冲区。</li>
+</ul>
+<h2 id="发送Email"><a href="#发送Email" class="headerlink" title="发送Email"></a>发送Email</h2><p>Email就是电子邮件。电子邮件的应用已经有几十年的历史了，我们熟悉的邮箱地址比如<code>abc@example.com</code>，邮件软件比如Outlook都是用来收发邮件的。</p>
+<p>使用Java程序也可以收发电子邮件。我们先来看一下传统的邮件是如何发送的。</p>
+<p>传统的邮件是通过邮局投递，然后从一个邮局到另一个邮局，最终到达用户的邮箱：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">           ┌──────────┐    ┌──────────┐</span><br><span class="line">           │PostOffice│    │PostOffice│     .───.</span><br><span class="line">┌─────┐    ├──────────┤    ├──────────┤    (   ( )</span><br><span class="line">│═══ ░│───&gt;│ ┌─┐ ┌┐┌┐ │───&gt;│ ┌─┐ ┌┐┌┐ │───&gt; `─┬─'</span><br><span class="line">└─────┘    │ │░│ └┘└┘ │    │ │░│ └┘└┘ │       │</span><br><span class="line">           └─┴─┴──────┘    └─┴─┴──────┘       │</span><br></pre></td></tr></tbody></table></figure>
+
+<p>电子邮件的发送过程也是类似的，只不过是电子邮件是从用户电脑的邮件软件，例如Outlook，发送到邮件服务器上，可能经过若干个邮件服务器的中转，最终到达对方邮件服务器上，收件方就可以用软件接收邮件：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">             ┌─────────┐    ┌─────────┐    ┌─────────┐</span><br><span class="line">             │░░░░░░░░░│    │░░░░░░░░░│    │░░░░░░░░░│</span><br><span class="line">┌───────┐    ├─────────┤    ├─────────┤    ├─────────┤    ┌───────┐</span><br><span class="line">│░░░░░░░│    │░░░░░░░░░│    │░░░░░░░░░│    │░░░░░░░░░│    │░░░░░░░│</span><br><span class="line">├───────┤    ├─────────┤    ├─────────┤    ├─────────┤    ├───────┤</span><br><span class="line">│       │───&gt;│O ░░░░░░░│───&gt;│O ░░░░░░░│───&gt;│O ░░░░░░░│&lt;───│       │</span><br><span class="line">└───────┘    └─────────┘    └─────────┘    └─────────┘    └───────┘</span><br><span class="line">   MUA           MTA            MTA            MDA           MUA</span><br></pre></td></tr></tbody></table></figure>
+
+<p>我们把类似Outlook这样的邮件软件称为MUA：Mail User Agent，意思是给用户服务的邮件代理；邮件服务器则称为MTA：Mail Transfer Agent，意思是邮件中转的代理；最终到达的邮件服务器称为MDA：Mail Delivery Agent，意思是邮件到达的代理。电子邮件一旦到达MDA，就不再动了。实际上，电子邮件通常就存储在MDA服务器的硬盘上，然后等收件人通过软件或者登陆浏览器查看邮件。</p>
+<p>MTA和MDA这样的服务器软件通常是现成的，我们不关心这些服务器内部是如何运行的。要发送邮件，我们关心的是如何编写一个MUA的软件，把邮件发送到MTA上。</p>
+<p>MUA到MTA发送邮件的协议就是SMTP协议，它是Simple Mail Transport Protocol的缩写，使用标准端口25，也可以使用加密端口465或587。</p>
+<p>SMTP协议是一个建立在TCP之上的协议，任何程序发送邮件都必须遵守SMTP协议。使用Java程序发送邮件时，我们无需关心SMTP协议的底层原理，只需要使用JavaMail这个标准API就可以直接发送邮件。</p>
+<h3 id="准备SMTP登录信息"><a href="#准备SMTP登录信息" class="headerlink" title="准备SMTP登录信息"></a>准备SMTP登录信息</h3><p>假设我们准备使用自己的邮件地址<code>me@example.com</code>给小明发送邮件，已知小明的邮件地址是<code>xiaoming@somewhere.com</code>，发送邮件前，我们首先要确定作为MTA的邮件服务器地址和端口号。邮件服务器地址通常是<code>smtp.example.com</code>，端口号由邮件服务商确定使用25、465还是587。以下是一些常用邮件服务商的SMTP信息：</p>
+<ul>
+<li>QQ邮箱：SMTP服务器是smtp.qq.com，端口是465/587；</li>
+<li>163邮箱：SMTP服务器是smtp.163.com，端口是465；</li>
+<li>Gmail邮箱：SMTP服务器是smtp.gmail.com，端口是465/587。</li>
+</ul>
+<p>有了SMTP服务器的域名和端口号，我们还需要SMTP服务器的登录信息，通常是使用自己的邮件地址作为用户名，登录口令是用户口令或者一个独立设置的SMTP口令。</p>
+<p>我们来看看如何使用JavaMail发送邮件。</p>
+<p>首先，我们需要创建一个Maven工程，并把JavaMail相关的两个依赖加入进来：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;javax.mail&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;javax.mail-api&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;1.6.2&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;com.sun.mail&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;javax.mail&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;1.6.2&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    ...</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后，我们通过JavaMail API连接到SMTP服务器上：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 服务器地址:</span></span><br><span class="line">String smtp = <span class="hljs-string">"smtp.office365.com"</span>;</span><br><span class="line"><span class="hljs-comment">// 登录用户名:</span></span><br><span class="line">String username = <span class="hljs-string">"jxsmtp101@outlook.com"</span>;</span><br><span class="line"><span class="hljs-comment">// 登录口令:</span></span><br><span class="line">String password = <span class="hljs-string">"********"</span>;</span><br><span class="line"><span class="hljs-comment">// 连接到SMTP服务器587端口:</span></span><br><span class="line">Properties props = <span class="hljs-keyword">new</span> Properties();</span><br><span class="line">props.put(<span class="hljs-string">"mail.smtp.host"</span>, smtp); <span class="hljs-comment">// SMTP主机名</span></span><br><span class="line">props.put(<span class="hljs-string">"mail.smtp.port"</span>, <span class="hljs-string">"587"</span>); <span class="hljs-comment">// 主机端口号</span></span><br><span class="line">props.put(<span class="hljs-string">"mail.smtp.auth"</span>, <span class="hljs-string">"true"</span>); <span class="hljs-comment">// 是否需要用户认证</span></span><br><span class="line">props.put(<span class="hljs-string">"mail.smtp.starttls.enable"</span>, <span class="hljs-string">"true"</span>); <span class="hljs-comment">// 启用TLS加密</span></span><br><span class="line"><span class="hljs-comment">// 获取Session实例:</span></span><br><span class="line">Session session = Session.getInstance(props, <span class="hljs-keyword">new</span> Authenticator() {</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">protected</span> PasswordAuthentication <span class="hljs-title">getPasswordAuthentication</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> PasswordAuthentication(username, password);</span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="hljs-comment">// 设置debug模式便于调试:</span></span><br><span class="line">session.setDebug(<span class="hljs-keyword">true</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>以587端口为例，连接SMTP服务器时，需要准备一个Properties对象，填入相关信息。最后获取Session实例时，如果服务器需要认证，还需要传入一个Authenticator对象，并返回指定的用户名和口令。</p>
+<p>当我们获取到Session实例后，打开调试模式可以看到SMTP通信的详细内容，便于调试。</p>
+<h3 id="发送邮件"><a href="#发送邮件" class="headerlink" title="发送邮件"></a>发送邮件</h3><p>发送邮件时，我们需要构造一个<code>Message</code>对象，然后调用<code>Transport.send(Message)</code>即可完成发送：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MimeMessage message = <span class="hljs-keyword">new</span> MimeMessage(session);</span><br><span class="line"><span class="hljs-comment">// 设置发送方地址:</span></span><br><span class="line">message.setFrom(<span class="hljs-keyword">new</span> InternetAddress(<span class="hljs-string">"me@example.com"</span>));</span><br><span class="line"><span class="hljs-comment">// 设置接收方地址:</span></span><br><span class="line">message.setRecipient(Message.RecipientType.TO, <span class="hljs-keyword">new</span> InternetAddress(<span class="hljs-string">"xiaoming@somewhere.com"</span>));</span><br><span class="line"><span class="hljs-comment">// 设置邮件主题:</span></span><br><span class="line">message.setSubject(<span class="hljs-string">"Hello"</span>, <span class="hljs-string">"UTF-8"</span>);</span><br><span class="line"><span class="hljs-comment">// 设置邮件正文:</span></span><br><span class="line">message.setText(<span class="hljs-string">"Hi Xiaoming..."</span>, <span class="hljs-string">"UTF-8"</span>);</span><br><span class="line"><span class="hljs-comment">// 发送:</span></span><br><span class="line">Transport.send(message);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>绝大多数邮件服务器要求发送方地址和登录用户名必须一致，否则发送将失败。</p>
+<h3 id="发送HTML邮件"><a href="#发送HTML邮件" class="headerlink" title="发送HTML邮件"></a>发送HTML邮件</h3><p>发送HTML邮件和文本邮件是类似的，只需要把：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">message.setText(body, <span class="hljs-string">"UTF-8"</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>改为：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">message.setText(body, <span class="hljs-string">"UTF-8"</span>, <span class="hljs-string">"html"</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>传入的<code>body</code>是类似<code>&lt;h1&gt;Hello&lt;/h1&gt;&lt;p&gt;Hi, xxx&lt;/p&gt;</code>这样的HTML字符串即可。HTML邮件可以在邮件客户端直接显示为网页格式。</p>
+<h3 id="发送附件"><a href="#发送附件" class="headerlink" title="发送附件"></a>发送附件</h3><p>要在电子邮件中携带附件，我们就不能直接调用<code>message.setText()</code>方法，而是要构造一个<code>Multipart</code>对象：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Multipart multipart = <span class="hljs-keyword">new</span> MimeMultipart();</span><br><span class="line"><span class="hljs-comment">// 添加text:</span></span><br><span class="line">BodyPart textpart = <span class="hljs-keyword">new</span> MimeBodyPart();</span><br><span class="line">textpart.setContent(body, <span class="hljs-string">"text/html;charset=utf-8"</span>);</span><br><span class="line">multipart.addBodyPart(textpart);</span><br><span class="line"><span class="hljs-comment">// 添加image:</span></span><br><span class="line">BodyPart imagepart = <span class="hljs-keyword">new</span> MimeBodyPart();</span><br><span class="line">imagepart.setFileName(fileName);</span><br><span class="line">imagepart.setDataHandler(<span class="hljs-keyword">new</span> DataHandler(<span class="hljs-keyword">new</span> ByteArrayDataSource(input, <span class="hljs-string">"application/octet-stream"</span>)));</span><br><span class="line">multipart.addBodyPart(imagepart);</span><br><span class="line"><span class="hljs-comment">// 设置邮件内容为multipart:</span></span><br><span class="line">message.setContent(multipart);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>一个<code>Multipart</code>对象可以添加若干个<code>BodyPart</code>，其中第一个<code>BodyPart</code>是文本，即邮件正文，后面的BodyPart是附件。<code>BodyPart</code>依靠<code>setContent()</code>决定添加的内容，如果添加文本，用<code>setContent("...", "text/plain;charset=utf-8")</code>添加纯文本，或者用<code>setContent("...", "text/html;charset=utf-8")</code>添加HTML文本。如果添加附件，需要设置文件名（不一定和真实文件名一致），并且添加一个<code>DataHandler()</code>，传入文件的MIME类型。二进制文件可以用<code>application/octet-stream</code>，Word文档则是<code>application/msword</code>。</p>
+<p>最后，通过<code>setContent()</code>把<code>Multipart</code>添加到<code>Message</code>中，即可发送。</p>
+<h3 id="发送内嵌图片的HTML邮件"><a href="#发送内嵌图片的HTML邮件" class="headerlink" title="发送内嵌图片的HTML邮件"></a>发送内嵌图片的HTML邮件</h3><p>有些童鞋可能注意到，HTML邮件中可以内嵌图片，这是怎么做到的？</p>
+<p>如果给一个<code>&lt;img src="http://example.com/test.jpg"&gt;</code>，这样的外部图片链接通常会被邮件客户端过滤，并提示用户显示图片并不安全。只有内嵌的图片才能正常在邮件中显示。</p>
+<p>内嵌图片实际上也是一个附件，即邮件本身也是<code>Multipart</code>，但需要做一点额外的处理：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Multipart multipart = <span class="hljs-keyword">new</span> MimeMultipart();</span><br><span class="line"><span class="hljs-comment">// 添加text:</span></span><br><span class="line">BodyPart textpart = <span class="hljs-keyword">new</span> MimeBodyPart();</span><br><span class="line">textpart.setContent(<span class="hljs-string">"&lt;h1&gt;Hello&lt;/h1&gt;&lt;p&gt;&lt;img src=\"cid:img01\"&gt;&lt;/p&gt;"</span>, <span class="hljs-string">"text/html;charset=utf-8"</span>);</span><br><span class="line">multipart.addBodyPart(textpart);</span><br><span class="line"><span class="hljs-comment">// 添加image:</span></span><br><span class="line">BodyPart imagepart = <span class="hljs-keyword">new</span> MimeBodyPart();</span><br><span class="line">imagepart.setFileName(fileName);</span><br><span class="line">imagepart.setDataHandler(<span class="hljs-keyword">new</span> DataHandler(<span class="hljs-keyword">new</span> ByteArrayDataSource(input, <span class="hljs-string">"image/jpeg"</span>)));</span><br><span class="line"><span class="hljs-comment">// 与HTML的&lt;img src="cid:img01"&gt;关联:</span></span><br><span class="line">imagepart.setHeader(<span class="hljs-string">"Content-ID"</span>, <span class="hljs-string">"&lt;img01&gt;"</span>);</span><br><span class="line">multipart.addBodyPart(imagepart);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在HTML邮件中引用图片时，需要设定一个ID，用类似<code>&lt;img src=\"cid:img01\"&gt;</code>引用，然后，在添加图片作为BodyPart时，除了要正确设置MIME类型（根据图片类型使用<code>image/jpeg</code>或<code>image/png</code>），还需要设置一个Header：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">imagepart.setHeader(<span class="hljs-string">"Content-ID"</span>, <span class="hljs-string">"&lt;img01&gt;"</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这个ID和HTML中引用的ID对应起来，邮件客户端就可以正常显示内嵌图片。</p>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><p>如果用户名或口令错误，会导致<code>535</code>登录失败：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DEBUG SMTP: AUTH LOGIN failed</span><br><span class="line">Exception in thread "main" javax.mail.AuthenticationFailedException: 535 5.7.3 Authentication unsuccessful [HK0PR03CA0105.apcprd03.prod.outlook.com]</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果登录用户和发件人不一致，会导致<code>554</code>拒绝发送错误：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DEBUG SMTP: MessagingException while sending, THROW: </span><br><span class="line">com.sun.mail.smtp.SMTPSendFailedException: 554 5.2.0 STOREDRV.Submission.Exception:SendAsDeniedException.MapiExceptionSendAsDenied;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>有些时候，如果邮件主题和正文过于简单，会导致<code>554</code>被识别为垃圾邮件的错误：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DEBUG SMTP: MessagingException while sending, THROW: </span><br><span class="line">com.sun.mail.smtp.SMTPSendFailedException: 554 DT:SPM</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="接受Email"><a href="#接受Email" class="headerlink" title="接受Email"></a>接受Email</h2><p>邮件最终到达收件人的MDA服务器，所以，接收邮件是收件人用自己的客户端把邮件从MDA服务器上抓取到本地的过程。</p>
+<p>接收邮件使用最广泛的协议是POP3：Post Office Protocol version 3，它也是一个建立在TCP连接之上的协议。POP3服务器的标准端口是110，如果整个回话需要加密，那么使用加密端口995。</p>
+<p>另一种接受邮件的协议是IMAP：Internet Mail Access Protocol，它使用标准端口143和加密端口993。IMAP和POP3的区别在于，IMAP协议在本地的所有操作都会自动同步到服务器上，并且，IMAP可以允许用户在邮件服务器的收件箱中创建文件夹。</p>
+<p>JavaMail也提供了IMAP协议的支持。因为POP3和IMAP的使用方式非常类似，因此我们只介绍POP3的用法。</p>
+<p>首先连接到Store对象。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 准备登录信息:</span></span><br><span class="line">String host = <span class="hljs-string">"pop3.example.com"</span>;</span><br><span class="line"><span class="hljs-keyword">int</span> port = <span class="hljs-number">995</span>;</span><br><span class="line">String username = <span class="hljs-string">"bob@example.com"</span>;</span><br><span class="line">String password = <span class="hljs-string">"password"</span>;</span><br><span class="line"></span><br><span class="line">Properties props = <span class="hljs-keyword">new</span> Properties();</span><br><span class="line">props.setProperty(<span class="hljs-string">"mail.store.protocol"</span>, <span class="hljs-string">"pop3"</span>); <span class="hljs-comment">// 协议名称</span></span><br><span class="line">props.setProperty(<span class="hljs-string">"mail.pop3.host"</span>, host);<span class="hljs-comment">// POP3主机名</span></span><br><span class="line">props.setProperty(<span class="hljs-string">"mail.pop3.port"</span>, String.valueOf(port)); <span class="hljs-comment">// 端口号</span></span><br><span class="line"><span class="hljs-comment">// 启动SSL:</span></span><br><span class="line">props.put(<span class="hljs-string">"mail.smtp.socketFactory.class"</span>, <span class="hljs-string">"javax.net.ssl.SSLSocketFactory"</span>);</span><br><span class="line">props.put(<span class="hljs-string">"mail.smtp.socketFactory.port"</span>, String.valueOf(port));</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// 连接到Store:</span></span><br><span class="line">URLName url = <span class="hljs-keyword">new</span> URLName(<span class="hljs-string">"pop3"</span>, host, post, <span class="hljs-string">""</span>, username, password);</span><br><span class="line">Session session = Session.getInstance(props, <span class="hljs-keyword">null</span>);</span><br><span class="line">session.setDebug(<span class="hljs-keyword">true</span>); <span class="hljs-comment">// 显示调试信息</span></span><br><span class="line">Store store = <span class="hljs-keyword">new</span> POP3SSLStore(session, url);</span><br><span class="line">store.connect();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>一个<code>Store</code>对象表示整个邮箱的存储，要收取邮件，我们需要通过<code>Store</code>访问指定的<code>Folder</code>（文件夹），通常是<code>INBOX</code>表示收件箱：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 获取收件箱:</span></span><br><span class="line">Folder folder = store.getFolder(<span class="hljs-string">"INBOX"</span>);</span><br><span class="line"><span class="hljs-comment">// 以读写方式打开:</span></span><br><span class="line">folder.open(Folder.READ_WRITE);</span><br><span class="line"><span class="hljs-comment">// 打印邮件总数/新邮件数量/未读数量/已删除数量:</span></span><br><span class="line">System.out.println(<span class="hljs-string">"Total messages: "</span> + folder.getMessageCount());</span><br><span class="line">System.out.println(<span class="hljs-string">"New messages: "</span> + folder.getNewMessageCount());</span><br><span class="line">System.out.println(<span class="hljs-string">"Unread messages: "</span> + folder.getUnreadMessageCount());</span><br><span class="line">System.out.println(<span class="hljs-string">"Deleted messages: "</span> + folder.getDeletedMessageCount());</span><br><span class="line"><span class="hljs-comment">// 获取每一封邮件:</span></span><br><span class="line">Message[] messages = folder.getMessages();</span><br><span class="line"><span class="hljs-keyword">for</span> (Message message : messages) {</span><br><span class="line">    <span class="hljs-comment">// 打印每一封邮件:</span></span><br><span class="line">    printMessage((MimeMessage) message);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当我们获取到一个<code>Message</code>对象时，可以强制转型为MimeMessage，然后打印出邮件主题、发件人、收件人等信息：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">printMessage</span><span class="hljs-params">(MimeMessage msg)</span> <span class="hljs-keyword">throws</span> IOException, MessagingException </span>{</span><br><span class="line">    <span class="hljs-comment">// 邮件主题:</span></span><br><span class="line">    System.out.println(<span class="hljs-string">"Subject: "</span> + MimeUtility.decodeText(msg.getSubject()));</span><br><span class="line">    <span class="hljs-comment">// 发件人:</span></span><br><span class="line">    Address[] froms = msg.getFrom();</span><br><span class="line">    InternetAddress address = (InternetAddress) froms[<span class="hljs-number">0</span>];</span><br><span class="line">    String personal = address.getPersonal();</span><br><span class="line">    String from = personal == <span class="hljs-keyword">null</span> ? address.getAddress() : (MimeUtility.decodeText(personal) + <span class="hljs-string">" &lt;"</span> + address.getAddress() + <span class="hljs-string">"&gt;"</span>);</span><br><span class="line">    System.out.println(<span class="hljs-string">"From: "</span> + from);</span><br><span class="line">    <span class="hljs-comment">// 继续打印收件人:</span></span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>比较麻烦的是获取邮件的正文。一个<code>MimeMessage</code>对象也是一个<code>Part</code>对象，它可能只包含一个文本，也可能是一个<code>Multipart</code>对象，即由几个<code>Part</code>构成，因此，需要递归地解析出完整的正文：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function">String <span class="hljs-title">getBody</span><span class="hljs-params">(Part part)</span> <span class="hljs-keyword">throws</span> MessagingException, IOException </span>{</span><br><span class="line">    <span class="hljs-keyword">if</span> (part.isMimeType(<span class="hljs-string">"text/*"</span>)) {</span><br><span class="line">        <span class="hljs-comment">// Part是文本:</span></span><br><span class="line">        <span class="hljs-keyword">return</span> part.getContent().toString();</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">if</span> (part.isMimeType(<span class="hljs-string">"multipart/*"</span>)) {</span><br><span class="line">        <span class="hljs-comment">// Part是一个Multipart对象:</span></span><br><span class="line">        Multipart multipart = (Multipart) part.getContent();</span><br><span class="line">        <span class="hljs-comment">// 循环解析每个子Part:</span></span><br><span class="line">        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; multipart.getCount(); i++) {</span><br><span class="line">            BodyPart bodyPart = multipart.getBodyPart(i);</span><br><span class="line">            String body = getBody(bodyPart);</span><br><span class="line">            <span class="hljs-keyword">if</span> (!body.isEmpty()) {</span><br><span class="line">                <span class="hljs-keyword">return</span> body;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后记得关闭<code>Folder</code>和<code>Store</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">folder.close(<span class="hljs-keyword">true</span>); <span class="hljs-comment">// 传入true表示删除操作会同步到服务器上（即删除服务器收件箱的邮件）</span></span><br><span class="line">store.close();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>设置debug模式可以查看通信详细内容，便于排查错误。</p>
+<h2 id="HTTP编程"><a href="#HTTP编程" class="headerlink" title="HTTP编程"></a>HTTP编程</h2><p>什么是HTTP？HTTP就是目前使用最广泛的Web应用程序使用的基础协议，例如，浏览器访问网站，手机App访问后台服务器，都是通过HTTP协议实现的。HTTP是HyperText Transfer Protocol的缩写，翻译为超文本传输协议，它是基于TCP协议之上的一种请求-响应协议。</p>
+<p>我们来看一下浏览器请求访问某个网站时发送的HTTP请求-响应。当浏览器希望访问某个网站时，浏览器和网站服务器之间首先建立TCP连接，且服务器总是使用<code>80</code>端口和加密端口<code>443</code>，然后，浏览器向服务器发送一个HTTP请求，服务器收到后，返回一个HTTP响应，并且在响应中包含了HTML的网页内容，这样，浏览器解析HTML后就可以给用户显示网页了。</p>
+<p>HTTP请求的格式是固定的，它由HTTP Header和HTTP Body两部分构成。第一行总是<code>请求方法 路径 HTTP版本</code>，例如，<code>GET / HTTP/1.1</code>表示使用<code>GET</code>请求，路径是<code>/</code>，版本是<code>HTTP/1.1</code>。</p>
+<ul>
+<li>Host：表示请求的域名，因为一台服务器上可能有多个网站，因此有必要依靠Host来识别请求是发给哪个网站的；</li>
+<li>User-Agent：表示客户端自身标识信息，不同的浏览器有不同的标识，服务器依靠User-Agent判断客户端类型是IE还是Chrome，是Firefox还是一个Python爬虫；</li>
+<li>Accept：表示客户端能处理的HTTP响应格式，<code>*/*</code>表示任意格式，<code>text/*</code>表示任意文本，<code>image/png</code>表示PNG格式的图片；</li>
+<li>Accept-Language：表示客户端接收的语言，多种语言按优先级排序，服务器依靠该字段给用户返回特定语言的网页版本。</li>
+</ul>
+<p>如果是<code>GET</code>请求，那么该HTTP请求只有HTTP Header，没有HTTP Body。如果是<code>POST</code>请求，那么该HTTP请求带有HTTP Body，以一个空行分割。一个典型的带Body的HTTP请求如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /login HTTP/1.1</span><br><span class="line">Host: www.example.com</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 30</span><br><span class="line"></span><br><span class="line">username=hello&amp;password=123456</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>POST</code>请求通常要设置<code>Content-Type</code>表示Body类型，<code>Content-Length</code>表示Body的长度，这样服务器就可以请求的Header和Body做出正确的响应。</p>
+<p>此外，GET请求的参数必须附加在URL上，并以URLEncode方式编码，例如：<a target="_blank" rel="noopener" href="http://www.example.com/?a=1&amp;b=K&amp;R">http://www.example.com/?a=1&amp;b=K%26R</a>，参数分别是<code>a=1</code>和<code>b=K&amp;R</code>。因为URL的长度限制，<code>GET</code>请求的参数不能太多，而<code>POST</code>请求的参数就没有长度限制，因为<code>POST</code>请求的参数必须放到Body中。并且<code>POST</code>请求的参数不一定是URL编码，可以按任意格式编码，只需要在Content-Type中正确设置即可。常见的发送JSON的<code>POST</code>请求如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">POST /login HTTP/1.1</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Content-Length: 38</span><br><span class="line"></span><br><span class="line">{"username":"bob","password":"123456"}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>HTTP响应也是由Header和Body两部分组成，一个典型的HTTP响应如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Content-Length: 133251</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;&lt;body&gt;</span><br><span class="line">&lt;h1&gt;Hello&lt;/h1&gt;</span><br><span class="line">...</span><br></pre></td></tr></tbody></table></figure>
+
+<p>响应的第一行总是<code>HTTP版本 响应代码 响应说明</code>，例如，<code>HTTP/1.1 200 OK</code>表示版本是<code>HTTP/1.1</code>，响应代码是<code>200</code>，响应说明是<code>OK</code>。客户端只依赖响应代码判断HTTP响应是否成功。HTTP有固定的响应代码：</p>
+<ul>
+<li>1xx：表示一个提示性响应，例如101表示将切换协议，常见于WebSocket连接；</li>
+<li>2xx：表示一个成功的响应，例如200表示成功，206表示只发送了部分内容；</li>
+<li>3xx：表示一个重定向的响应，例如301表示永久重定向，303表示客户端应该按指定路径重新发送请求；</li>
+<li>4xx：表示一个因为客户端问题导致的错误响应，例如400表示因为Content-Type等各种原因导致的无效请求，404表示指定的路径不存在；</li>
+<li>5xx：表示一个因为服务器问题导致的错误响应，例如500表示服务器内部故障，503表示服务器暂时无法响应。</li>
+</ul>
+<p>当浏览器收到第一个HTTP响应后，它解析HTML后，又会发送一系列HTTP请求，例如，<code>GET /logo.jpg HTTP/1.1</code>请求一个图片，服务器响应图片请求后，会直接把二进制内容的图片发送给浏览器：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: image/jpeg</span><br><span class="line">Content-Length: 18391</span><br><span class="line"></span><br><span class="line">????JFIFHH??XExifMM?i&amp;??X?...(二进制的JPEG图片)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>因此，服务器总是被动地接收客户端的一个HTTP请求，然后响应它。客户端则根据需要发送若干个HTTP请求。</p>
+<p>对于最早期的HTTP/1.0协议，每次发送一个HTTP请求，客户端都需要先创建一个新的TCP连接，然后，收到服务器响应后，关闭这个TCP连接。由于建立TCP连接就比较耗时，因此，为了提高效率，HTTP/1.1协议允许在一个TCP连接中反复发送-响应，这样就能大大提高效率。</p>
+<p>因为HTTP协议是一个请求-响应协议，客户端在发送了一个HTTP请求后，必须等待服务器响应后，才能发送下一个请求，这样一来，如果某个响应太慢，它就会堵住后面的请求。</p>
+<p>所以，为了进一步提速，HTTP/2.0允许客户端在没有收到响应的时候，发送多个HTTP请求，服务器返回响应的时候，不一定按顺序返回，只要双方能识别出哪个响应对应哪个请求，就可以做到并行发送和接收。</p>
+<h3 id="HTTP编程-1"><a href="#HTTP编程-1" class="headerlink" title="HTTP编程"></a>HTTP编程</h3><p>既然HTTP涉及到客户端和服务器端，和TCP类似，我们也需要针对客户端编程和针对服务器端编程。</p>
+<p>本节我们不讨论服务器端的HTTP编程，因为服务器端的HTTP编程本质上就是编写Web服务器，这是一个非常复杂的体系，也是JavaEE开发的核心内容，我们在后面的章节再仔细研究。</p>
+<p>本节我们只讨论作为客户端的HTTP编程。</p>
+<p>因为浏览器也是一种HTTP客户端，所以，客户端的HTTP编程，它的行为本质上和浏览器是一样的，即发送一个HTTP请求，接收服务器响应后，获得响应内容。只不过浏览器进一步把响应内容解析后渲染并展示给了用户，而我们使用Java进行HTTP客户端编程仅限于获得响应内容。</p>
+<p>我们来看一下Java如何使用HTTP客户端编程。</p>
+<p>Java标准库提供了基于HTTP的包，但是要注意，早期的JDK版本是通过<code>HttpURLConnection</code>访问HTTP。</p>
+<p>上述代码编写比较繁琐，并且需要手动处理<code>InputStream</code>，所以用起来很麻烦。</p>
+<p>从Java 11开始，引入了新的<code>HttpClient</code>，它使用链式调用的API，能大大简化HTTP的处理。</p>
+<p>我们来看一下如何使用新版的<code>HttpClient</code>。首先需要创建一个全局<code>HttpClient</code>实例，因为<code>HttpClient</code>内部使用线程池优化多个HTTP连接，可以复用：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static HttpClient httpClient = HttpClient.newBuilder().build();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用<code>GET</code>请求获取文本内容代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> java.net.URI;</span><br><span class="line"><span class="hljs-keyword">import</span> java.net.http.*;</span><br><span class="line"><span class="hljs-keyword">import</span> java.net.http.HttpClient.Version;</span><br><span class="line"><span class="hljs-keyword">import</span> java.time.Duration;</span><br><span class="line"><span class="hljs-keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{</span><br><span class="line">    <span class="hljs-comment">// 全局HttpClient:</span></span><br><span class="line">    <span class="hljs-keyword">static</span> HttpClient httpClient = HttpClient.newBuilder().build();</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>{</span><br><span class="line">        String url = <span class="hljs-string">"https://www.sina.com.cn/"</span>;</span><br><span class="line">        HttpRequest request = HttpRequest.newBuilder(<span class="hljs-keyword">new</span> URI(url))</span><br><span class="line">            <span class="hljs-comment">// 设置Header:</span></span><br><span class="line">            .header(<span class="hljs-string">"User-Agent"</span>, <span class="hljs-string">"Java HttpClient"</span>).header(<span class="hljs-string">"Accept"</span>, <span class="hljs-string">"*/*"</span>)</span><br><span class="line">            <span class="hljs-comment">// 设置超时:</span></span><br><span class="line">            .timeout(Duration.ofSeconds(<span class="hljs-number">5</span>))</span><br><span class="line">            <span class="hljs-comment">// 设置版本:</span></span><br><span class="line">            .version(Version.HTTP_2).build();</span><br><span class="line">        HttpResponse&lt;String&gt; response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());</span><br><span class="line">        <span class="hljs-comment">// HTTP允许重复的Header，因此一个Header可对应多个Value:</span></span><br><span class="line">        Map&lt;String, List&lt;String&gt;&gt; headers = response.headers().map();</span><br><span class="line">        <span class="hljs-keyword">for</span> (String header : headers.keySet()) {</span><br><span class="line">            System.out.println(header + <span class="hljs-string">": "</span> + headers.get(header).get(<span class="hljs-number">0</span>));</span><br><span class="line">        }</span><br><span class="line">        System.out.println(response.body().substring(<span class="hljs-number">0</span>, <span class="hljs-number">1024</span>) + <span class="hljs-string">"..."</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果我们要获取图片这样的二进制内容，只需要把<code>HttpResponse.BodyHandlers.ofString()</code>换成<code>HttpResponse.BodyHandlers.ofByteArray()</code>，就可以获得一个<code>HttpResponse&lt;byte[]&gt;</code>对象。如果响应的内容很大，不希望一次性全部加载到内存，可以使用<code>HttpResponse.BodyHandlers.ofInputStream()</code>获取一个<code>InputStream</code>流。</p>
+<p>要使用<code>POST</code>请求，我们要准备好发送的Body数据并正确设置<code>Content-Type</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">String url = <span class="hljs-string">"http://www.example.com/login"</span>;</span><br><span class="line">String body = <span class="hljs-string">"username=bob&amp;password=123456"</span>;</span><br><span class="line">HttpRequest request = HttpRequest.newBuilder(<span class="hljs-keyword">new</span> URI(url))</span><br><span class="line">    <span class="hljs-comment">// 设置Header:</span></span><br><span class="line">    .header(<span class="hljs-string">"Accept"</span>, <span class="hljs-string">"*/*"</span>)</span><br><span class="line">    .header(<span class="hljs-string">"Content-Type"</span>, <span class="hljs-string">"application/x-www-form-urlencoded"</span>)</span><br><span class="line">    <span class="hljs-comment">// 设置超时:</span></span><br><span class="line">    .timeout(Duration.ofSeconds(<span class="hljs-number">5</span>))</span><br><span class="line">    <span class="hljs-comment">// 设置版本:</span></span><br><span class="line">    .version(Version.HTTP_2)</span><br><span class="line">    <span class="hljs-comment">// 使用POST并设置Body:</span></span><br><span class="line">    .POST(BodyPublishers.ofString(body, StandardCharsets.UTF_8)).build();</span><br><span class="line">HttpResponse&lt;String&gt; response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());</span><br><span class="line">String s = response.body();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可见发送<code>POST</code>数据也十分简单。</p>
+<h2 id="RMI远程调用"><a href="#RMI远程调用" class="headerlink" title="RMI远程调用"></a>RMI远程调用</h2><p>Java的RMI远程调用是指，一个JVM中的代码可以通过网络实现远程调用另一个JVM中的某个方法。RMI是Remote Method Invocation的缩写。提供服务的一方我们称为服务器，而实现远程调用的一方我们称为客户端。</p>
+<p>我们先来实现一个最简单的RMI：服务器会提供一个<code>WorldClock</code>服务，允许客户端获取指定时区的时间，即允许客户端调用下面的方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function">LocalDateTime <span class="hljs-title">getLocalDateTime</span><span class="hljs-params">(String zoneId)</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>要实现RMI，服务器和客户端必须共享同一个接口。我们定义一个<code>WorldClock</code>接口，代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">WorldClock</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Remote</span> </span>{</span><br><span class="line">    <span class="hljs-function">LocalDateTime <span class="hljs-title">getLocalDateTime</span><span class="hljs-params">(String zoneId)</span> <span class="hljs-keyword">throws</span> RemoteException</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Java的RMI规定此接口必须派生自<code>java.rmi.Remote</code>，并在每个方法声明抛出<code>RemoteException</code>。</p>
+<p>下一步是编写服务器的实现类，因为客户端请求的调用方法<code>getLocalDateTime()</code>最终会通过这个实现类返回结果。实现类<code>WorldClockService</code>代码如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class WorldClockService implements WorldClock {</span><br><span class="line">    @Override</span><br><span class="line">    public LocalDateTime getLocalDateTime(String zoneId) throws RemoteException {</span><br><span class="line">        return LocalDateTime.now(ZoneId.of(zoneId)).withNano(0);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在，服务器端的服务相关代码就编写完毕。我们需要通过Java RMI提供的一系列底层支持接口，把上面编写的服务以RMI的形式暴露在网络上，客户端才能调用：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Server {</span><br><span class="line">    public static void main(String[] args) throws RemoteException {</span><br><span class="line">        System.out.println("create World clock remote service...");</span><br><span class="line">        // 实例化一个WorldClock:</span><br><span class="line">        WorldClock worldClock = new WorldClockService();</span><br><span class="line">        // 将此服务转换为远程服务接口:</span><br><span class="line">        WorldClock skeleton = (WorldClock) UnicastRemoteObject.exportObject(worldClock, 0);</span><br><span class="line">        // 将RMI服务注册到1099端口:</span><br><span class="line">        Registry registry = LocateRegistry.createRegistry(1099);</span><br><span class="line">        // 注册此服务，服务名为"WorldClock":</span><br><span class="line">        registry.rebind("WorldClock", skeleton);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上述代码主要目的是通过RMI提供的相关类，将我们自己的<code>WorldClock</code>实例注册到RMI服务上。RMI的默认端口是<code>1099</code>，最后一步注册服务时通过<code>rebind()</code>指定服务名称为<code>"WorldClock"</code>。</p>
+<p>下一步我们就可以编写客户端代码。RMI要求服务器和客户端共享同一个接口，因此我们要把<code>WorldClock.java</code>这个接口文件复制到客户端，然后在客户端实现RMI调用：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Client {</span><br><span class="line">    public static void main(String[] args) throws RemoteException, NotBoundException {</span><br><span class="line">        // 连接到服务器localhost，端口1099:</span><br><span class="line">        Registry registry = LocateRegistry.getRegistry("localhost", 1099);</span><br><span class="line">        // 查找名称为"WorldClock"的服务并强制转型为WorldClock接口:</span><br><span class="line">        WorldClock worldClock = (WorldClock) registry.lookup("WorldClock");</span><br><span class="line">        // 正常调用接口方法:</span><br><span class="line">        LocalDateTime now = worldClock.getLocalDateTime("Asia/Shanghai");</span><br><span class="line">        // 打印调用结果:</span><br><span class="line">        System.out.println(now);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>先运行服务器，再运行客户端。从运行结果可知，因为客户端只有接口，并没有实现类，因此，客户端获得的接口方法返回值实际上是通过网络从服务器端获取的。整个过程实际上非常简单，对客户端来说，客户端持有的<code>WorldClock</code>接口实际上对应了一个“实现类”，它是由<code>Registry</code>内部动态生成的，并负责把方法调用通过网络传递到服务器端。而服务器端接收网络调用的服务并不是我们自己编写的<code>WorldClockService</code>，而是<code>Registry</code>自动生成的代码。我们把客户端的“实现类”称为<code>stub</code>，而服务器端的网络服务类称为<code>skeleton</code>，它会真正调用服务器端的<code>WorldClockService</code>，获取结果，然后把结果通过网络传递给客户端。整个过程由RMI底层负责实现序列化和反序列化。</p>
+<p>Java的RMI严重依赖序列化和反序列化，而这种情况下可能会造成严重的安全漏洞，因为Java的序列化和反序列化不但涉及到数据，还涉及到二进制的字节码，即使使用白名单机制也很难保证100%排除恶意构造的字节码。因此，使用RMI时，双方必须是内网互相信任的机器，不要把1099端口暴露在公网上作为对外服务。</p>
+<p>此外，Java的RMI调用机制决定了双方必须是Java程序，其他语言很难调用Java的RMI。如果要使用不同语言进行RPC调用，可以选择更通用的协议，例如<a target="_blank" rel="noopener" href="https://grpc.io/">gRPC</a>。</p>
+</body></html>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Java/">#Java</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2021/05/27/Maven%E5%9F%BA%E7%A1%80/">Maven基础</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
