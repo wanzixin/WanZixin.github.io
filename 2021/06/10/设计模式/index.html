@@ -24,7 +24,7 @@
 <meta property="og:description" content="设计模式，即Design Patterns，是指在软件设计中，被反复使用的代码设计经验。使用设计模式的目的是为了可重用代码，提高代码的可扩展性和可维护性。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-06-10T10:54:11.000Z">
-<meta property="article:modified_time" content="2021-06-12T06:14:33.940Z">
+<meta property="article:modified_time" content="2021-06-13T03:16:45.242Z">
 <meta property="article:author" content="WanZixin">
 <meta name="twitter:card" content="summary">
 
@@ -151,6 +151,18 @@
                     
                     <a class="navbar-item" href="#生成器">2.3&nbsp;&nbsp;生成器</a>
                     
+                    
+                    
+                    <a class="navbar-item" href="#原型">2.4&nbsp;&nbsp;原型</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#单例">2.5&nbsp;&nbsp;单例</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结-1">2.5.1&nbsp;&nbsp;小结</a>
+                    
                 </div>
             </div>
             
@@ -190,7 +202,7 @@
         <span class="column is-narrow">
             
             
-            22 minutes read (About 3246 words)
+            32 minutes read (About 4801 words)
         </span>
         
     </div>
@@ -297,6 +309,61 @@
 <p>由于我们经常需要构造URL字符串，可以使用Builder模式编写一个URLBuilder，调用方式如下：</p>
 <figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String url = URLBuilder.builder() <span class="hljs-comment">// 创建Builder</span></span><br><span class="line">        .setDomain(<span class="hljs-string">"www.liaoxuefeng.com"</span>) <span class="hljs-comment">// 设置domain</span></span><br><span class="line">        .setScheme(<span class="hljs-string">"https"</span>) <span class="hljs-comment">// 设置scheme</span></span><br><span class="line">        .setPath(<span class="hljs-string">"/"</span>) <span class="hljs-comment">// 设置路径</span></span><br><span class="line">        .setQuery(Map.of(<span class="hljs-string">"a"</span>, <span class="hljs-string">"123"</span>, <span class="hljs-string">"q"</span>, <span class="hljs-string">"K&amp;R"</span>)) <span class="hljs-comment">// 设置query</span></span><br><span class="line">        .build(); <span class="hljs-comment">// 完成build</span></span><br></pre></td></tr></tbody></table></figure>
 
+<h3 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h3><p>原型模式，即Prototype，指创建新对象的时候，根据现有的一个原型创建。</p>
+<p>我们举个例子：如果我们已经有了一个<code>String[]</code>数组，想再创建一个一模一样的<code>String[]</code>数组，怎么写？实际上创建过程很简单，就是把现有数组的元素复制到新数组。如果我们把这个创建过程封装一下，就成了原型模式。用代码实现如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 原型:</span></span><br><span class="line">String[] original = { <span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Pear"</span>, <span class="hljs-string">"Banana"</span> };</span><br><span class="line"><span class="hljs-comment">// 新对象:</span></span><br><span class="line">String[] copy = Arrays.copyOf(original, original.length);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>对于普通类，我们如何实现原型拷贝？Java的Object提供了一个<code>clone()</code>方法，它的意图就是复制一个新的对象出来，我们需要实现一个<code>Cloneable</code>接口，来标识一个对象是“可复制”的。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Cloneable</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> id;</span><br><span class="line">    <span class="hljs-keyword">private</span> String name;</span><br><span class="line">    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> score;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// 复制新对象并返回:</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">clone</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        Student std = <span class="hljs-keyword">new</span> Student();</span><br><span class="line">        std.id = <span class="hljs-keyword">this</span>.id;</span><br><span class="line">        std.name = <span class="hljs-keyword">this</span>.name;</span><br><span class="line">        std.score = <span class="hljs-keyword">this</span>.score;</span><br><span class="line">        <span class="hljs-keyword">return</span> std;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用的时候，因为clone()的方法签名定义在Object中，返回类型也是Object，所以强制转型，比较麻烦。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Student std1 = <span class="hljs-keyword">new</span> Student();</span><br><span class="line">std1.setId(<span class="hljs-number">123</span>);</span><br><span class="line">std1.setName(<span class="hljs-string">"Bob"</span>);</span><br><span class="line">std1.setScore(<span class="hljs-number">88</span>);</span><br><span class="line"><span class="hljs-comment">// 复制新对象:</span></span><br><span class="line">Student std2 = (Student) std1.clone();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>实际上，使用原型模式更好的方式是定义一个<code>copy()</code>方法，返回明确的类型。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> id;</span><br><span class="line">    <span class="hljs-keyword">private</span> String name;</span><br><span class="line">    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> score;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> Student <span class="hljs-title">copy</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        Student std = <span class="hljs-keyword">new</span> Student();</span><br><span class="line">        std.id = <span class="hljs-keyword">this</span>.id;</span><br><span class="line">        std.name = <span class="hljs-keyword">this</span>.name;</span><br><span class="line">        std.score = <span class="hljs-keyword">this</span>.score;</span><br><span class="line">        <span class="hljs-keyword">return</span> std;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>原型模式应用不是很广泛，因为很多实例会持有类似文件、Socket这样的资源，而这些资源是无法复制给另一个对象共享的，只有存储简单类型的“值”对象可以复制。</p>
+<h3 id="单例"><a href="#单例" class="headerlink" title="单例"></a>单例</h3><p>单例模式，即Singleton，是为了保证在一个进程中，某个类有且仅有一个实例。因为这个类只有一个实例，因此，自然不能让调用方使用<code>new Xyz()</code>来创建实例了。所以，单例的构造方法必须是<code>private</code>，这样就防止了调用方自己创建实例。但在类的内部，可以用一个静态字段来引用唯一创建的实例。</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton {</span><br><span class="line">    // 静态字段引用唯一实例:</span><br><span class="line">    private static final Singleton INSTANCE = new Singleton();</span><br><span class="line"></span><br><span class="line">    // private构造方法保证外部无法实例化:</span><br><span class="line">    private Singleton() {</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>那么，外部调用方如何获取这唯一的实例呢？提供一个静态方法返回这个实例。</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton {</span><br><span class="line">    // 静态字段引用唯一实例:</span><br><span class="line">    private static final Singleton INSTANCE = new Singleton();</span><br><span class="line"></span><br><span class="line">    // 通过静态方法返回实例:</span><br><span class="line">    public static Singleton getInstance() {</span><br><span class="line">        return INSTANCE;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    // private构造方法保证外部无法实例化:</span><br><span class="line">    private Singleton() {</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>或者直接把static变量暴露出去。</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton {</span><br><span class="line">    // 静态字段引用唯一实例:</span><br><span class="line">    public static final Singleton INSTANCE = new Singleton();</span><br><span class="line"></span><br><span class="line">    // private构造方法保证外部无法实例化:</span><br><span class="line">    private Singleton() {</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>所以，单例模式的实现方式很简单：</p>
+<ol>
+<li>只有<code>private</code>构造方法，确保外部无法实例化；</li>
+<li>通过<code>private static</code>变量持有唯一实例，保证全局唯一性；</li>
+<li>通过<code>public static</code>方法返回此唯一实例，使外部调用方能获取到实例。</li>
+</ol>
+<p>Java标准库有一些类就是单例，例如<code>Runtime</code>这个类：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Runtime runtime = Runtime.getRuntime();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>有些童鞋可能听说过延迟加载，即在调用方第一次调用<code>getInstance()</code>时才初始化全局唯一实例，类似这样：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton {</span><br><span class="line">    private static Singleton INSTANCE = null;</span><br><span class="line"></span><br><span class="line">    public static Singleton getInstance() {</span><br><span class="line">        if (INSTANCE == null) {</span><br><span class="line">            INSTANCE = new Singleton();</span><br><span class="line">        }</span><br><span class="line">        return INSTANCE;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    private Singleton() {</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>遗憾的是，这种写法在多线程中是错误的，在竞争条件下会创建出多个实例。必须对整个方法进行加锁：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public synchronized static Singleton getInstance() {</span><br><span class="line">    if (INSTANCE == null) {</span><br><span class="line">        INSTANCE = new Singleton();</span><br><span class="line">    }</span><br><span class="line">    return INSTANCE;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但加锁会严重影响并发性能。还有些童鞋听说过双重检查，类似这样：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static Singleton getInstance() {</span><br><span class="line">    if (INSTANCE == null) {</span><br><span class="line">        synchronized (Singleton.class) {</span><br><span class="line">            if (INSTANCE == null) {</span><br><span class="line">                INSTANCE = new Singleton();</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    return INSTANCE;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然而，由于Java的内存模型，双重检查在这里不成立。要真正实现延迟加载，只能通过Java的ClassLoader机制完成。如果没有特殊的需求，使用Singleton模式的时候，最好不要延迟加载，这样会使代码更简单。</p>
+<p>另一种实现Singleton的方式是利用Java的<code>enum</code>，因为Java保证枚举类的每个枚举都是单例，所以我们只需要编写一个只有一个枚举的类即可：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public enum World {</span><br><span class="line">    // 唯一枚举:</span><br><span class="line">	INSTANCE;</span><br><span class="line"></span><br><span class="line">	private String name = "world";</span><br><span class="line"></span><br><span class="line">	public String getName() {</span><br><span class="line">		return this.name;</span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">	public void setName(String name) {</span><br><span class="line">		this.name = name;</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>枚举类也完全可以像其他类那样定义自己的字段、方法，这样上面这个<code>World</code>类在调用方看来就可以这么用：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String name = World.INSTANCE.getName();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用枚举实现Singleton还避免了第一种方式实现Singleton的一个潜在问题：即序列化和反序列化会绕过普通类的<code>private</code>构造方法从而创建出多个实例，而枚举类就没有这个问题。</p>
+<p>那我们什么时候应该用Singleton呢？实际上，很多程序，尤其是Web程序，大部分服务类都应该被视作Singleton，如果全部按Singleton的写法写，会非常麻烦，所以，通常是通过约定让框架（例如Spring）来实例化这些类，保证只有一个实例，调用方自觉通过框架获取实例而不是<code>new</code>操作符：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Component // 表示一个单例组件</span><br><span class="line">public class MyService {</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>因此，除非确有必要，否则Singleton模式一般以“约定”为主，不会刻意实现它。</p>
+<h4 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h4><p>Singleton模式是为了保证一个程序的运行期间，某个类有且只有一个全局唯一实例；</p>
+<p>Singleton模式既可以严格实现，也可以以约定的方式把普通类视作单例。</p>
 </body></html>
     
     </div>
