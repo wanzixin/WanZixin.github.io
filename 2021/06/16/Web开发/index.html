@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>Web开发 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="从本章开始我们就进入到JavaEE的领域。JavaEE并不是一个软件产品，它更多的是一种软件架构和设计思想。我们可以把JavaEE看作是在JavaSE的基础上，开发的一系列基于服务器的组件、API标准和通用架构。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web开发">
+<meta property="og:url" content="https://wanzixin.github.io/2021/06/16/Web%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="从本章开始我们就进入到JavaEE的领域。JavaEE并不是一个软件产品，它更多的是一种软件架构和设计思想。我们可以把JavaEE看作是在JavaSE的基础上，开发的一系列基于服务器的组件、API标准和通用架构。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-16T02:16:47.000Z">
+<meta property="article:modified_time" content="2021-06-18T03:26:59.609Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Web基础">1&nbsp;&nbsp;<b>Web基础</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#HTTP协议">1.1&nbsp;&nbsp;HTTP协议</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#编写HTTP-Server">1.2&nbsp;&nbsp;编写HTTP Server</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#Servlet入门">2&nbsp;&nbsp;<b>Servlet入门</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#Servlet开发">3&nbsp;&nbsp;<b>Servlet开发</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#Servlet进阶">4&nbsp;&nbsp;<b>Servlet进阶</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#重定向与转发">4.1&nbsp;&nbsp;重定向与转发</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Web开发
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>Jun 16 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            43 minutes read (About 6415 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>从本章开始我们就进入到JavaEE的领域。JavaEE并不是一个软件产品，它更多的是一种软件架构和设计思想。我们可以把JavaEE看作是在JavaSE的基础上，开发的一系列基于服务器的组件、API标准和通用架构。<span id="more"></span></p>
+<p>JavaEE最核心的部件是基于Servlet标准的Web服务器，开发者编写的应用程序是基于Servlet API并运行在Web服务器内部的。此外，JavaEE还有一系列技术标准：</p>
+<ul>
+<li>EJB：Enterprise JavaBean，企业级JavaBean，早期经常用于实现应用程序的业务逻辑，现在基本被轻量级框架如Spring所取代</li>
+<li>JAAS：Java Authentication and Authorization Service，一个标准的认证和授权服务，常用于企业内部，Web程序通常使用更轻量级的自定义认证</li>
+<li>JCA：JavaEE Connector Architecture，用于连接企业内部的EIS系统等</li>
+<li>JMS：Java Message Service，用于消息服务</li>
+<li>JTA：Java Transaction API，用于分布式事务</li>
+<li>JAX-WS：Java API for XML Web Services，用于构建基于XML的Web服务</li>
+<li>…</li>
+</ul>
+<p>目前流行的基于Spring的轻量级JavaEE开发架构，使用最广泛的是Servlet和JMS，以及一系列开源组件。本章我们将详细介绍基于Servlet的Web开发。</p>
+<h2 id="Web基础"><a href="#Web基础" class="headerlink" title="Web基础"></a>Web基础</h2><p>今天我们访问网站、使用App时，都是基于Web这种Browser/Server模式，简称BS架构。它的特点是，客户端只需要浏览器，应用程序的逻辑和数据都存储在服务器端。浏览器只需要请求服务器，获取Web页面，并把Web页面展示给用户即可。</p>
+<p>因为Web页面是用HTML编写的，而HTML具有强大的表现力，所以Web页面具有极强的交互性。并且，服务端升级后，客户端无需任何部署就可以使用到新版本，因此，BS架构升级非常容易。</p>
+<p>对于Browser来说，请求页面的流程如下：</p>
+<ol>
+<li>与服务器建立TCP连接</li>
+<li>发送HTTP请求</li>
+<li>接收HTTP相应，然后把网页在浏览器端显示出来</li>
+</ol>
+<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p>浏览器发送的HTTP请求如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: www.sina.com.cn</span><br><span class="line">User-Agent: Mozilla/5.0 xxx</span><br><span class="line">Accept: */*</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中，第一行表示使用<code>GET</code>请求路径为<code>/</code>的资源，并使用<code>HTTP/1.1</code>协议。从第二行开始，每行都是以<code>Header: Value</code>形式表示的HTTP头，比较常用的HTTP Header包括：</p>
+<ol>
+<li>Host：表示请求的主机名，因为一个服务器上可能运行着多个网站，因此Host表示浏览器正在请求的域名</li>
+<li>User-Agent：标识客户端本身，例如Chrome浏览器的标识类似<code>Mozilla/5.0 ... Chrome/79</code>，IE浏览器的标识类似<code>Mozilla/5.0 (Windows NT ...) like Gecko</code></li>
+<li>Accept：表示浏览器能接收的资源类型，如<code>text/*</code>，<code>image/*</code>或者<code>*/*</code>表示所有</li>
+<li>Accept-Language：表示浏览器偏好的语言，服务器可以根据这个返回不同语言的网页</li>
+<li>Accept-Encoding：表示浏览器可以支持的压缩类型，例如<code>gzip</code>, <code>deflate</code>, <code>br</code></li>
+</ol>
+<p>服务器的响应如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Content-Length: 21932</span><br><span class="line">Content-Encoding: gzip</span><br><span class="line">Cache-Control: max-age=300</span><br><span class="line"></span><br><span class="line">&lt;html&gt;...网页数据...</span><br></pre></td></tr></tbody></table></figure>
+
+<p>服务器响应的第一行总是版本号+空格+数字+空格+文本，数字表示响应码，其中<code>2xx</code>表示成功，3xx表示重定向，<code>4xx</code>表示客户端引发的所务，<code>5xx</code>表示服务端引发的错误。数字是给程序识别，文本是给开发者调试使用的。常见的响应代码有：</p>
+<ul>
+<li>200 OK：表示成功；</li>
+<li>301 Moved Permanently：表示该URL已经永久重定向；</li>
+<li>302 Found：表示该URL需要临时重定向；</li>
+<li>304 Not Modified：表示该资源没有修改，客户端可以使用本地缓存的版本；</li>
+<li>400 Bad Request：表示客户端发送了一个错误的请求，例如参数无效；</li>
+<li>401 Unauthorized：表示客户端因为身份未验证而不允许访问该URL；</li>
+<li>403 Forbidden：表示服务器因为权限问题拒绝了客户端的请求；</li>
+<li>404 Not Found：表示客户端请求了一个不存在的资源；</li>
+<li>500 Internal Server Error：表示服务器处理时内部出错，例如因为无法连接数据库；</li>
+<li>503 Service Unavailable：表示服务器此刻暂时无法处理请求。</li>
+</ul>
+<p>从第二行开始，服务器每一行返回一个HTTP头。服务器经常返回的HTTP Header包括：</p>
+<ul>
+<li>Content-Type：表示该响应内容的类型，例如<code>text/html</code>，<code>image/jpeg</code></li>
+<li>Content-Length：表示该响应内容的长度（字节数）</li>
+<li>Content-Encoding：表示该响应压缩算法，例如<code>gzip</code></li>
+<li>Cache-Control：指示客户端应如何缓存，例如<code>max-age=300</code>表示可以最多缓存300秒</li>
+</ul>
+<p>HTTP请求和响应都由HTTP Header和HTTP Body构成，其中HTTP Header每行以<code>\r\n</code>。如果遇到连续两个<code>\r\n</code>，那么后面就是HTTP Body。浏览器读取HTTP Body，并根据Header信息中指示的<code>Content-Type</code>，<code>Content-Encoding</code>等解压后显示网页、图像或其他内容。</p>
+<p>通常浏览器获取的第一个资源是HTTP网页，在网页中，如果嵌入了JavaScript、CSS、图片、视频等其他资源，浏览器会根据资源的URL再次向服务器请求对应的资源。</p>
+<h3 id="编写HTTP-Server"><a href="#编写HTTP-Server" class="headerlink" title="编写HTTP Server"></a>编写HTTP Server</h3><p>一个HTTP Server本质上是一个TCP服务器，我们先用<a href="https://wanzixin.github.io/2021/05/29/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/#TCP%E7%BC%96%E7%A8%8B">TCP编程</a>的知识实现服务器端的框架。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Server</span> </span>{</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException </span>{</span><br><span class="line">        ServerSocket ss = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">8080</span>); <span class="hljs-comment">// 监听指定端口</span></span><br><span class="line">        System.out.println(<span class="hljs-string">"server is running..."</span>);</span><br><span class="line">        <span class="hljs-keyword">for</span> (;;) {</span><br><span class="line">            Socket sock = ss.accept();</span><br><span class="line">            System.out.println(<span class="hljs-string">"connected from "</span> + sock.getRemoteSocketAddress());</span><br><span class="line">            Thread t = <span class="hljs-keyword">new</span> Handler(sock);</span><br><span class="line">            t.start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Handler</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Thread</span> </span>{</span><br><span class="line">    Socket sock;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Handler</span><span class="hljs-params">(Socket sock)</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">this</span>.sock = sock;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">try</span> (InputStream input = <span class="hljs-keyword">this</span>.sock.getInputStream()) {</span><br><span class="line">            <span class="hljs-keyword">try</span> (OutputStream output = <span class="hljs-keyword">this</span>.sock.getOutputStream()) {</span><br><span class="line">                handle(input, output);</span><br><span class="line">            }</span><br><span class="line">        } <span class="hljs-keyword">catch</span> (Exception e) {</span><br><span class="line">            <span class="hljs-keyword">try</span> {</span><br><span class="line">                <span class="hljs-keyword">this</span>.sock.close();</span><br><span class="line">            } <span class="hljs-keyword">catch</span> (IOException ioe) {</span><br><span class="line">            }</span><br><span class="line">            System.out.println(<span class="hljs-string">"client disconnected."</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">handle</span><span class="hljs-params">(InputStream input, OutputStream output)</span> <span class="hljs-keyword">throws</span> IOException </span>{</span><br><span class="line">        <span class="hljs-keyword">var</span> reader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(input, StandardCharsets.UTF_8));</span><br><span class="line">        <span class="hljs-keyword">var</span> writer = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(output, StandardCharsets.UTF_8));</span><br><span class="line">        <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> 处理HTTP请求</span></span><br><span class="line">        System.out.println(<span class="hljs-string">"Process new http request..."</span>);</span><br><span class="line">    <span class="hljs-keyword">var</span> reader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(input, StandardCharsets.UTF_8));</span><br><span class="line">    <span class="hljs-keyword">var</span> writer = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(output, StandardCharsets.UTF_8));</span><br><span class="line">    <span class="hljs-comment">// 读取HTTP请求:</span></span><br><span class="line">    <span class="hljs-keyword">boolean</span> requestOk = <span class="hljs-keyword">false</span>;</span><br><span class="line">    String first = reader.readLine();</span><br><span class="line">    <span class="hljs-keyword">if</span> (first.startsWith(<span class="hljs-string">"GET / HTTP/1."</span>)) {</span><br><span class="line">        requestOk = <span class="hljs-keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">for</span> (;;) {</span><br><span class="line">        String header = reader.readLine();</span><br><span class="line">        <span class="hljs-keyword">if</span> (header.isEmpty()) { <span class="hljs-comment">// 读取到空行时, HTTP Header读取完毕</span></span><br><span class="line">            <span class="hljs-keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">        System.out.println(header);</span><br><span class="line">    }</span><br><span class="line">    System.out.println(requestOk ? <span class="hljs-string">"Response OK"</span> : <span class="hljs-string">"Response Error"</span>);</span><br><span class="line">    <span class="hljs-keyword">if</span> (!requestOk) {</span><br><span class="line">        <span class="hljs-comment">// 发送错误响应:</span></span><br><span class="line">        writer.write(<span class="hljs-string">"HTTP/1.0 404 Not Found\r\n"</span>);</span><br><span class="line">        writer.write(<span class="hljs-string">"Content-Length: 0\r\n"</span>);</span><br><span class="line">        writer.write(<span class="hljs-string">"\r\n"</span>);</span><br><span class="line">        writer.flush();</span><br><span class="line">    } <span class="hljs-keyword">else</span> {</span><br><span class="line">        <span class="hljs-comment">// 发送成功响应:</span></span><br><span class="line">        String data = <span class="hljs-string">"&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello, world!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;"</span>;</span><br><span class="line">        <span class="hljs-keyword">int</span> length = data.getBytes(StandardCharsets.UTF_8).length;</span><br><span class="line">        writer.write(<span class="hljs-string">"HTTP/1.0 200 OK\r\n"</span>);</span><br><span class="line">        writer.write(<span class="hljs-string">"Connection: close\r\n"</span>);</span><br><span class="line">        writer.write(<span class="hljs-string">"Content-Type: text/html\r\n"</span>);</span><br><span class="line">        writer.write(<span class="hljs-string">"Content-Length: "</span> + length + <span class="hljs-string">"\r\n"</span>);</span><br><span class="line">        writer.write(<span class="hljs-string">"\r\n"</span>); <span class="hljs-comment">// 空行标识Header和Body的分隔</span></span><br><span class="line">        writer.write(data);</span><br><span class="line">        writer.flush();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这里的核心代码是，先读取HTTP请求，这里我们只处理<code>GET /</code>的请求。当读取到空行时，表示已读到连续两个<code>\r\n</code>，说明请求结束，可以发送响应。发送响应的时候，首先发送响应代码<code>HTTP/1.0 200 OK</code>表示一个成功的200响应，使用<code>HTTP/1.0</code>协议，然后，依次发送Header，发送完Header后，再发送一个空行标识Header结束，紧接着发送HTTP Body，在浏览器输入<code>http://localhost:8080/</code>就可以看到响应页面。</p>
+<blockquote>
+<p>HTTP目前有多个版本，<code>1.0</code>是早期版本，浏览器每次建立TCP连接后，只发送一个HTTP请求并接收一个HTTP响应，然后就关闭TCP连接。由于创建TCP连接本身就需要消耗一定的时间，因此，HTTP 1.1允许浏览器和服务器在同一个TCP连接上反复发送、接收多个HTTP请求和响应，这样就大大提高了传输效率。</p>
+<p>我们注意到HTTP协议是一个请求-响应协议，它总是发送一个请求，然后接收一个响应。能不能一次性发送多个请求，然后再接收多个响应呢？HTTP 2.0可以支持浏览器同时发出多个请求，但每个请求需要唯一标识，服务器可以不按请求的顺序返回多个响应，由浏览器自己把收到的响应和请求对应起来。可见，HTTP 2.0进一步提高了传输效率，因为浏览器发出一个请求后，不必等待响应，就可以继续发下一个请求。</p>
+<p>HTTP 3.0为了进一步提高速度，将抛弃TCP协议，改为使用无需创建连接的UDP协议，目前HTTP 3.0仍然处于实验阶段。</p>
+</blockquote>
+<h2 id="Servlet入门"><a href="#Servlet入门" class="headerlink" title="Servlet入门"></a>Servlet入门</h2><p>在上一节中我们看到，编写HTTP服务器其实是比较简单的，只需要先编写基于多线程的TCP服务，然后在一个TCP连接中去读HTTP请求，发送HTTP响应即可。但是，要编写一个完善的HTTP服务器，以HTTP/1.1为例，需要考虑：</p>
+<ul>
+<li>识别正确和错误的HTTP请求；</li>
+<li>识别正确和错误的HTTP头；</li>
+<li>复用TCP连接；</li>
+<li>复用线程；</li>
+<li>IO异常处理；</li>
+<li>…</li>
+</ul>
+<p>这些基础的工作需要耗费大量的时间，并且经过长期测试才能稳定运行。如果我们只需要输出一个简单的HTML页面，就不得不编写上千行底层代码，那就无法做到高效而可靠的开发。</p>
+<p>因此，在JavaEE平台上，处理TCP连接，解析HTTP协议这些底层工作统统交给现成的Web服务器去做，我们只需要把自己的应用程序跑在Web服务器上。为了实现这一目的，JavaEE提供了Servlet API，我们使用Servlet API编写自己的Servlet来处理HTTP请求，Web服务器实现Servlet API接口，实现底层功能：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">                 ┌───────────┐</span><br><span class="line">                 │My Servlet │</span><br><span class="line">                 ├───────────┤</span><br><span class="line">                 │Servlet API│</span><br><span class="line">┌───────┐  HTTP  ├───────────┤</span><br><span class="line">│Browser│&lt;──────&gt;│Web Server │</span><br><span class="line">└───────┘        └───────────┘</span><br></pre></td></tr></tbody></table></figure>
+
+<p>我们来实现一个最简单的Servlet：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// WebServlet注解表示这是一个Servlet，并映射到地址/:</span></span><br><span class="line"><span class="hljs-meta">@WebServlet(urlPatterns = "/")</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloServlet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpServlet</span> </span>{</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest req, HttpServletResponse resp)</span></span></span><br><span class="line"><span class="hljs-function">            <span class="hljs-keyword">throws</span> ServletException, IOException </span>{</span><br><span class="line">        <span class="hljs-comment">// 设置响应类型:</span></span><br><span class="line">        resp.setContentType(<span class="hljs-string">"text/html"</span>);</span><br><span class="line">        <span class="hljs-comment">// 获取输出流:</span></span><br><span class="line">        PrintWriter pw = resp.getWriter();</span><br><span class="line">        <span class="hljs-comment">// 写入响应:</span></span><br><span class="line">        pw.write(<span class="hljs-string">"&lt;h1&gt;Hello, world!&lt;/h1&gt;"</span>);</span><br><span class="line">        <span class="hljs-comment">// 最后不要忘记flush强制输出:</span></span><br><span class="line">        pw.flush();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>一个Servlet总是继承自<code>HttpServlet</code>，然后覆写<code>doGet()</code>和<code>doPost()</code>方法。注意到doGet()方法传入了<code>HttpServletRequest</code>和<code>HttpServletResponse</code>，分别表示HTTP请求和响应。我们使用Servlet API时，并不与底层TCP交互。也不需要解析HTTP协议，因为<code>HttpServletRequest</code>和<code>HttpServletResponse</code>都已经封装好了请求和响应。以发送响应为例，我们只需要设置正确的响应类型，然后获取<code>PrintWriter</code>，写入响应即可。</p>
+<p>那么Servlet API是谁提供的呢？</p>
+<p>Servlet API是一个jar包，我们需要通过Maven来引入它，才能正常编译：</p>
+<figure class="highlight xml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">packaging</span>&gt;</span>war<span class="hljs-tag">&lt;/<span class="hljs-name">packaging</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>javax.servlet<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>javax.servlet-api<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>4.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>provided<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意到这个<code>pom.xml</code>与之前讲到的普通Java程序有点不同，打包类型是不<code>jar</code>而是<code>war</code>，表示Java Web Application Archive。注意到<code>&lt;scope&gt;</code>指定为<code>provided</code>，表示编译时使用，但不会打包到<code>.war</code>文件中，因为运行期Web服务器本身已经提供了Servlet API相关的jar包。</p>
+<p>我们还需要在工程目录下创建一个web.xml描述文件，放到<code>src/main/webapp/WEB-INF</code>目录下（固定目录结构，不要修改路径，注意大小写）。文件内容可以固定如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE web-app PUBLIC</span><br><span class="line"> <span class="hljs-string">"-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"</span></span><br><span class="line"> <span class="hljs-string">"http://java.sun.com/dtd/web-app_2_3.dtd"</span>&gt;</span><br><span class="line">&lt;web-app&gt;</span><br><span class="line">  &lt;display-name&gt;Archetype Created Web Application&lt;/display-name&gt;</span><br><span class="line">&lt;/web-app&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">web-servlet-hello</span><br><span class="line">├── pom.xml</span><br><span class="line">└── src</span><br><span class="line">    └── main</span><br><span class="line">        ├── java</span><br><span class="line">        │   └── com</span><br><span class="line">        │       └── itranswarp</span><br><span class="line">        │           └── learnjava</span><br><span class="line">        │               └── servlet</span><br><span class="line">        │                   └── HelloServlet.java</span><br><span class="line">        ├── resources</span><br><span class="line">        └── webapp</span><br><span class="line">            └── WEB-INF</span><br><span class="line">                └── web.xml</span><br></pre></td></tr></tbody></table></figure>
+
+<p>运行Maven命令<code>mvn clean package</code>，在target目录下得到一个hello.war文件，这个文件就是我们编译打包后的Web应用程序。</p>
+<p>普通的Java程序是通过启动JVM，然后执行<code>main()</code>方法开始运行。但是Web应用程序有所不同，我们无法直接运行<code>war</code>文件，必须先启动Web服务器，再由Web服务器加载我们编写的<code>HelloServlet</code>，这样就可以让<code>HelloServlet</code>处理浏览器发送的请求。</p>
+<p>因此，我们首先要找一个支持Servlet API的Web服务器。常用的服务器有：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://tomcat.apache.org/">Tomcat</a>：由Apache开发的开源免费服务器；</li>
+<li><a target="_blank" rel="noopener" href="https://www.eclipse.org/jetty/">Jetty</a>：由Eclipse开发的开源免费服务器；</li>
+<li><a target="_blank" rel="noopener" href="https://javaee.github.io/glassfish/">GlassFish</a>：一个开源的全功能JavaEE服务器。</li>
+</ul>
+<p>无论使用哪个服务器，只要它支持Servlet API 4.0（因为我们引入的Servlet版本是4.0），我们的war包都可以在上面运行。这里我们选择使用最广泛的开源免费的Tomcat服务器。</p>
+<p>要运行我们的<code>hello.war</code>，首先要下载Tomcat服务器，解压后，把<code>hello.war</code>复制到Tomcat的<code>webapps</code>目录下，然后切换到<code>bin</code>目录，执行<code>startup.sh</code>或<code>startup.bat</code>启动Tomcat服务器。</p>
+<p>在浏览器输入<code>http://localhost:8080/hello/</code>即可看到<code>HelloServlet</code>的输出。细心的童鞋可能会问，为啥路径是<code>/hello/</code>而不是<code>/</code>？因为一个Web服务器允许同时运行多个Web App，而我们的Web App叫<code>hello</code>，因此，第一级目录<code>/hello</code>表示Web App的名字，后面的<code>/</code>才是我们在<code>HelloServlet</code>中映射的路径。</p>
+<p>那能不能直接使用<code>/</code>而不是<code>/hello/</code>？毕竟<code>/</code>比较简洁。</p>
+<p>答案是肯定的。先关闭Tomcat（执行<code>shutdown.sh</code>或<code>shutdown.bat</code>），然后删除Tomcat的webapps目录下的所有文件夹和文件，最后把我们的<code>hello.war</code>复制过来，改名为<code>ROOT.war</code>，文件名为<code>ROOT</code>的应用程序将作为默认应用，启动后直接访问<code>http://localhost:8080/</code>即可。</p>
+<p>实际上，类似Tomcat这样的服务器也是Java编写的，启动Tomcat服务器实际上是启动Java虚拟机，执行Tomcat的<code>main()</code>方法，然后由Tomcat负责加载我们的<code>.war</code>文件，并创建一个<code>HelloServlet</code>实例，最后以多线程的模式来处理HTTP请求。如果Tomcat服务器收到的请求路径是<code>/</code>（假定部署文件为ROOT.war），就转发到<code>HelloServlet</code>并传入<code>HttpServletRequest</code>和<code>HttpServletResponse</code>两个对象。</p>
+<p>因为我们编写的Servlet并不是直接运行，而是由Web服务器加载后创建实例运行，所以，类似Tomcat这样的Web服务器也称为Servlet容器。</p>
+<p>在Servlet容器中运行的Servlet具有如下特点：</p>
+<ul>
+<li>无法在代码中直接通过new创建Servlet实例，必须由Servlet容器自动创建Servlet实例</li>
+<li>Servlet容器只会给每个Servlet类创建唯一实例</li>
+<li>Servlet容器会使用多线程执行<code>doGet()</code>或<code>doPost()</code>方法</li>
+</ul>
+<p>复习一下Java多线程的内容，我们可以得出结论：</p>
+<ul>
+<li>在Servlet中定义的实例变量会被多个线程同时访问，要注意线程安全</li>
+<li><code>HttpServletRequest</code>和<code>HttpServletResponse</code>实例是由Servlet容器传入的局部变量，它们只能被当前线程访问，不存在多个线程访问的问题</li>
+<li>在<code>doGet()</code>或<code>doPost()</code>方法中，如果使用了<code>ThreadLocal</code>，但没有清理，那么它的状态很可能会影响到下次的某个请求，因为Servlet容器很可能用线程池实现线程复用</li>
+</ul>
+<p>因此，正确编写Servlet，要清晰理解Java的多线程模型，需要同步访问的必须同步。</p>
+<h2 id="Servlet开发"><a href="#Servlet开发" class="headerlink" title="Servlet开发"></a>Servlet开发</h2><p>在上一节中我们看到，一个完整的Web应用程序开发流程如下：</p>
+<ol>
+<li>编写Servlet</li>
+<li>打包为war文件</li>
+<li>复制到Tomcat的webapps目录下</li>
+<li>启动Tomcat</li>
+</ol>
+<p>这个过程有点繁琐，比如我们想在IDE中断点调试，还需要打开Tomcat的远程调试窗口并连接上去。因此，我们需要一种简单可靠，能直接在IDE中启动并调试webapp的方法。我们先来看看Tomcat的启动流程：</p>
+<ol>
+<li>启动JVM并执行Tomcat的main()方法</li>
+<li>加载war并初始化Servlet</li>
+<li>正常服务</li>
+</ol>
+<p>启动Tomcat无非就是设置好classpath并执行Tomcat某个jar包的<code>main()</code>方法，我们完全可以把Tomcat的jar包全部引入进来，然后自己编写<code>main()</code>方法，让它先启动Tomcat，再加载我们的webapp就行。</p>
+<p>我们新建一个<code>web-servlet-embedded</code>工程，编写<code>pom.xml</code>如下：</p>
+<figure class="highlight xml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">project</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">"http://maven.apache.org/POM/4.0.0"</span></span></span><br><span class="line"><span class="hljs-tag">    <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="hljs-tag">    <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">modelVersion</span>&gt;</span>4.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.itranswarp.learnjava<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>web-servlet-embedded<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.0-SNAPSHOT<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">packaging</span>&gt;</span>war<span class="hljs-tag">&lt;/<span class="hljs-name">packaging</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">properties</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="hljs-tag">&lt;/<span class="hljs-name">project.build.sourceEncoding</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">project.reporting.outputEncoding</span>&gt;</span>UTF-8<span class="hljs-tag">&lt;/<span class="hljs-name">project.reporting.outputEncoding</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">maven.compiler.source</span>&gt;</span>11<span class="hljs-tag">&lt;/<span class="hljs-name">maven.compiler.source</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">maven.compiler.target</span>&gt;</span>11<span class="hljs-tag">&lt;/<span class="hljs-name">maven.compiler.target</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">java.version</span>&gt;</span>11<span class="hljs-tag">&lt;/<span class="hljs-name">java.version</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">tomcat.version</span>&gt;</span>9.0.26<span class="hljs-tag">&lt;/<span class="hljs-name">tomcat.version</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.tomcat.embed<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>tomcat-embed-core<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>${tomcat.version}<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>provided<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.tomcat.embed<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>tomcat-embed-jasper<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>${tomcat.version}<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>provided<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">project</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中，<code>&lt;packaging&gt;</code>类型仍然为war，引入依赖<code>tomcat-embed-core</code>和<code>tomcat-embed-jasper</code>。不必再引入Servlet API，因为引入的Tomcat依赖启动后自动引入了Servlet API，我们正常编写Servlet如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@WebServlet(urlPatterns = "/")</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloServlet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpServlet</span> </span>{</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>{</span><br><span class="line">        resp.setContentType(<span class="hljs-string">"text/html"</span>);</span><br><span class="line">        String name = req.getParameter(<span class="hljs-string">"name"</span>);</span><br><span class="line">        <span class="hljs-keyword">if</span> (name == <span class="hljs-keyword">null</span>) {</span><br><span class="line">            name = <span class="hljs-string">"world"</span>;</span><br><span class="line">        }</span><br><span class="line">        PrintWriter pw = resp.getWriter();</span><br><span class="line">        pw.write(<span class="hljs-string">"&lt;h1&gt;Hello, "</span> + name + <span class="hljs-string">"!&lt;/h1&gt;"</span>);</span><br><span class="line">        pw.flush();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后，我们编写一个main()方法，启动Tomcat服务器：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>{</span><br><span class="line">        <span class="hljs-comment">// 启动Tomcat:</span></span><br><span class="line">        Tomcat tomcat = <span class="hljs-keyword">new</span> Tomcat();</span><br><span class="line">        tomcat.setPort(Integer.getInteger(<span class="hljs-string">"port"</span>, <span class="hljs-number">8080</span>));</span><br><span class="line">        tomcat.getConnector();</span><br><span class="line">        <span class="hljs-comment">// 创建webapp:</span></span><br><span class="line">        Context ctx = tomcat.addWebapp(<span class="hljs-string">""</span>, <span class="hljs-keyword">new</span> File(<span class="hljs-string">"src/main/webapp"</span>).getAbsolutePath());</span><br><span class="line">        WebResourceRoot resources = <span class="hljs-keyword">new</span> StandardRoot(ctx);</span><br><span class="line">        resources.addPreResources(</span><br><span class="line">                <span class="hljs-keyword">new</span> DirResourceSet(resources, <span class="hljs-string">"/WEB-INF/classes"</span>, <span class="hljs-keyword">new</span> File(<span class="hljs-string">"target/classes"</span>).getAbsolutePath(), <span class="hljs-string">"/"</span>));</span><br><span class="line">        ctx.setResources(resources);</span><br><span class="line">        tomcat.start();</span><br><span class="line">        tomcat.getServer().await();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样，我们运行<code>main()</code>方法，即可启动嵌入式Tomcat服务器，然后，通过预设的<code>tomcat.addWebapp("", new File("src/main/webapp"))</code>，Tomcat会自动加载当前工程为根webapp，可直接在浏览器访问<a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080/</a>。</p>
+<p>通过<code>main()</code>方法启动Tomcat服务器并加载我们自己的webapp有如下好处：</p>
+<ol>
+<li>启动简单，无需下载Tomcat或安装任何IDE插件</li>
+<li>调试方便，可在IDE中使用断点调试</li>
+<li>使用Maven创建war包后，也可以正常部署到独立的Tomcar应用服务器</li>
+</ol>
+<blockquote>
+<p>对SpringBoot有所了解的童鞋可能知道，SpringBoot也支持在<code>main()</code>方法中一行代码直接启动Tomcat，并且还能方便地更换成Jetty等其他服务器。它的启动方式和我们介绍的是基本一样的，后续涉及到SpringBoot的部分我们还会详细讲解。</p>
+</blockquote>
+<p>开发Servlet时，推荐使用main()方法启动嵌入式Tomcat服务器并加载当前工程的webapp，便于开发调试，且不影响打包部署，能提升开发效率。</p>
+<h2 id="Servlet进阶"><a href="#Servlet进阶" class="headerlink" title="Servlet进阶"></a>Servlet进阶</h2><p>一个Web App是由一个或多个Servlet组成，每个Servlet通过注解说明自己能处理的路径。比如：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@WebServlet(urlPatterns = "/hello")</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloServlet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpServlet</span> </span>{</span><br><span class="line">    <span class="hljs-meta">@Override</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>{</span><br><span class="line">        ...</span><br><span class="line">    }</span><br><span class="line">  ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上述<code>HelloServlet</code>能处理<code>/hello</code>这个路径的请求。早期的Servlet需要在<code>web.xml</code>中配置映射路径，但最新Servlet版本只需要通过注解就可以完成映射。</p>
+<p>浏览器发送请求时，还会有请求方法（HTTP Method）：即GET、POST、PUT等不同类型的请求，因此要处理GET请求必须覆写<code>doGet()</code>方法。类似地，要处理POST请求，就需要覆写<code>doPost()</code>方法。如果没有覆写<code>doPost()</code>方法，那么HelloServlet能不能处理POST/hello请求呢？</p>
+<p>我们查看HttpServlet的<code>doPost()</code>：它会直接返回405或400错误。因此，如果一个Servlet映射到<code>/hello</code>，那么这个路径下的所有请求方法都会由这个Servlet来处理，至于能不能返回200成功响应，要看有没有覆写对应的请求方法。</p>
+<p>一个WebApp完全可以有多个Servlet，分别映射不同的路径。浏览器发送的HTTP请求总是由Web Server先接收，然后根据Servlet配置的映射，不同的路径转发到不同的Servlet。这种根据路径转发的功能一般称为Dispatch。映射到/的Servlet比较特殊，它会接收所有未匹配的路径。</p>
+<p>一、<code>HttpServletRequest</code>封装了一个HTTP请求，通过HttpServletRequest的接口几乎可以拿到HTTP请求的全部信息。</p>
+<ul>
+<li>getMethod()：返回请求方法，例如，<code>"GET"</code>，<code>"POST"</code></li>
+<li>getRequestURI()：返回请求路径，但不包括请求参数，例如，<code>"/hello"</code></li>
+<li>getQueryString()：返回请求参数，例如，<code>"name=Bob&amp;a=1&amp;b=2"</code></li>
+<li>getParameter(name)：返回请求参数，GET请求从URL读取参数，POST请求从Body中读取参数</li>
+<li>getContentType()：获取请求Body的类型，例如，<code>"application/x-www-form-urlencoded"</code></li>
+<li>getContextPath()：获取当前Webapp挂载的路径，对于ROOT来说，总是返回空字符串<code>""</code></li>
+<li>getCookies()：返回请求携带的所有Cookie</li>
+<li>getHeader(name)：获取指定的Header，对Header名称不区分大小写</li>
+<li>getHeaderNames()：返回所有Header名称</li>
+<li>getInputStream()：如果该请求带有HTTP Body，该方法将打开一个输入流用于读取Body</li>
+<li>getReader()：和getInputStream()类似，但打开的是Reader</li>
+<li>getRemoteAddr()：返回客户端的IP地址</li>
+<li>getScheme()：返回协议类型，例如，<code>"http"</code>，<code>"https"</code></li>
+</ul>
+<p>此外，<code>HttpServletRequest</code>还有两个方法：<code>setAttribute()</code>和<code>getAttribute()</code>，可以给当前<code>HttpServletRequest</code>对象附加多个Key-Value，相当于把<code>HttpServletRequest</code>当作一个<code>Map&lt;String, Object&gt;</code>使用。调用<code>HttpServletRequest</code>的方法时，注意务必阅读接口方法的文档说明，因为有的方法会返回<code>null</code>。</p>
+<p>二、<code>HttpServletResponse</code>封装了一个HTTP响应。由于HTTP响应必须先发送Header，再发送Body，所以，操作<code>HttpServletResponse</code>对象时，必须先调用设置Header的方法，最后调用发送Body的方法。</p>
+<p>常用的设置Header的方法有：</p>
+<ul>
+<li>setStatus(sc)：设置响应代码，默认是<code>200</code></li>
+<li>setContentType(type)：设置Body的类型，例如，<code>"text/html"</code></li>
+<li>setCharacterEncoding(charset)：设置字符编码，例如，<code>"UTF-8"</code></li>
+<li>setHeader(name, value)：设置一个Header的值</li>
+<li>addCookie(cookie)：给响应添加一个Cookie</li>
+<li>addHeader(name, value)：给响应添加一个Header，因为HTTP协议允许有多个相同的Header</li>
+</ul>
+<p>写入响应时，需要通过<code>getOutputStream()</code>获取写入流，或者通过<code>getWriter()</code>获取字符流，二者只能获取其中一个。写入响应前，无需设置<code>setContentLength()</code>，因为底层服务器会根据写入的字节数自动设置，如果写入的数据量很小，实际上会写入缓冲区，如果写入的数据量很大，服务器会自动采用Chunked编码让浏览器能识别数据结束符而不需要设置Content-Length。</p>
+<p>但是写完后调用<code>flush()</code>是必须的，因为大部分Web服务器都基于HTTP/1.1协议，会复用TCP连接。如果没有调用<code>flush()</code>会导致缓冲区的内容无法及时发送到客户端。此外，写入完毕后千万不要调用<code>close()</code>，因为会有复用TCP连接，如果关闭写入流，将关闭TCP连接，使得Web服务器无法复用此连接。</p>
+<p>有了HttpServletRequest和HttpServletResponse这两个高级接口，我们就不需要直接处理HTTP协议，注意到具体的实现类是由各服务器提供的，而我们编写的Web应用程序只关心接口方法，不需要关心具体的实现子类。</p>
+<p>三、一个Servlet类在服务器中只有一个实例，但对于每个HTTP请求，Web服务器会使用多线程执行请求。因此，一个Servlet的<code>doGet()</code>、<code>doPost()</code>等处理请求是多线程并发执行的。如果Servlet中定义了字段，要注意多线程并发访问的问题。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloServlet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HttpServlet</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">private</span> Map&lt;String, String&gt; map = <span class="hljs-keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>{</span><br><span class="line">        <span class="hljs-comment">// 注意读写map字段是多线程并发的:</span></span><br><span class="line">        <span class="hljs-keyword">this</span>.map.put(key, value);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>对于每个请求，Web服务器会创建唯一的<code>HttpServletRequest</code>和<code>HttpServletResponse</code>实例，因此，<code>HttpServletRequest</code>和<code>HttpServletResponse</code>实例只有在当前处理线程中有效，它们总是局部变量，不存在多线程共享的问题。</p>
+<h3 id="重定向与转发"><a href="#重定向与转发" class="headerlink" title="重定向与转发"></a>重定向与转发</h3></body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2021/06/21/Confidence/">Confidence</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2021/06/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
