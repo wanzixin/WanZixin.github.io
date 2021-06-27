@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>IoC容器 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="在学习Spring框架时，我们遇到的第一个也是最核心的概念就是容器。什么是容器？ 容器是一种为某个特定组件的运行提供必要支持的一个软件环境。例如，Tomcat就是一个Servlet容器，它可以为Servlet的运行提供运行环境。类似Docker这样的软件也是一个容器，它提供了必要的Linux环境以便运行一个特定的Linux进程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IoC容器">
+<meta property="og:url" content="https://wanzixin.github.io/Study/Java/Spring/IoC%E5%AE%B9%E5%99%A8/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="在学习Spring框架时，我们遇到的第一个也是最核心的概念就是容器。什么是容器？ 容器是一种为某个特定组件的运行提供必要支持的一个软件环境。例如，Tomcat就是一个Servlet容器，它可以为Servlet的运行提供运行环境。类似Docker这样的软件也是一个容器，它提供了必要的Linux环境以便运行一个特定的Linux进程。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-27T03:11:46.000Z">
+<meta property="article:modified_time" content="2021-06-27T03:14:31.810Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#IoC原理">1&nbsp;&nbsp;<b>IoC原理</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#依赖注入方式">1.1&nbsp;&nbsp;依赖注入方式</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#无侵入容器">1.2&nbsp;&nbsp;无侵入容器</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#装配Bean">2&nbsp;&nbsp;<b>装配Bean</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#ApplicationContext">2.1&nbsp;&nbsp;ApplicationContext</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#使用Annotation配置">3&nbsp;&nbsp;<b>使用Annotation配置</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#思考">3.1&nbsp;&nbsp;思考</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#定制Bean">4&nbsp;&nbsp;<b>定制Bean</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Scope">4.1&nbsp;&nbsp;Scope</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#注入List">4.2&nbsp;&nbsp;注入List</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#可选注入">4.3&nbsp;&nbsp;可选注入</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#创建第三方Bean">4.4&nbsp;&nbsp;创建第三方Bean</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#初始化和销毁">4.5&nbsp;&nbsp;初始化和销毁</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用别名">4.6&nbsp;&nbsp;使用别名</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用FactoryBean">4.7&nbsp;&nbsp;使用FactoryBean</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#使用Resource">5&nbsp;&nbsp;<b>使用Resource</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#注入配置">6&nbsp;&nbsp;<b>注入配置</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#使用条件装配">7&nbsp;&nbsp;<b>使用条件装配</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用Conditional">7.1&nbsp;&nbsp;使用Conditional</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            IoC容器
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>Jun 27 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a><span>></span><a class="article-category-link" href="/categories/Study/Java/Spring/">Spring</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            an hour read (About 7417 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>在学习Spring框架时，我们遇到的第一个也是最核心的概念就是容器。什么是容器？</p>
+<p>容器是一种为某个特定组件的运行提供必要支持的一个软件环境。例如，Tomcat就是一个Servlet容器，它可以为Servlet的运行提供运行环境。类似Docker这样的软件也是一个容器，它提供了必要的Linux环境以便运行一个特定的Linux进程。<span id="more"></span></p>
+<p>通常来说，使用容器运行组件，除了提供一个组件的运行环境之外，容器还提供了许多底层服务。例如，Servlet容器底层实现了TCP链接，解析HTTP协议等非常复杂的任务，如果没有容器来提供这些服务，我们就无法编写像Servlet这样代码简单、功能强大的组件。早起的Java EE服务器提供的EJB容器最重要的功能就是通过声明式事务服务，使得EJB组件的开发人员不必编写冗长的事务处理代码，所以极大的简化了事务处理。</p>
+<p>Spring的核心就是提供了一个IoC容器，它可以管理所有轻量级的JavaBean组件，提供的底层服务包括组件的生命周期管理、配置和组装服务、AOP支持，以及建立在AOP基础上的声明式服务等。本节我们介绍的IoC容器，主要介绍Spring容器如何对组件进行声明周期管理和配置组装服务。</p>
+<h2 id="IoC原理"><a href="#IoC原理" class="headerlink" title="IoC原理"></a>IoC原理</h2><p>IoC全称是Inversion of Control，直译为控制反转。在理解IoC之前，我们先看看通常的Java组件是如何协作的。</p>
+<p>我们假定一个在线书店，通过BookService获取书籍，为了从数据库查询书籍，BookService持有一个DataSource；为了实例化一个HikariDataSource，又不得不实例化一个HikariConfig。现在我们继续编写UserService获取用户，因为UserService也要访问数据库，因此我们不得不也实例化一个HikariDataSource。在处理用户购买的CartServlet中，我们需要实例化UserService和BookService。类似的，在购买历史HistoryServlet中，也需要实例化UserService和BookService。</p>
+<p>上述每个组件都采用了一种简单的通过<code>new</code>创建实例并持有的方式。仔细观察，会发现以下缺点：</p>
+<ol>
+<li>实例化一个组件其实很难。例如，BookService和UserService要创建HikariDataSource，实际上需要读取配置，才能先实例化HikariConfig，再实例化HikariDataSource。</li>
+<li>没有必要让BookService和UserService分别创建DataSource实例，完全可以共享同一个DataSource，但谁负责创建DataSource，谁负责获取其他组件已经创建的DataSource，不好处理。类似的，CartServlet和HistoryServlet也应当共享BookService实例和UserService实例，但也不好处理。</li>
+<li>很多组件需要销毁以便释放资源，例如DataSource，但如果该组件被多个组件共享，如何确保它的使用方都已经全部被销毁？</li>
+<li>随着更多组件被引入，例如书籍评论，需要共享的组件写起来会更困难，这些组件的依赖关系会越来越复杂。</li>
+<li>测试某个组件，例如BookService，是复杂的，因为必须要在真实的数据库环境下执行。</li>
+</ol>
+<p>从上面的例子可以看出，如果一个系统有大量的组件，其生命周期和相互之间的依赖关系如果由组件自身来维护，不但大大增加了系统的复杂度，而且会导致组件之间极为紧密的耦合，继而给测试和维护带来了极大的困难。</p>
+<p>因此，核心问题是：</p>
+<ol>
+<li>谁负责创建组件？</li>
+<li>谁负责根据依赖关系组装组件？</li>
+<li>销毁时，如何按依赖顺序正确销毁？</li>
+</ol>
+<p>解决这一问题的核心方案就是IoC。</p>
+<p>传统的应用程序中，控制权在程序本身，程序的控制流程完全由开发者控制。例如：CartServlet创建了BookService，在创建BookService的过程中，又创建了DataSource组件。这种模式的缺点是，一个组件如果要使用另一个组件，必须先知道如何正确地创建它。</p>
+<p>在IoC模式下，控制权发生了反转，即从应用程序转移到IoC容器，所有组件不再由应用程序自己创建和配置，而是由IoC容器负责，这样，应用程序只需要直接使用已经创建好并且配置好的组件。为了能让组件在IoC容器中被“装配”出来，需要某种“注入”机制。例如，BookService自己并不会创建DataSource，而是等待外部通过setDataSource()方法来注入一个DataSource。</p>
+<p>不直接new一个DataSource，而是注入一个DataSource，这个小小的改动虽然简单，却带来了一系列好处：</p>
+<ol>
+<li>BookService不再关心如何创建DataSource，因此不必编写数据库配置之类的代码</li>
+<li>DataSource实例被注入到BookService，同样也可以注入到UserService，因此共享一个组件非常简单</li>
+<li>测试BookService更容易，因为注入的是DataSource，可以使用内存数据库，而不是真实的MySQL配置</li>
+</ol>
+<p>因此，IoC又称为依赖注入（DI：Dependency Injection），它解决了一个最主要的问题：将组件的创建+配置和组件的使用相分离，并且由IoC容器负责管理组件的生命周期。</p>
+<p>因为IoC容器要负责实例化所有的组件，因此有必要告诉容器如何创建组件，以及各组件的依赖关系。一种最简单的配置是通过XML文件来实现的，例如：</p>
+<figure class="highlight xml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">beans</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"dataSource"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"HikariDataSource"</span> /&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"bookService"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"BookService"</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"dataSource"</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">"dataSource"</span> /&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"userService"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"UserService"</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"dataSource"</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">"dataSource"</span> /&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">beans</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>上述XML配置文件指示IoC容器创建3个JavaBean组件，并把id为dataSource的组件通过属性dataSource注入到另外两个组件中。</p>
+<p>在Spring的IoC容器中，我们把所有的组件统称为JavaBean，即配置一个组件就是配置一个Bean。</p>
+<h3 id="依赖注入方式"><a href="#依赖注入方式" class="headerlink" title="依赖注入方式"></a>依赖注入方式</h3><p>我们从上面的代码可以看到，依赖注入可以通过<code>set()</code>方法实现。但依赖注入也可以通过构造方法实现。</p>
+<p>很多Java类都具有带参数的构造方法，如果我们把BookService改造为通过构造方法注入，那么实现代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BookService</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">private</span> DataSource dataSource;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">BookService</span><span class="hljs-params">(DataSource dataSource)</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">this</span>.dataSource = dataSource;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Spring的IoC容器同时支持属性注入和构造方法注入，并允许混合使用。</p>
+<h3 id="无侵入容器"><a href="#无侵入容器" class="headerlink" title="无侵入容器"></a>无侵入容器</h3><p>在设计上，Spring的IoC容器是一个高度可扩展的无侵入容器。所谓无侵入，是指应用程序的组件无需实现Spring的特定接口，或者说，组件根本不知道自己在Spring的容器中运行。这种无侵入的设计有以下好处：</p>
+<ol>
+<li>应用程序组件既可以在Spring的IoC容器中运行，也可以自己编写代码自行组装配置；</li>
+<li>测试的时候并不依赖Spring容器，可单独进行测试，大大提高了开发效率。</li>
+</ol>
+<h2 id="装配Bean"><a href="#装配Bean" class="headerlink" title="装配Bean"></a>装配Bean</h2><p>上一节我们讨论了为什么要使用Spring的IoC容器，那么到底如何使用IoC容器呢？装配好的Bean又如何使用？</p>
+<p>我们看一个具体的用户注册登录的例子，下面是他的工程结构。首先，我们用Maven创建工程并引入<code>spring-context</code>依赖。</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">spring-ioc-appcontext</span><br><span class="line">├── pom.xml</span><br><span class="line">└── src</span><br><span class="line">    └── main</span><br><span class="line">        ├── java</span><br><span class="line">        │   └── com</span><br><span class="line">        │       └── itranswarp</span><br><span class="line">        │           └── learnjava</span><br><span class="line">        │               ├── Main.java</span><br><span class="line">        │               └── service</span><br><span class="line">        │                   ├── MailService.java</span><br><span class="line">        │                   ├── User.java</span><br><span class="line">        │                   └── UserService.java</span><br><span class="line">        └── resources</span><br><span class="line">            └── application.xml</span><br></pre></td></tr></tbody></table></figure>
+
+<p>先编写一个MailService，用于在用户登录和注册成功后发送邮件通知。再编写一个UserService，实现用户登录和注册。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span></span>{...}</span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span></span>{</span><br><span class="line">  <span class="hljs-keyword">private</span> MailService mailService;</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setMailService</span><span class="hljs-params">(MailService mailService)</span></span>{</span><br><span class="line">    <span class="hljs-keyword">this</span>.mailService = mailService;</span><br><span class="line">  }</span><br><span class="line">   ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意到UserService通过setMailService()注入了一个MailService。</p>
+<p>然后，我们要编写一个特定的application.xml配置文件，告诉Sring的IoC容器应该如何创建并组装Bean。</p>
+<figure class="highlight xml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">beans</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="hljs-tag">    <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="hljs-tag">    <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">"http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="hljs-string"><span class="hljs-tag">        https://www.springframework.org/schema/beans/spring-beans.xsd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"userService"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"com.itranswarp.learnjava.service.UserService"</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"mailService"</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">"mailService"</span> /&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"mailService"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"com.itranswarp.learnjava.service.MailService"</span> /&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">beans</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意观察上述配置文件，其中与XML Schema相关的部分格式是固定的，我们只关注两个<code>&lt;bean ...&gt;</code>的配置。</p>
+<ul>
+<li>每个<code>&lt;bean ...&gt;</code>都有一个id标识，相当于Bean的唯一ID；</li>
+<li>在<code>userService</code>Bean中，通过<code>&lt;property name="..." ref="..." /&gt;</code>注入了另一个Bean；</li>
+<li>Bean的顺序不重要，Spring根据依赖关系会自动正确初始化。</li>
+</ul>
+<p>把上述XML配置文件用Java代码写出来，就像这样：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UserService userService = <span class="hljs-keyword">new</span> UserService();</span><br><span class="line">MailService mailService = <span class="hljs-keyword">new</span> MailService();</span><br><span class="line">userService.setMailService(mailService);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>只不过Spring容器是通过读取XML文件后使用反射完成的。</p>
+<p>如果注入的不是Bean，而是<code>boolean</code>、<code>int</code>、<code>String</code>这样的数据类型，则通过<code>value</code>注入，例如，创建一个<code>HikariDataSource</code>：</p>
+<figure class="highlight xml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"dataSource"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"com.zaxxer.hikari.HikariDataSource"</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"jdbcUrl"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"jdbc:mysql://localhost:3306/test"</span> /&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"username"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"root"</span> /&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"password"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"password"</span> /&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"maximumPoolSize"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"10"</span> /&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"autoCommit"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"true"</span> /&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后一步，我们需要创建一个Spring的IoC容器实例，然后加载配置文件，让Spring容器为我们创建并装配好配置文件中指定的所有Bean，这只需要一行代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext context = <span class="hljs-keyword">new</span> ClassPathXmlApplicationContext(<span class="hljs-string">"application.xml"</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>接下来，我们就可以从Spring容器中取出装配好的Bean，然后使用它。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 获取Bean:</span></span><br><span class="line">UserService userService = context.getBean(UserService.class);</span><br><span class="line"><span class="hljs-comment">// 正常调用:</span></span><br><span class="line">User user = userService.login(<span class="hljs-string">"bob@example.com"</span>, <span class="hljs-string">"password"</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>完整的main()方法如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{</span><br><span class="line">        ApplicationContext context = <span class="hljs-keyword">new</span> ClassPathXmlApplicationContext(<span class="hljs-string">"application.xml"</span>);</span><br><span class="line">        UserService userService = context.getBean(UserService.class);</span><br><span class="line">        User user = userService.login(<span class="hljs-string">"bob@example.com"</span>, <span class="hljs-string">"password"</span>);</span><br><span class="line">        System.out.println(user.getName());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="ApplicationContext"><a href="#ApplicationContext" class="headerlink" title="ApplicationContext"></a>ApplicationContext</h3><p>我们从创建Spring容器的代码：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext context = new ClassPathXmlApplicationContext("application.xml");</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看到，Spring容器就是<code>ApplicationContext</code>，它是一个接口，有很多实现类，这里我们选择<code>ClassPathXmlApplicationContext</code>，表示它会自动从classpath中查找指定的XML配置文件。</p>
+<p>获得了<code>ApplicationContext</code>的实例，就获得了IoC容器的引用。从<code>ApplicationContext</code>中我们可以根据Bean的ID获取Bean，但更多的时候我们根据Bean的类型获取Bean的引用：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserService userService = context.getBean(UserService.class);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Spring还提供另一种IoC容器叫<code>BeanFactory</code>，使用方式和<code>ApplicationContext</code>类似：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BeanFactory factory = <span class="hljs-keyword">new</span> XmlBeanFactory(<span class="hljs-keyword">new</span> ClassPathResource(<span class="hljs-string">"application.xml"</span>));</span><br><span class="line">MailService mailService = factory.getBean(MailService.class);</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>BeanFactory</code>和<code>ApplicationContext</code>的区别在于，<code>BeanFactory</code>的实现是按需创建，即第一次获取Bean时才创建这个Bean，而<code>ApplicationContext</code>会一次性创建所有的Bean。实际上，<code>ApplicationContext</code>接口是从<code>BeanFactory</code>接口继承而来的，并且，<code>ApplicationContext</code>提供了一些额外的功能，包括国际化支持、事件和通知机制等。通常情况下，我们总是使用<code>ApplicationContext</code>，很少会考虑使用<code>BeanFactory</code>。</p>
+<h2 id="使用Annotation配置"><a href="#使用Annotation配置" class="headerlink" title="使用Annotation配置"></a>使用Annotation配置</h2><p>使用Spring的IoC容器，实际上就是通过类似XML这样的配置文件，把我们自己的Bean的依赖关系描述出来，然后让容器来创建和装配Bean。一旦容器初始化完毕，我们就直接从容器中获取Bean使用他们。</p>
+<p>使用XML配置的优点是所有的Bean都能一目了然地列出来了，并通过配置注入能直观的看到每个Bean的依赖。它的缺点是写起来非常繁琐，每增加一个组件，就必须把新的Bean配置到XML中。</p>
+<p>有没有其他更简洁的配置方式呢？</p>
+<p>有的。我们可以使用Annotation配置，可以完全不需要XML，让Spring自动扫描Bean并组装它们。</p>
+<p>我们把上一节的示例改造一下。先删除XML配置文件，然后给UserService和MailService添加几个注解。首先，给MailService添加一个<code>@Component</code>注解。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span> </span>{    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这个<code>@Component</code>注解就相当于定义了一个Bean，它有一个可选的名称，默认是<code>mailService</code>，即小写开头的类名。然后，我们给UserService添加一个<code>@Component</code>注解和<code>@Autowired</code>注解。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{    <span class="hljs-meta">@Autowired</span>    MailService mailService;    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用<code>@Autowired</code>就相当于把指定类型的Bean注入到指定的字段中。和XML配置相比，<code>@Autowired</code>大幅简化了注入，因为它不但可以写在<code>set()</code>方法上，还可以直接写在字段上，甚至可以写在构造方法中。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{    MailService mailService;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">UserService</span><span class="hljs-params">(<span class="hljs-meta">@Autowired</span> MailService mailService)</span> </span>{        <span class="hljs-keyword">this</span>.mailService = mailService;    }    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>我们一般把<code>@Autowired</code>写在字段上，通常使用package权限的字段，便于测试。</p>
+<p>最后编写一个<code>AppConfig</code>类启动容器：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span><span class="hljs-meta">@ComponentScanpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{        ApplicationContext context = <span class="hljs-keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);        UserService userService = context.getBean(UserService.class);        User user = userService.login(<span class="hljs-string">"bob@example.com"</span>, <span class="hljs-string">"password"</span>);        System.out.println(user.getName());    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>除了<code>main()</code>方法外，<code>AppConfig</code>标注了<code>@Configuration</code>，表示它是一个配置类，因为我们创建ApplicationContext时，</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext context = <span class="hljs-keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用的实现类是<code>AnnotationConfigApplicationContext</code>，必须传入一个标注了<code>@Configuration</code>的类名。</p>
+<p>此外，AppConfig还标注了<code>@ComponentScan</code>，它告诉容器，自动搜索当前类所在的包以及子包，把所有标注为<code>@Component</code>的Bean自动创建出来，并根据<code>@Autowired</code>进行装配。</p>
+<p>整个工程的结构如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spring-ioc-annoconfig├── pom.xml└── src    └── main        └── java            └── com                └── itranswarp                    └── learnjava                        ├── AppConfig.java                        └── service                            ├── MailService.java                            ├── User.java                            └── UserService.java</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用Annotation配合自动扫描能大幅简化Spring的配置，我们只需要保证：</p>
+<ul>
+<li>每个Bean被标注为@Component并正确使用@Autowired注入</li>
+<li>配置类被标注为@Configuration和@ComponentScan</li>
+<li>所有Bean均在指定包以及子包内</li>
+</ul>
+<p>使用@ComponentScan非常方便，但是我们也要特别注意包的层次结构。通常来说，启动配置AppConfig位于自定义的顶层包，其他Bean按类别放入子包。</p>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>如果我们想给<code>UserService</code>注入<code>HikariDataSource</code>，但是这个类位于<code>com.zaxxer.hikari</code>包中，并且<code>HikariDataSource</code>也不可能有<code>@Component</code>注解，如何告诉IoC容器创建并配置<code>HikariDataSource</code>？或者换个说法，如何创建并配置一个第三方Bean？</p>
+<h2 id="定制Bean"><a href="#定制Bean" class="headerlink" title="定制Bean"></a>定制Bean</h2><h3 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h3><p>对于Spring容器来说，当我们把一个Bean标记为<code>@Component</code>，它就会自动为我们创建一个单例（Singleton），即容器初始化时创建Bean，容器关闭前销毁Bean。在容器运行期间，我们调用<code>getBean(Class)</code>获取到的Bean总是同一个实例。</p>
+<p>还有一种Bean，我们每次调用<code>getBean(Class)</code>，容器都会返回一个新的实例，这种Bean称为Prototype（原型），它的生命周期显然和Singleton不同。声明一个Prototype的Bean时，需要添加一个额外的<code>@Scope</code>注解。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span><span class="hljs-meta">@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)</span> <span class="hljs-comment">// @Scope("prototype")public class MailSession {    ...}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="注入List"><a href="#注入List" class="headerlink" title="注入List"></a>注入List</h3><p>有些时候，我们会有一系列接口相同，不同实现类的Bean。例如，注册用户时，我们要对email、password和name这3个变量进行验证。为了便于扩展，我们先定义验证接口：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Validator</span> </span>{    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">validate</span><span class="hljs-params">(String email, String password, String name)</span></span>;}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后，分别使用3个<code>Validator</code>对用户参数进行验证：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EmailValidator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Validator</span> </span>{    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">validate</span><span class="hljs-params">(String email, String password, String name)</span> </span>{        <span class="hljs-keyword">if</span> (!email.matches(<span class="hljs-string">"^[a-z0-9]+\\@[a-z0-9]+\\.[a-z]{2,10}$"</span>)) {            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalArgumentException(<span class="hljs-string">"invalid email: "</span> + email);        }    }}<span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PasswordValidator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Validator</span> </span>{    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">validate</span><span class="hljs-params">(String email, String password, String name)</span> </span>{        <span class="hljs-keyword">if</span> (!password.matches(<span class="hljs-string">"^.{6,20}$"</span>)) {            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalArgumentException(<span class="hljs-string">"invalid password"</span>);        }    }}<span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NameValidator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Validator</span> </span>{    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">validate</span><span class="hljs-params">(String email, String password, String name)</span> </span>{        <span class="hljs-keyword">if</span> (name == <span class="hljs-keyword">null</span> || name.isBlank() || name.length() &gt; <span class="hljs-number">20</span>) {            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalArgumentException(<span class="hljs-string">"invalid name: "</span> + name);        }    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后，我们通过一个<code>Validators</code>作为入口进行验证：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Validators</span> </span>{    <span class="hljs-meta">@Autowired</span>    List&lt;Validator&gt; validators;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">validate</span><span class="hljs-params">(String email, String password, String name)</span> </span>{        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> validator : <span class="hljs-keyword">this</span>.validators) {            validator.validate(email, password, name);        }    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意到<code>Validators</code>被注入了一个<code>List&lt;Validator&gt;</code>，Spring会自动把所有类型为<code>Validator</code>的Bean装配为一个<code>List</code>注入进来，这样一来，我们每新增一个<code>Validator</code>类型，就自动被Spring装配到<code>Validators</code>中了，非常方便。</p>
+<p>因为Spring是通过扫描classpath获取到所有的Bean，而List是有序的，要指定List中Bean的顺序，可以加上<code>@Order</code>注解。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span><span class="hljs-meta">@Order(1)</span><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EmailValidator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Validator</span> </span>{    ...}<span class="hljs-meta">@Component</span><span class="hljs-meta">@Order(2)</span><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PasswordValidator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Validator</span> </span>{    ...}<span class="hljs-meta">@Component</span><span class="hljs-meta">@Order(3)</span><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NameValidator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Validator</span> </span>{    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="可选注入"><a href="#可选注入" class="headerlink" title="可选注入"></a>可选注入</h3><p>默认情况下，当我们标记了一个<code>@Autowired</code>后，Spring如果没有找到对应类型的Bean，它会抛出<code>NoSuchBeanDefinitionException</code>异常。</p>
+<p>可以给<code>@Autowired</code>增加一个<code>required = false</code>的参数：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span> </span>{    <span class="hljs-meta">@Autowired(required = false)</span>    ZoneId zoneId = ZoneId.systemDefault();    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这个参数告诉Spring容器，如果找到一个类型为<code>ZoneId</code>的Bean，就注入，如果找不到，就忽略。</p>
+<p>这种方式非常适合有定义就使用定义，没有就使用默认值的情况。</p>
+<h3 id="创建第三方Bean"><a href="#创建第三方Bean" class="headerlink" title="创建第三方Bean"></a>创建第三方Bean</h3><p>如果一个Bean不在我们自己的package管理之内，例如<code>ZoneId</code>，如何创建它？</p>
+<p>答案是我们自己在<code>@Configuration</code>类中编写一个Java方法创建并返回它，注意给方法标记一个<code>@Bean</code>注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span><span class="hljs-meta">@ComponentScanpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{    <span class="hljs-comment">// 创建一个Bean:    @Bean    ZoneId createZoneId() {        return ZoneId.of("Z");    }}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>Spring对标记为<code>@Bean</code>的方法只调用一次，因此返回的Bean仍然是单例。</p>
+<h3 id="初始化和销毁"><a href="#初始化和销毁" class="headerlink" title="初始化和销毁"></a>初始化和销毁</h3><p>有些时候，一个Bean在注入必要的依赖后，需要进行初始化（监听消息等）。在容器关闭时，有时候还需要清理资源（关闭连接池等）。我们通常会定义一个<code>init()</code>方法进行初始化，定义一个<code>shutdown()</code>方法进行清理，然后，引入JSR-250定义的Annotation：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;    &lt;groupId&gt;javax.annotation&lt;/groupId&gt;    &lt;artifactId&gt;javax.annotation-api&lt;/artifactId&gt;    &lt;version&gt;<span class="hljs-number">1.3</span><span class="hljs-number">.2</span>&lt;/version&gt;&lt;/dependency&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在Bean的初始化和清理方法上标记<code>@PostConstruct</code>和<code>@PreDestroy</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span> </span>{    <span class="hljs-meta">@Autowired(required = false)</span>    ZoneId zoneId = ZoneId.systemDefault();    <span class="hljs-meta">@PostConstruct</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{        System.out.println(<span class="hljs-string">"Init mail service with zoneId = "</span> + <span class="hljs-keyword">this</span>.zoneId);    }    <span class="hljs-meta">@PreDestroy</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">shutdown</span><span class="hljs-params">()</span> </span>{        System.out.println(<span class="hljs-string">"Shutdown mail service"</span>);    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Spring容器会对上述Bean做如下初始化流程：</p>
+<ul>
+<li>调用构造方法创建<code>MailService</code>实例；</li>
+<li>根据<code>@Autowired</code>进行注入；</li>
+<li>调用标记有<code>@PostConstruct</code>的<code>init()</code>方法进行初始化。</li>
+</ul>
+<p>而销毁时，容器会首先调用标记有<code>@PreDestroy</code>的<code>shutdown()</code>方法。</p>
+<p>Spring只根据Annotation查找<strong>无参数</strong>方法，对方法名不作要求。</p>
+<h3 id="使用别名"><a href="#使用别名" class="headerlink" title="使用别名"></a>使用别名</h3><p>默认情况下，对一种类型的Bean，容器只创建一个实例。但有些时候，我们需要对一种类型的Bean创建多个实例。例如，同时连接多个数据库，就必须创建多个<code>DataSource</code>实例。</p>
+<p>如果我们在<code>@Configuration</code>类中创建了多个同类型的Bean：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span><span class="hljs-meta">@ComponentScanpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{    <span class="hljs-meta">@Bean</span>    <span class="hljs-function">ZoneId <span class="hljs-title">createZoneOfZ</span><span class="hljs-params">()</span> </span>{        <span class="hljs-keyword">return</span> ZoneId.of(<span class="hljs-string">"Z"</span>);    }    <span class="hljs-meta">@Bean</span>    <span class="hljs-function">ZoneId <span class="hljs-title">createZoneOfUTC8</span><span class="hljs-params">()</span> </span>{        <span class="hljs-keyword">return</span> ZoneId.of(<span class="hljs-string">"UTC+08:00"</span>);    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Spring会报<code>NoUniqueBeanDefinitionException</code>异常，意思是出现了重复的Bean定义。</p>
+<p>这个时候，需要给每个Bean添加不同的名字：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span><span class="hljs-meta">@ComponentScanpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{    <span class="hljs-meta">@Bean("z")</span>    <span class="hljs-function">ZoneId <span class="hljs-title">createZoneOfZ</span><span class="hljs-params">()</span> </span>{        <span class="hljs-keyword">return</span> ZoneId.of(<span class="hljs-string">"Z"</span>);    }    <span class="hljs-meta">@Bean</span>    <span class="hljs-meta">@Qualifier("utc8")</span>    <span class="hljs-function">ZoneId <span class="hljs-title">createZoneOfUTC8</span><span class="hljs-params">()</span> </span>{        <span class="hljs-keyword">return</span> ZoneId.of(<span class="hljs-string">"UTC+08:00"</span>);    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以用<code>@Bean("name")</code>指定别名，也可以用<code>@Bean</code>+<code>@Qualifier("name")</code>指定别名。</p>
+<p>存在多个同类型的Bean时，注入<code>ZoneId</code>又会报错：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NoUniqueBeanDefinitionException: No qualifying bean of type <span class="hljs-string">'java.time.ZoneId'</span> available: expected single matching bean but found <span class="hljs-number">2</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>意思是期待找到唯一的<code>ZoneId</code>类型Bean，但是找到两。因此，注入时，要指定Bean的名称：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span> </span>{	<span class="hljs-meta">@Autowired(required = false)</span>	<span class="hljs-meta">@Qualifier("z")</span> <span class="hljs-comment">// 指定注入名称为"z"的ZoneId	ZoneId zoneId = ZoneId.systemDefault();    ...}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>还有一种方法是把其中某个Bean指定为<code>@Primary</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span><span class="hljs-meta">@ComponentScanpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{    <span class="hljs-meta">@Bean</span>    <span class="hljs-meta">@Primary</span> <span class="hljs-comment">// 指定为主要Bean    @Qualifier("z")    ZoneId createZoneOfZ() {        return ZoneId.of("Z");    }    @Bean    @Qualifier("utc8")    ZoneId createZoneOfUTC8() {        return ZoneId.of("UTC+08:00");    }}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样，在注入时，如果没有指出Bean的名字，Spring会注入标记有<code>@Primary</code>的Bean。这种方式也很常用。例如，对于主从两个数据源，通常将主数据源定义为<code>@Primary</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span><span class="hljs-meta">@ComponentScanpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{    <span class="hljs-meta">@Bean</span>    <span class="hljs-meta">@Primary</span>    <span class="hljs-function">DataSource <span class="hljs-title">createMasterDataSource</span><span class="hljs-params">()</span> </span>{        ...    }    <span class="hljs-meta">@Bean</span>    <span class="hljs-meta">@Qualifier("slave")</span>    <span class="hljs-function">DataSource <span class="hljs-title">createSlaveDataSource</span><span class="hljs-params">()</span> </span>{        ...    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其他Bean默认注入的就是主数据源。如果要注入从数据源，那么只需要指定名称即可。</p>
+<h3 id="使用FactoryBean"><a href="#使用FactoryBean" class="headerlink" title="使用FactoryBean"></a>使用FactoryBean</h3><p>我们在设计模式的<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1281319170474017">工厂方法</a>中讲到，很多时候，可以通过工厂模式创建对象。Spring也提供了工厂模式，允许定义一个工厂，然后由工厂创建真正的Bean。</p>
+<p>用工厂模式创建Bean需要实现<code>FactoryBean</code>接口。我们观察下面的代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ZoneIdFactoryBean</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">FactoryBean</span>&lt;<span class="hljs-title">ZoneId</span>&gt; </span>{    String zone = <span class="hljs-string">"Z"</span>;    <span class="hljs-meta">@Override</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> ZoneId <span class="hljs-title">getObject</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{        <span class="hljs-keyword">return</span> ZoneId.of(zone);    }    <span class="hljs-meta">@Override</span>    <span class="hljs-keyword">public</span> Class&lt;?&gt; getObjectType() {        <span class="hljs-keyword">return</span> ZoneId.class;    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当一个Bean实现了<code>FactoryBean</code>接口后，Spring会先实例化这个工厂，然后调用<code>getObject()</code>创建真正的Bean。<code>getObjectType()</code>可以指定创建的Bean的类型，因为指定类型不一定与实际类型一致，可以是接口或抽象类。</p>
+<p>因此，如果定义了一个<code>FactoryBean</code>，要注意Spring创建的Bean实际上是这个<code>FactoryBean</code>的<code>getObject()</code>方法返回的Bean。为了和普通Bean区分，我们通常都以<code>XxxFactoryBean</code>命名。</p>
+<h2 id="使用Resource"><a href="#使用Resource" class="headerlink" title="使用Resource"></a>使用Resource</h2><p>在Java程序中，我们经常会读取配置文件、资源文件等。使用Spring容器时，我们也可以把“文件”注入进来，方便程序读取。</p>
+<p>例如，AppService需要读取<code>logo.txt</code>这个文件，通常情况下，我们需要写很多繁琐的代码，主要是为了定位文件，打开InputStream。</p>
+<p>Spring提供了一个<code>org.springframework.core.io.Resource</code>（注意不是<code>javax.annotation.Resource</code>），它可以像<code>String</code>、<code>int</code>一样使用<code>@Value</code>注入：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppService</span> </span>{    <span class="hljs-meta">@Value("classpath:/logo.txt")</span>    <span class="hljs-keyword">private</span> Resource resource;    <span class="hljs-keyword">private</span> String logo;    <span class="hljs-meta">@PostConstruct</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException </span>{        <span class="hljs-keyword">try</span> (<span class="hljs-keyword">var</span> reader = <span class="hljs-keyword">new</span> BufferedReader(                <span class="hljs-keyword">new</span> InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {            <span class="hljs-keyword">this</span>.logo = reader.lines().collect(Collectors.joining(<span class="hljs-string">"\n"</span>));        }    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注入<code>Resource</code>最常用的方式是通过classpath，即类似<code>classpath:/logo.txt</code>表示在classpath中搜索<code>logo.txt</code>文件，然后，我们直接调用<code>Resource.getInputStream()</code>就可以获取到输入流，避免了自己搜索文件的代码。</p>
+<p>也可以直接指定文件的路径，例如：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Value("file:/path/to/logo.txt")</span><span class="hljs-keyword">private</span> Resource resource;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但使用classpath是最简单的方式。上述工程结构如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spring-ioc-resource├── pom.xml└── src    └── main        ├── java        │   └── com        │       └── itranswarp        │           └── learnjava        │               ├── AppConfig.java        │               └── AppService.java        └── resources            └── logo.txt</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用Maven的标准目录结构，所有资源文件放入<code>src/main/resources</code>即可。</p>
+<h2 id="注入配置"><a href="#注入配置" class="headerlink" title="注入配置"></a>注入配置</h2><p>在开发应用程序时，经常需要读取配置文件。最常用的配置方法是以<code>key=value</code>的形式写在<code>.properties</code>文件中。</p>
+<p>例如，<code>MailService</code>根据配置的<code>app.zone=Asia/Shanghai</code>来决定使用哪个时区。要读取配置文件，我们可以使用上一节讲到的<code>Resource</code>来读取位于classpath下的一个<code>app.properties</code>文件。但是，这样仍然比较繁琐。</p>
+<p>Spring容器还提供了一个更简单的<code>@PropertySource</code>来自动读取配置文件。我们只需要在<code>@Configuration</code>配置类上再添加一个注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span><span class="hljs-meta">@ComponentScan</span><span class="hljs-meta">@PropertySource("app.properties")</span> <span class="hljs-comment">// 表示读取classpath的app.propertiespublic class AppConfig {    @Value("${app.zone:Z}")    String zoneId;    @Bean    ZoneId createZoneId() {        return ZoneId.of(zoneId);    }}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>Spring容器看到<code>@PropertySource("app.properties")</code>注解后，自动读取这个配置文件，然后，我们使用<code>@Value</code>正常注入：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Value("${app.zone:Z}")</span>String zoneId;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意注入的字符串语法，它的格式如下：</p>
+<ul>
+<li><code>"${app.zone}"</code>表示读取key为<code>app.zone</code>的value，如果key不存在，启动将报错；</li>
+<li><code>"${app.zone:Z}"</code>表示读取key为<code>app.zone</code>的value，但如果key不存在，就使用默认值<code>Z</code>。</li>
+</ul>
+<p>这样一来，我们就可以根据<code>app.zone</code>的配置来创建<code>ZoneId</code>。</p>
+<p>还可以把注入的注解写到方法参数中：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@BeanZoneId</span> createZoneId(<span class="hljs-meta">@Value("${app.zone:Z}")</span> String zoneId) {    <span class="hljs-keyword">return</span> ZoneId.of(zoneId);}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可见，先使用<code>@PropertySource</code>读取配置文件，然后通过<code>@Value</code>以<code>${key:defaultValue}</code>的形式注入，可以极大地简化读取配置的麻烦。</p>
+<p>另一种注入配置的方式是先通过一个简单的JavaBean持有所有的配置，例如，一个<code>SmtpConfig</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SmtpConfig</span> </span>{    <span class="hljs-meta">@Value("${smtp.host}")</span>    <span class="hljs-keyword">private</span> String host;    <span class="hljs-meta">@Value("${smtp.port:25}")</span>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> port;    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getHost</span><span class="hljs-params">()</span> </span>{        <span class="hljs-keyword">return</span> host;    }    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getPort</span><span class="hljs-params">()</span> </span>{        <span class="hljs-keyword">return</span> port;    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后，在需要读取的地方，使用<code>#{smtpConfig.host}</code>注入：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span> </span>{    <span class="hljs-meta">@Value("#{smtpConfig.host}")</span>    <span class="hljs-keyword">private</span> String smtpHost;    <span class="hljs-meta">@Value("#{smtpConfig.port}")</span>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> smtpPort;}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意观察<code>#{}</code>这种注入语法，它和<code>${key}</code>不同的是，<code>#{}</code>表示从JavaBean读取属性。<code>"#{smtpConfig.host}"</code>的意思是，从名称为<code>smtpConfig</code>的Bean读取<code>host</code>属性，即调用<code>getHost()</code>方法。一个Class名为<code>SmtpConfig</code>的Bean，它在Spring容器中的默认名称就是<code>smtpConfig</code>，除非用<code>@Qualifier</code>指定了名称。</p>
+<p>使用一个独立的JavaBean持有所有属性，然后在其他Bean中以<code>#{bean.property}</code>注入的好处是，多个Bean都可以引用同一个Bean的某个属性。例如，如果<code>SmtpConfig</code>决定从数据库中读取相关配置项，那么<code>MailService</code>注入的<code>@Value("#{smtpConfig.host}")</code>仍然可以不修改正常运行。</p>
+<h2 id="使用条件装配"><a href="#使用条件装配" class="headerlink" title="使用条件装配"></a>使用条件装配</h2><p>开发应用程序时，我们会使用开发环境，例如，使用内存数据库以便快速启动。而运行在生产环境时，我们会使用生产环境，例如，使用MySQL数据库。如果应用程序可以根据自身的环境做一些适配，无疑会更加灵活。</p>
+<p>Spring为应用程序准备了Profile这一概念，用来表示不同的环境。例如，我们分别定义开发、测试和生产这3个环境：</p>
+<ul>
+<li>native</li>
+<li>test</li>
+<li>production</li>
+</ul>
+<p>创建某个Bean时，Spring容器可以根据注解<code>@Profile</code>来决定是否创建。例如，以下配置：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span><span class="hljs-meta">@ComponentScanpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{    <span class="hljs-meta">@Bean</span>    <span class="hljs-meta">@Profile("!test")</span>    <span class="hljs-function">ZoneId <span class="hljs-title">createZoneId</span><span class="hljs-params">()</span> </span>{        <span class="hljs-keyword">return</span> ZoneId.systemDefault();    }    <span class="hljs-meta">@Bean</span>    <span class="hljs-meta">@Profile("test")</span>    <span class="hljs-function">ZoneId <span class="hljs-title">createZoneIdForTest</span><span class="hljs-params">()</span> </span>{        <span class="hljs-keyword">return</span> ZoneId.of(<span class="hljs-string">"America/New_York"</span>);    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果当前的Profile设置为<code>test</code>，则Spring容器会调用<code>createZoneIdForTest()</code>创建<code>ZoneId</code>，否则，调用<code>createZoneId()</code>创建<code>ZoneId</code>。注意到<code>@Profile("!test")</code>表示非test环境。</p>
+<p>在运行程序时，加上JVM参数<code>-Dspring.profiles.active=test</code>就可以指定以<code>test</code>环境启动。</p>
+<p>实际上，Spring允许指定多个Profile，例如：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dspring.profiles.active=test,master</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以表示<code>test</code>环境，并使用<code>master</code>分支代码。</p>
+<p>要满足多个Profile条件，可以这样写：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Bean</span><span class="hljs-meta">@Profile({ "test", "master" })</span> <span class="hljs-comment">// 同时满足test和masterZoneId createZoneId() {    ...}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="使用Conditional"><a href="#使用Conditional" class="headerlink" title="使用Conditional"></a>使用Conditional</h3><p>除了根据<code>@Profile</code>条件来决定是否创建某个Bean外，Spring还可以根据<code>@Conditional</code>决定是否创建某个Bean。</p>
+<p>例如，我们对<code>SmtpMailService</code>添加如下注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span><span class="hljs-meta">@Conditional(OnSmtpEnvCondition.class)</span><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SmtpMailService</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">MailService</span> </span>{    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>它的意思是，如果满足<code>OnSmtpEnvCondition</code>的条件，才会创建<code>SmtpMailService</code>这个Bean。<code>OnSmtpEnvCondition</code>的条件是什么呢？我们看一下代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OnSmtpEnvCondition</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Condition</span> </span>{    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">matches</span><span class="hljs-params">(ConditionContext context, AnnotatedTypeMetadata metadata)</span> </span>{        <span class="hljs-keyword">return</span> <span class="hljs-string">"true"</span>.equalsIgnoreCase(System.getenv(<span class="hljs-string">"smtp"</span>));    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>因此，<code>OnSmtpEnvCondition</code>的条件是存在环境变量<code>smtp</code>，值为<code>true</code>。这样，我们就可以通过环境变量来控制是否创建<code>SmtpMailService</code>。</p>
+<p>Spring只提供了<code>@Conditional</code>注解，具体判断逻辑还需要我们自己实现。Spring Boot提供了更多使用起来更简单的条件注解，例如，如果配置文件中存在<code>app.smtp=true</code>，则创建<code>MailService</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span><span class="hljs-meta">@ConditionalOnProperty(name="app.smtp", havingValue="true")</span><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span> </span>{    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果当前classpath中存在类<code>javax.mail.Transport</code>，则创建<code>MailService</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span><span class="hljs-meta">@ConditionalOnClass(name = "javax.mail.Transport")</span><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span> </span>{    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>后续我们会介绍Spring Boot的条件装配。我们以文件存储为例，假设我们需要保存用户上传的头像，并返回存储路径，在本地开发运行时，我们总是存储到文件：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span><span class="hljs-meta">@ConditionalOnProperty(name = "app.storage", havingValue = "file", matchIfMissing = true)</span><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FileUploader</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Uploader</span> </span>{    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在生产环境运行时，我们会把文件存储到类似AWS S3上：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span><span class="hljs-meta">@ConditionalOnProperty(name = "app.storage", havingValue = "s3")</span><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">S3Uploader</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Uploader</span> </span>{    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其他需要存储的服务则注入<code>Uploader</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserImageService</span> </span>{    <span class="hljs-meta">@Autowired</span>    Uploader uploader;}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当应用程序检测到配置文件存在<code>app.storage=s3</code>时，自动使用<code>S3Uploader</code>，如果存在配置<code>app.storage=file</code>，或者配置<code>app.storage</code>不存在，则使用<code>FileUploader</code>。</p>
+<p>可见，使用条件注解，能更灵活地装配Bean。</p>
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/Study/Java/Spring/%E4%BD%BF%E7%94%A8AOP/">使用AOP</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/Study/Java/Spring/Spring%E5%BC%80%E5%8F%91/">Spring开发</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
