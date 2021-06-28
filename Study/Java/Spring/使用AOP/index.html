@@ -24,7 +24,7 @@
 <meta property="og:description" content="AOP是Aspect Oriented Programming，即面向切面编程。我们先回顾一下OOP：Object Oriented Programming，OOP作为面向对象编程的模式，获得了巨大的成功，OOP的主要功能是数据封装、继承和多态。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-06-27T06:58:29.000Z">
-<meta property="article:modified_time" content="2021-06-27T07:00:25.997Z">
+<meta property="article:modified_time" content="2021-06-28T03:18:12.363Z">
 <meta property="article:author" content="WanZixin">
 <meta name="twitter:card" content="summary">
 
@@ -194,7 +194,7 @@
         <span class="column is-narrow">
             
             
-            25 minutes read (About 3807 words)
+            29 minutes read (About 4354 words)
         </span>
         
     </div>
@@ -312,7 +312,23 @@
 <p>有了<code>@MetricTime</code>注解，再配合<code>MetricAspect</code>，任何Bean，只要方法标注了<code>@MetricTime</code>注解，就可以自动实现性能监控。运行代码，输出结果如下：</p>
 <figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Welcome, Bob![Metrics] register: 16ms</span><br></pre></td></tr></tbody></table></figure>
 
-<h2 id="AOP避坑指南"><a href="#AOP避坑指南" class="headerlink" title="AOP避坑指南"></a>AOP避坑指南</h2><p>Spring使用CGLIB构造的Proxy类，是直接生成字节码，并没有源码-编译-字节码这个步骤。因此，Spring通过CGLIB创建的代理类，不会初始化代理类自身继承的任何成员变量，包括final类型的成员变量！</p>
+<h2 id="AOP避坑指南"><a href="#AOP避坑指南" class="headerlink" title="AOP避坑指南"></a>AOP避坑指南</h2><p>例如，UserService的初始化在<code>UserService$$EnhancerBySpringCGLIB</code>中并未执行，原因是，没必要初始化proxy的成员变量，因为proxy的目的是代理方法。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> ZoneId zoneId = ZoneId.systemDefault();</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">UserService</span><span class="hljs-params">()</span> </span>{}</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>实际上，成员变量的初始化是在构造方法中完成的，这样才是编译器实际编译的代码。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> ZoneId zoneId;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">UserService</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">super</span>(); <span class="hljs-comment">// 构造方法的第一行代码总是调用super()</span></span><br><span class="line">        zoneId = ZoneId.systemDefault(); <span class="hljs-comment">// 继续初始化成员变量</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然而，对于Spring通过CGLIB动态创建的<code>UserService$$EnhancerBySpringCGLIB</code>代理类，它的构造方法中，并未调用<code>super()</code>，因此，从父类继承的成员变量，包括<code>final</code>类型的成员变量，统统没有初始化。</p>
+<p>那Java语言规定，任何类的构造方法，第一行必须调用<code>super()</code>，如果没有，编译器也会自动加上，怎么Spring的CGLIB就可以搞特殊？</p>
+<p>这是因为自动加<code>super()</code>的功能是Java编译器实现的，它发现你没加，就自动给加上，发现你加错了，就报编译错误。但实际上，如果直接构造字节码，一个类的构造方法中，不一定非要调用<code>super()</code>。Spring使用CGLIB构造的Proxy类，是直接生成字节码，并没有<code>源码-编译-字节码</code>这个步骤。因此，<strong>Spring通过CGLIB创建的代理类，不会初始化代理类自身继承的任何成员变量，包括final类型的成员变量！</strong></p>
+<p>那么，启动了AOP后，应该如何解决这个问题呢？</p>
+<p>很简单，只需要把直接访问字段的代码，改为通过方法访问。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span> </span>{</span><br><span class="line">    <span class="hljs-meta">@Autowired</span></span><br><span class="line">    UserService userService;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">sendMail</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        <span class="hljs-comment">// 不要直接访问UserService的字段:</span></span><br><span class="line">        ZoneId zoneId = userService.getZoneId();</span><br><span class="line">        ...</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>此时，无论注入的UserService是原始实例还是代理实例，<code>getZoneId()</code>都能正常工作，因为代理类会覆写<code>getZoneId()</code>方法，并将其委托给原始实例。</p>
+<p>但如果我们添加一个<code>public final</code>的方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{</span><br><span class="line">    ...</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> ZoneId <span class="hljs-title">getFinalZoneId</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">return</span> zoneId;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在<code>MailService</code>中调用<code>getFinalZoneId()</code>时，又会出现<code>NullPointerException</code>。这是因为，代理类无法覆写final方法（这一点绕不开JVM的ClassLoader检查），该方法返回的是代理类的<code>zoneId</code>字段，即<code>null</code>。</p>
 <p>因此，正确使用AOP，我们需要一个避坑指南：</p>
 <ol>
 <li>访问被注入的Bean时，总是调用方法而非直接访问字段；</li>
@@ -327,7 +343,9 @@
     
     
     <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/Study/Java/Spring/%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/">访问数据库</a>
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">

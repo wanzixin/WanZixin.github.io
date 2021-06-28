@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>访问数据库 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="数据库基本上是现代应用程序的标准存储，绝大多数程序都把自己的业务数据存储在关系数据库中，可见，访问数据库几乎是所有应用程序必备能力。我们在前面已经介绍了Java程序访问数据库的标准接口JDBC，它的实现方式非常简洁，即：Java标准库定义接口，各数据库厂商以“驱动”的形式实现接口。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="访问数据库">
+<meta property="og:url" content="https://wanzixin.github.io/Study/Java/Spring/%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="数据库基本上是现代应用程序的标准存储，绝大多数程序都把自己的业务数据存储在关系数据库中，可见，访问数据库几乎是所有应用程序必备能力。我们在前面已经介绍了Java程序访问数据库的标准接口JDBC，它的实现方式非常简洁，即：Java标准库定义接口，各数据库厂商以“驱动”的形式实现接口。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-28T03:19:24.000Z">
+<meta property="article:modified_time" content="2021-06-28T06:16:49.925Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用JDBC">1&nbsp;&nbsp;<b>使用JDBC</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#JdbcTemplate的用法">1.1&nbsp;&nbsp;JdbcTemplate的用法</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结">1.2&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#使用声明式事务">2&nbsp;&nbsp;<b>使用声明式事务</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#回滚事务">2.1&nbsp;&nbsp;回滚事务</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#事务边界">2.2&nbsp;&nbsp;事务边界</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#事务传播">2.3&nbsp;&nbsp;事务传播</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#使用DAO">3&nbsp;&nbsp;<b>使用DAO</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#集成Hibernate">4&nbsp;&nbsp;<b>集成Hibernate</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#集成JPA">5&nbsp;&nbsp;<b>集成JPA</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#集成Mybatis">6&nbsp;&nbsp;<b>集成Mybatis</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#设计ORM">7&nbsp;&nbsp;<b>设计ORM</b></a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            访问数据库
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>Jun 28 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a><span>></span><a class="article-category-link" href="/categories/Study/Java/Spring/">Spring</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            40 minutes read (About 6034 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>数据库基本上是现代应用程序的标准存储，绝大多数程序都把自己的业务数据存储在关系数据库中，可见，访问数据库几乎是所有应用程序必备能力。我们在前面已经介绍了Java程序访问数据库的标准接口JDBC，它的实现方式非常简洁，即：Java标准库定义接口，各数据库厂商以“驱动”的形式实现接口。<span id="more"></span>应用程序要使用哪个数据库，就把该数据库厂商的驱动以jar包形式引入进来，同时自身仅使用JDBC接口，编译期并不需要特定厂商的驱动。</p>
+<p>使用JDBC虽然简单，但代码比较繁琐。Spring为了简化数据库访问，主要做了以下几点工作：</p>
+<ul>
+<li>提供了简化的访问JDBC的模板类，不必手动释放资源</li>
+<li>提供了一个统一的DAO类以实现Data Access Object模式</li>
+<li>把<code>SQLException</code>封装为<code>DataAccessException</code>，这个异常是一个<code>RuntimeException</code>，并且让我们能区分SQL异常的原因，例如，<code>DuplicateKeyException</code>表示违反了一个唯一约束</li>
+<li>能方便地集成Hibernate、JPA和MyBatis这些数据库访问框架</li>
+</ul>
+<p>本章我们将详细讲解在Spring中访问数据库的最佳实践。</p>
+<h2 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h2><p>Java程序使用JDBC接口访问关系数据库的时候，需要以下几步：</p>
+<ul>
+<li>创建全局<code>DataSource</code>实例，表示数据库连接池；</li>
+<li>在需要读写数据库的方法内部，按如下步骤访问数据库：<ul>
+<li>从全局<code>DataSource</code>实例获取<code>Connection</code>实例；</li>
+<li>通过<code>Connection</code>实例创建<code>PreparedStatement</code>实例；</li>
+<li>执行SQL语句，如果是查询，则通过<code>ResultSet</code>读取结果集，如果是修改，则获得<code>int</code>结果。</li>
+</ul>
+</li>
+</ul>
+<p>正确编写JDBC代码的关键是使用<code>try ... finally</code>释放资源，涉及到事务的代码需要正确提交或回滚事务。</p>
+<p>在Spring使用JDBC，首先我们通过IoC容器创建并管理一个<code>DataSource</code>实例，然后，Spring提供了一个<code>JdbcTemplate</code>，可以方便地让我们操作JDBC，因此，通常情况下，我们会实例化一个<code>JdbcTemplate</code>。顾名思义，这个类主要使用了Template模式。</p>
+<p>编写示例代码或者测试代码时，我们强烈推荐使用<a target="_blank" rel="noopener" href="http://hsqldb.org/">HSQLDB</a>这个数据库，它是一个用Java编写的关系数据库，可以以内存模式或者文件模式运行，本身只有一个jar包，非常适合演示代码或者测试代码。</p>
+<p>我们以实际工程为例，先创建Maven工程<code>spring-data-jdbc</code>，然后引入以下依赖：</p>
+<figure class="highlight xml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-context<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>5.2.0.RELEASE<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-jdbc<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>5.2.0.RELEASE<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>javax.annotation<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>javax.annotation-api<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.3.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.zaxxer<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>HikariCP<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.4.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.hsqldb<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>hsqldb<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.5.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>在AppConfig中，我们需要创建以下几个必须的Bean：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span></span><br><span class="line"><span class="hljs-meta">@ComponentScan</span></span><br><span class="line"><span class="hljs-meta">@PropertySource("jdbc.properties")</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Value("${jdbc.url}")</span></span><br><span class="line">    String jdbcUrl;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Value("${jdbc.username}")</span></span><br><span class="line">    String jdbcUsername;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Value("${jdbc.password}")</span></span><br><span class="line">    String jdbcPassword;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Bean</span></span><br><span class="line">    <span class="hljs-function">DataSource <span class="hljs-title">createDataSource</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        HikariConfig config = <span class="hljs-keyword">new</span> HikariConfig();</span><br><span class="line">        config.setJdbcUrl(jdbcUrl);</span><br><span class="line">        config.setUsername(jdbcUsername);</span><br><span class="line">        config.setPassword(jdbcPassword);</span><br><span class="line">        config.addDataSourceProperty(<span class="hljs-string">"autoCommit"</span>, <span class="hljs-string">"true"</span>);</span><br><span class="line">        config.addDataSourceProperty(<span class="hljs-string">"connectionTimeout"</span>, <span class="hljs-string">"5"</span>);</span><br><span class="line">        config.addDataSourceProperty(<span class="hljs-string">"idleTimeout"</span>, <span class="hljs-string">"60"</span>);</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> HikariDataSource(config);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Bean</span></span><br><span class="line">    <span class="hljs-function">JdbcTemplate <span class="hljs-title">createJdbcTemplate</span><span class="hljs-params">(<span class="hljs-meta">@Autowired</span> DataSource dataSource)</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在上述配置中：</p>
+<ol>
+<li>通过<code>@PropertySource("jdbc.properties")</code>读取数据库配置文件</li>
+<li>通过<code>@Value("${jdbc.url}")</code>注入配置文件的相关配置</li>
+<li>创建一个DataSource实例，它的实际类型是<code>HikariDataSource</code>，创建时需要用到注入的配置</li>
+<li>创建一个JdbcTemplate实例，它需要注入<code>DataSource</code>，这是通过方法参数完成注入的</li>
+</ol>
+<p>最后，针对HSQLDB写一个配置文件<code>jdbc.properties</code>：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 数据库文件名为testdb:</span><br><span class="line">jdbc.url=jdbc:hsqldb:file:testdb</span><br><span class="line"></span><br><span class="line"># Hsqldb默认的用户名是sa，口令是空字符串:</span><br><span class="line">jdbc.username=sa</span><br><span class="line">jdbc.password=</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以通过HSQLDB自带的工具来初始化数据库表，这里我们写一个Bean，在Spring容器启动时自动创建一个<code>users</code>表：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DatabaseInitializer</span> </span>{</span><br><span class="line">    <span class="hljs-meta">@Autowired</span></span><br><span class="line">    JdbcTemplate jdbcTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@PostConstruct</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        jdbcTemplate.update(<span class="hljs-string">"CREATE TABLE IF NOT EXISTS users ("</span> <span class="hljs-comment">//</span></span><br><span class="line">                + <span class="hljs-string">"id BIGINT IDENTITY NOT NULL PRIMARY KEY, "</span> <span class="hljs-comment">//</span></span><br><span class="line">                + <span class="hljs-string">"email VARCHAR(100) NOT NULL, "</span> <span class="hljs-comment">//</span></span><br><span class="line">                + <span class="hljs-string">"password VARCHAR(100) NOT NULL, "</span> <span class="hljs-comment">//</span></span><br><span class="line">                + <span class="hljs-string">"name VARCHAR(100) NOT NULL, "</span> <span class="hljs-comment">//</span></span><br><span class="line">                + <span class="hljs-string">"UNIQUE (email))"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在，所有准备工作都已完毕。我们只需要在需要访问数据库的Bean中，注入<code>JdbcTemplate</code>即可：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{</span><br><span class="line">    <span class="hljs-meta">@Autowired</span></span><br><span class="line">    JdbcTemplate jdbcTemplate;</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="JdbcTemplate的用法"><a href="#JdbcTemplate的用法" class="headerlink" title="JdbcTemplate的用法"></a>JdbcTemplate的用法</h3><p>Spring提供的<code>JdbcTemplate</code>采用Template模式，提供了一系列以回调为特点的工具方法，目的是避免繁琐的<code>try...catch</code>语句。</p>
+<p>我们以具体的示例来说明JdbcTemplate的用法。</p>
+<p>首先我们看<code>T execute(ConnectionCallback&lt;T&gt; action)</code>方法，它提供了Jdbc的<code>Connection</code>供我们使用：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> User <span class="hljs-title">getUserById</span><span class="hljs-params">(<span class="hljs-keyword">long</span> id)</span> </span>{</span><br><span class="line">    <span class="hljs-comment">// 注意传入的是ConnectionCallback:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> jdbcTemplate.execute((Connection conn) -&gt; {</span><br><span class="line">        <span class="hljs-comment">// 可以直接使用conn实例，不要释放它，回调结束后JdbcTemplate自动释放:</span></span><br><span class="line">        <span class="hljs-comment">// 在内部手动创建的PreparedStatement、ResultSet必须用try(...)释放:</span></span><br><span class="line">        <span class="hljs-keyword">try</span> (<span class="hljs-keyword">var</span> ps = conn.prepareStatement(<span class="hljs-string">"SELECT * FROM users WHERE id = ?"</span>)) {</span><br><span class="line">            ps.setObject(<span class="hljs-number">1</span>, id);</span><br><span class="line">            <span class="hljs-keyword">try</span> (<span class="hljs-keyword">var</span> rs = ps.executeQuery()) {</span><br><span class="line">                <span class="hljs-keyword">if</span> (rs.next()) {</span><br><span class="line">                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User( <span class="hljs-comment">// new User object:</span></span><br><span class="line">                            rs.getLong(<span class="hljs-string">"id"</span>), <span class="hljs-comment">// id</span></span><br><span class="line">                            rs.getString(<span class="hljs-string">"email"</span>), <span class="hljs-comment">// email</span></span><br><span class="line">                            rs.getString(<span class="hljs-string">"password"</span>), <span class="hljs-comment">// password</span></span><br><span class="line">                            rs.getString(<span class="hljs-string">"name"</span>)); <span class="hljs-comment">// name</span></span><br><span class="line">                }</span><br><span class="line">                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"user not found by id."</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    });</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>也就是说，上述回调方法允许获取Connection，然后做任何基于Connection的操作。</p>
+<p>我们再看<code>T execute(String sql, PreparedStatementCallback&lt;T&gt; action)</code>的用法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> User <span class="hljs-title">getUserByName</span><span class="hljs-params">(String name)</span> </span>{</span><br><span class="line">    <span class="hljs-comment">// 需要传入SQL语句，以及PreparedStatementCallback:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> jdbcTemplate.execute(<span class="hljs-string">"SELECT * FROM users WHERE name = ?"</span>, (PreparedStatement ps) -&gt; {</span><br><span class="line">        <span class="hljs-comment">// PreparedStatement实例已经由JdbcTemplate创建，并在回调后自动释放:</span></span><br><span class="line">        ps.setObject(<span class="hljs-number">1</span>, name);</span><br><span class="line">        <span class="hljs-keyword">try</span> (<span class="hljs-keyword">var</span> rs = ps.executeQuery()) {</span><br><span class="line">            <span class="hljs-keyword">if</span> (rs.next()) {</span><br><span class="line">                <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User( <span class="hljs-comment">// new User object:</span></span><br><span class="line">                        rs.getLong(<span class="hljs-string">"id"</span>), <span class="hljs-comment">// id</span></span><br><span class="line">                        rs.getString(<span class="hljs-string">"email"</span>), <span class="hljs-comment">// email</span></span><br><span class="line">                        rs.getString(<span class="hljs-string">"password"</span>), <span class="hljs-comment">// password</span></span><br><span class="line">                        rs.getString(<span class="hljs-string">"name"</span>)); <span class="hljs-comment">// name</span></span><br><span class="line">            }</span><br><span class="line">            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"user not found by id."</span>);</span><br><span class="line">        }</span><br><span class="line">    });</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后，我们看<code>T queryForObject(String sql, Object[] args, RowMapper&lt;T&gt; rowMapper)</code>方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> User <span class="hljs-title">getUserByEmail</span><span class="hljs-params">(String email)</span> </span>{</span><br><span class="line">    <span class="hljs-comment">// 传入SQL，参数和RowMapper实例:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> jdbcTemplate.queryForObject(<span class="hljs-string">"SELECT * FROM users WHERE email = ?"</span>, <span class="hljs-keyword">new</span> Object[] { email },</span><br><span class="line">            (ResultSet rs, <span class="hljs-keyword">int</span> rowNum) -&gt; {</span><br><span class="line">                <span class="hljs-comment">// 将ResultSet的当前行映射为一个JavaBean:</span></span><br><span class="line">                <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User( <span class="hljs-comment">// new User object:</span></span><br><span class="line">                        rs.getLong(<span class="hljs-string">"id"</span>), <span class="hljs-comment">// id</span></span><br><span class="line">                        rs.getString(<span class="hljs-string">"email"</span>), <span class="hljs-comment">// email</span></span><br><span class="line">                        rs.getString(<span class="hljs-string">"password"</span>), <span class="hljs-comment">// password</span></span><br><span class="line">                        rs.getString(<span class="hljs-string">"name"</span>)); <span class="hljs-comment">// name</span></span><br><span class="line">            });</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在<code>queryForObject()</code>方法中，传入SQL以及SQL参数后，<code>JdbcTemplate</code>会自动创建<code>PreparedStatement</code>，自动执行查询并返回<code>ResultSet</code>，我们提供的<code>RowMapper</code>需要做的事情就是把<code>ResultSet</code>的当前行映射成一个JavaBean并返回。整个过程中，使用<code>Connection</code>、<code>PreparedStatement</code>和<code>ResultSet</code>都不需要我们手动管理。</p>
+<p><code>RowMapper</code>不一定返回JavaBean，实际上它可以返回任何Java对象。例如，使用<code>SELECT COUNT(*)</code>查询时，可以返回<code>Long</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">getUsers</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> jdbcTemplate.queryForObject(<span class="hljs-string">"SELECT COUNT(*) FROM users"</span>, <span class="hljs-keyword">null</span>, (ResultSet rs, <span class="hljs-keyword">int</span> rowNum) -&gt; {</span><br><span class="line">        <span class="hljs-comment">// SELECT COUNT(*)查询只有一列，取第一列数据:</span></span><br><span class="line">        <span class="hljs-keyword">return</span> rs.getLong(<span class="hljs-number">1</span>);</span><br><span class="line">    });</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果我们期望返回多行记录，而不是一行，可以用<code>query()</code>方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> List&lt;User&gt; <span class="hljs-title">getUsers</span><span class="hljs-params">(<span class="hljs-keyword">int</span> pageIndex)</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">int</span> limit = <span class="hljs-number">100</span>;</span><br><span class="line">    <span class="hljs-keyword">int</span> offset = limit * (pageIndex - <span class="hljs-number">1</span>);</span><br><span class="line">    <span class="hljs-keyword">return</span> jdbcTemplate.query(<span class="hljs-string">"SELECT * FROM users LIMIT ? OFFSET ?"</span>, <span class="hljs-keyword">new</span> Object[] { limit, offset },</span><br><span class="line">            <span class="hljs-keyword">new</span> BeanPropertyRowMapper&lt;&gt;(User.class));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上述<code>query()</code>方法传入的参数仍然是SQL、SQL参数以及<code>RowMapper</code>实例。这里我们直接使用Spring提供的<code>BeanPropertyRowMapper</code>。如果数据库表的结构恰好和JavaBean的属性名称一致，那么<code>BeanPropertyRowMapper</code>就可以直接把一行记录按列名转换为JavaBean。</p>
+<p>如果我们执行的不是查询，而是插入、更新和删除操作，那么需要使用<code>update()</code>方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">updateUser</span><span class="hljs-params">(User user)</span> </span>{</span><br><span class="line">    <span class="hljs-comment">// 传入SQL，SQL参数，返回更新的行数:</span></span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> != jdbcTemplate.update(<span class="hljs-string">"UPDATE user SET name = ? WHERE id=?"</span>, user.getName(), user.getId())) {</span><br><span class="line">        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"User not found by id"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>只有一种<code>INSERT</code>操作比较特殊，那就是如果某一列是自增列（例如自增主键），通常，我们需要获取插入后的自增值。<code>JdbcTemplate</code>提供了一个<code>KeyHolder</code>来简化这一操作：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> User <span class="hljs-title">register</span><span class="hljs-params">(String email, String password, String name)</span> </span>{</span><br><span class="line">    <span class="hljs-comment">// 创建一个KeyHolder:</span></span><br><span class="line">    KeyHolder holder = <span class="hljs-keyword">new</span> GeneratedKeyHolder();</span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-number">1</span> != jdbcTemplate.update(</span><br><span class="line">        <span class="hljs-comment">// 参数1:PreparedStatementCreator</span></span><br><span class="line">        (conn) -&gt; {</span><br><span class="line">            <span class="hljs-comment">// 创建PreparedStatement时，必须指定RETURN_GENERATED_KEYS:</span></span><br><span class="line">            <span class="hljs-keyword">var</span> ps = conn.prepareStatement(<span class="hljs-string">"INSERT INTO users(email,password,name) VALUES(?,?,?)"</span>,</span><br><span class="line">                    Statement.RETURN_GENERATED_KEYS);</span><br><span class="line">            ps.setObject(<span class="hljs-number">1</span>, email);</span><br><span class="line">            ps.setObject(<span class="hljs-number">2</span>, password);</span><br><span class="line">            ps.setObject(<span class="hljs-number">3</span>, name);</span><br><span class="line">            <span class="hljs-keyword">return</span> ps;</span><br><span class="line">        },</span><br><span class="line">        <span class="hljs-comment">// 参数2:KeyHolder</span></span><br><span class="line">        holder)</span><br><span class="line">    ) {</span><br><span class="line">        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"Insert failed."</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-comment">// 从KeyHolder中获取返回的自增值:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User(holder.getKey().longValue(), email, password, name);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>JdbcTemplate</code>还有许多重载方法，这里我们不一一介绍。需要强调的是，<code>JdbcTemplate</code>只是对JDBC操作的一个简单封装，它的目的是尽量减少手动编写<code>try(resource) {...}</code>的代码。对于查询，主要通过<code>RowMapper</code>实现了JDBC结果集到Java对象的转换。</p>
+<p>我们总结一下<code>JdbcTemplate</code>的用法，那就是：</p>
+<ul>
+<li>针对简单查询，优选<code>query()</code>和<code>queryForObject()</code>，因为只需提供SQL语句、参数和<code>RowMapper</code>；</li>
+<li>针对更新操作，优选<code>update()</code>，因为只需提供SQL语句和参数；</li>
+<li>任何复杂的操作，最终也可以通过<code>execute(ConnectionCallback)</code>实现，因为拿到<code>Connection</code>就可以做任何JDBC操作。</li>
+</ul>
+<p>实际上我们使用最多的仍然是各种查询。如果在设计表结构的时候，能够和JavaBean的属性一一对应，那么直接使用<code>BeanPropertyRowMapper</code>就很方便。如果表结构和JavaBean不一致怎么办？那就需要稍微改写一下查询，使结果集的结构和JavaBean保持一致。</p>
+<p>例如，表的列名是<code>office_address</code>，而JavaBean属性是<code>workAddress</code>，就需要指定别名，改写查询如下：</p>
+<figure class="highlight sql hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">SELECT</span> id, email, office_address <span class="hljs-keyword">AS</span> workAddress, name <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> email <span class="hljs-operator">=</span> ?</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>Spring提供了<code>JdbcTemplate</code>来简化JDBC操作；</p>
+<p>使用<code>JdbcTemplate</code>时，根据需要优先选择高级方法；</p>
+<p>任何JDBC操作都可以使用保底的<code>execute(ConnectionCallback)</code>方法。</p>
+<h2 id="使用声明式事务"><a href="#使用声明式事务" class="headerlink" title="使用声明式事务"></a>使用声明式事务</h2><p>使用Spring操作JDBC虽然方便，但是我们在前面讨论JDBC的时候，讲到过<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1321748500840481">JDBC事务</a>，如果要在Spring中操作事务，没必要手写JDBC事务，可以使用Spring提供的高级接口来操作事务。</p>
+<p>Spring提供了一个<code>PlatformTransactionManager</code>来表示事务管理器，所有的事务都由它负责管理。而事务由<code>TransactionStatus</code>表示。如果手写事务代码，使用<code>try...catch</code>如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TransactionStatus tx = null;try {    // 开启事务:    tx = txManager.getTransaction(new DefaultTransactionDefinition());    // 相关JDBC操作:    jdbcTemplate.update("...");    jdbcTemplate.update("...");    // 提交事务:    txManager.commit(tx);} catch (RuntimeException e) {    // 回滚事务:    txManager.rollback(tx);    throw e;}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Spring为啥要抽象出<code>PlatformTransactionManager</code>和<code>TransactionStatus</code>？原因是JavaEE除了提供JDBC事务外，它还支持分布式事务JTA（Java Transaction API）。分布式事务是指多个数据源（比如多个数据库，多个消息系统）要在分布式环境下实现事务的时候，应该怎么实现。分布式事务实现起来非常复杂，简单地说就是通过一个分布式事务管理器实现两阶段提交，但本身数据库事务就不快，基于数据库事务实现的分布式事务就慢得难以忍受，所以使用率不高。</p>
+<p>Spring为了同时支持JDBC和JTA两种事务模型，就抽象出<code>PlatformTransactionManager</code>。因为我们的代码只需要JDBC事务，因此，在<code>AppConfig</code>中，需要再定义一个<code>PlatformTransactionManager</code>对应的Bean，它的实际类型是<code>DataSourceTransactionManager</code>：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Configuration@ComponentScan@PropertySource("jdbc.properties")public class AppConfig {    ...    @Bean    PlatformTransactionManager createTxManager(@Autowired DataSource dataSource) {        return new DataSourceTransactionManager(dataSource);    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用编程的方式使用Spring事务仍然比较繁琐，更好的方式是通过声明式事务来实现。使用声明式事务非常简单，除了在<code>AppConfig</code>中追加一个上述定义的<code>PlatformTransactionManager</code>外，再加一个<code>@EnableTransactionManagement</code>就可以启用声明式事务：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Configuration@ComponentScan@EnableTransactionManagement // 启用声明式@PropertySource("jdbc.properties")public class AppConfig {    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后，对需要事务支持的方法，加一个<code>@Transactional</code>注解：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Componentpublic class UserService {    // 此public方法自动具有事务支持:    @Transactional    public User register(String email, String password, String name) {       ...    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>或者更简单一点，直接在Bean的<code>class</code>处加上，表示所有<code>public</code>方法都具有事务支持：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Component@Transactionalpublic class UserService {    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Spring对一个声明式事务的方法，如何开启事务支持？原理仍然是AOP代理，即通过自动创建Bean的Proxy实现：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class UserService$$EnhancerBySpringCGLIB extends UserService {    UserService target = ...    PlatformTransactionManager txManager = ...    public User register(String email, String password, String name) {        TransactionStatus tx = null;        try {            tx = txManager.getTransaction(new DefaultTransactionDefinition());            target.register(email, password, name);            txManager.commit(tx);        } catch (RuntimeException e) {            txManager.rollback(tx);            throw e;        }    }    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意：声明了<code>@EnableTransactionManagement</code>后，不必额外添加<code>@EnableAspectJAutoProxy</code>。</p>
+<h3 id="回滚事务"><a href="#回滚事务" class="headerlink" title="回滚事务"></a>回滚事务</h3><p>默认情况下，如果发生了<code>RuntimeException</code>，Spring的声明式事务将自动回滚。在一个事务方法中，如果程序判断需要回滚事务，只需抛出<code>RuntimeException</code>，例如：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Transactionalpublic buyProducts(long productId, int num) {    ...    if (store &lt; num) {        // 库存不够，购买失败:        throw new IllegalArgumentException("No enough products");    }    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果要针对Checked Exception回滚事务，需要在<code>@Transactional</code>注解中写出来：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Transactional(rollbackFor = {RuntimeException.class, IOException.class})public buyProducts(long productId, int num) throws IOException {    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上述代码表示在抛出<code>RuntimeException</code>或<code>IOException</code>时，事务将回滚。</p>
+<p>为了简化代码，我们强烈建议业务异常体系从<code>RuntimeException</code>派生，这样就不必声明任何特殊异常即可让Spring的声明式事务正常工作：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class BusinessException extends RuntimeException {    ...}public class LoginException extends BusinessException {    ...}public class PaymentException extends BusinessException {    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="事务边界"><a href="#事务边界" class="headerlink" title="事务边界"></a>事务边界</h3><p>在使用事务的时候，明确事务边界非常重要。对于声明式事务，例如，下面的<code>register()</code>方法：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Componentpublic class UserService {    @Transactional    public User register(String email, String password, String name) { // 事务开始       ...    } // 事务结束}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>它的事务边界就是<code>register()</code>方法开始和结束。</p>
+<p>类似的，一个负责给用户增加积分的<code>addBonus()</code>方法：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Componentpublic class BonusService {    @Transactional    public void addBonus(long userId, int bonus) { // 事务开始       ...    } // 事务结束}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>它的事务边界就是<code>addBonus()</code>方法开始和结束。</p>
+<p>在现实世界中，问题总是要复杂一点点。用户注册后，能自动获得100积分，因此，实际代码如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Componentpublic class UserService {    @Autowired    BonusService bonusService;    @Transactional    public User register(String email, String password, String name) {        // 插入用户记录:        User user = jdbcTemplate.insert("...");        // 增加100积分:        bonusService.addBonus(user.id, 100);    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在问题来了：调用方（比如<code>RegisterController</code>）调用<code>UserService.register()</code>这个事务方法，它在内部又调用了<code>BonusService.addBonus()</code>这个事务方法，一共有几个事务？如果<code>addBonus()</code>抛出了异常需要回滚事务，<code>register()</code>方法的事务是否也要回滚？</p>
+<p>问题的复杂度是不是一下子提高了10倍？</p>
+<h3 id="事务传播"><a href="#事务传播" class="headerlink" title="事务传播"></a>事务传播</h3><p>要解决上面的问题，我们首先要定义事务的传播模型。</p>
+<p>假设用户注册的入口是<code>RegisterController</code>，它本身没有事务，仅仅是调用<code>UserService.register()</code>这个事务方法：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Controllerpublic class RegisterController {    @Autowired    UserService userService;    @PostMapping("/register")    public ModelAndView doRegister(HttpServletRequest req) {        String email = req.getParameter("email");        String password = req.getParameter("password");        String name = req.getParameter("name");        User user = userService.register(email, password, name);        return ...    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>因此，<code>UserService.register()</code>这个事务方法的起始和结束，就是事务的范围。</p>
+<p>我们需要关心的问题是，在<code>UserService.register()</code>这个事务方法内，调用<code>BonusService.addBonus()</code>，我们期待的事务行为是什么：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Transactionalpublic User register(String email, String password, String name) {    // 事务已开启:    User user = jdbcTemplate.insert("...");    // ???:    bonusService.addBonus(user.id, 100);} // 事务结束</span><br></pre></td></tr></tbody></table></figure>
+
+<p>对于大多数业务来说，我们期待<code>BonusService.addBonus()</code>的调用，和<code>UserService.register()</code>应当融合在一起，它的行为应该如下：</p>
+<p><code>UserService.register()</code>已经开启了一个事务，那么在内部调用<code>BonusService.addBonus()</code>时，<code>BonusService.addBonus()</code>方法就没必要再开启一个新事务，直接加入到<code>BonusService.register()</code>的事务里就好了。</p>
+<p>其实就相当于：</p>
+<ol>
+<li><code>UserService.register()</code>先执行了一条INSERT语句：<code>INSERT INTO users ...</code></li>
+<li><code>BonusService.addBonus()</code>再执行一条INSERT语句：<code>INSERT INTO bonus ...</code></li>
+</ol>
+<p>因此，Spring的声明式事务为事务传播定义了几个级别，默认传播级别就是REQUIRED，它的意思是，如果当前没有事务，就创建一个新事务，如果当前有事务，就加入到当前事务中执行。</p>
+<p>我们观察<code>UserService.register()</code>方法，它在<code>RegisterController</code>中执行，因为<code>RegisterController</code>没有事务，因此，<code>UserService.register()</code>方法会自动创建一个新事务。</p>
+<p>在<code>UserService.register()</code>方法内部，调用<code>BonusService.addBonus()</code>方法时，因为<code>BonusService.addBonus()</code>检测到当前已经有事务了，因此，它会加入到当前事务中执行。</p>
+<p>因此，整个业务流程的事务边界就清晰了：它只有一个事务，并且范围就是<code>UserService.register()</code>方法。</p>
+<p>有的童鞋会问：把<code>BonusService.addBonus()</code>方法的<code>@Transactional</code>去掉，变成一个普通方法，那不就规避了复杂的传播模型吗？</p>
+<p>去掉<code>BonusService.addBonus()</code>方法的<code>@Transactional</code>，会引来另一个问题，即其他地方如果调用<code>BonusService.addBonus()</code>方法，那就没法保证事务了。例如，规定用户登录时积分+5：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Controllerpublic class LoginController {    @Autowired    BonusService bonusService;    @PostMapping("/login")    public ModelAndView doLogin(HttpServletRequest req) {        User user = ...        bonusService.addBonus(user.id, 5);    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可见，<code>BonusService.addBonus()</code>方法必须要有<code>@Transactional</code>，否则，登录后积分就无法添加了。</p>
+<p>默认的事务传播级别是<code>REQUIRED</code>，它满足绝大部分的需求。还有一些其他的传播级别：</p>
+<p><code>SUPPORTS</code>：表示如果有事务，就加入到当前事务，如果没有，那也不开启事务执行。这种传播级别可用于查询方法，因为SELECT语句既可以在事务内执行，也可以不需要事务；</p>
+<p><code>MANDATORY</code>：表示必须要存在当前事务并加入执行，否则将抛出异常。这种传播级别可用于核心更新逻辑，比如用户余额变更，它总是被其他事务方法调用，不能直接由非事务方法调用；</p>
+<p><code>REQUIRES_NEW</code>：表示不管当前有没有事务，都必须开启一个新的事务执行。如果当前已经有事务，那么当前事务会挂起，等新事务完成后，再恢复执行；</p>
+<p><code>NOT_SUPPORTED</code>：表示不支持事务，如果当前有事务，那么当前事务会挂起，等这个方法执行完成后，再恢复执行；</p>
+<p><code>NEVER</code>：和<code>NOT_SUPPORTED</code>相比，它不但不支持事务，而且在监测到当前有事务时，会抛出异常拒绝执行；</p>
+<p><code>NESTED</code>：表示如果当前有事务，则开启一个嵌套级别事务，如果当前没有事务，则开启一个新事务。</p>
+<p>上面这么多种事务的传播级别，其实默认的<code>REQUIRED</code>已经满足绝大部分需求，<code>SUPPORTS</code>和<code>REQUIRES_NEW</code>在少数情况下会用到，其他基本不会用到，因为把事务搞得越复杂，不仅逻辑跟着复杂，而且速度也会越慢。</p>
+<p>定义事务的传播级别也是写在<code>@Transactional</code>注解里的：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Transactional(propagation = Propagation.REQUIRES_NEW)public Product createProduct() {    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在只剩最后一个问题了：Spring是如何传播事务的？</p>
+<p>我们<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1321748500840481">在JDBC中使用事务</a>的时候，是这么个写法：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Connection conn = openConnection();try {    // 关闭自动提交:    conn.setAutoCommit(false);    // 执行多条SQL语句:    insert(); update(); delete();    // 提交事务:    conn.commit();} catch (SQLException e) {    // 回滚事务:    conn.rollback();} finally {    conn.setAutoCommit(true);    conn.close();}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Spring使用声明式事务，最终也是通过执行JDBC事务来实现功能的，那么，一个事务方法，如何获知当前是否存在事务？</p>
+<p>答案是<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1306581251653666">使用ThreadLocal</a>。Spring总是把JDBC相关的<code>Connection</code>和<code>TransactionStatus</code>实例绑定到<code>ThreadLocal</code>。如果一个事务方法从<code>ThreadLocal</code>未取到事务，那么它会打开一个新的JDBC连接，同时开启一个新的事务，否则，它就直接使用从<code>ThreadLocal</code>获取的JDBC连接以及<code>TransactionStatus</code>。</p>
+<p>因此，事务能正确传播的前提是，方法调用是在一个线程内才行。如果像下面这样写：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Transactionalpublic User register(String email, String password, String name) { // BEGIN TX-A    User user = jdbcTemplate.insert("...");    new Thread(() -&gt; {        // BEGIN TX-B:        bonusService.addBonus(user.id, 100);        // END TX-B    }).start();} // END TX-A</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在另一个线程中调用<code>BonusService.addBonus()</code>，它根本获取不到当前事务，因此，<code>UserService.register()</code>和<code>BonusService.addBonus()</code>两个方法，将分别开启两个完全独立的事务。</p>
+<p>换句话说，事务只能在当前线程传播，无法跨线程传播。</p>
+<p>那如果我们想实现跨线程传播事务呢？原理很简单，就是要想办法把当前线程绑定到<code>ThreadLocal</code>的<code>Connection</code>和<code>TransactionStatus</code>实例传递给新线程，但实现起来非常复杂，根据异常回滚更加复杂，不推荐自己去实现。</p>
+<h2 id="使用DAO"><a href="#使用DAO" class="headerlink" title="使用DAO"></a>使用DAO</h2><p>在传统的多层应用程序中，通常是Web层调用业务层，业务层调用数据访问层。业务层负责处理各种业务逻辑，而数据访问层只负责对数据进行增删改查。因此，实现数据访问层就是用<code>JdbcTemplate</code>实现对数据库的操作。</p>
+<p>编写数据访问层的时候，可以使用DAO模式。DAO即Data Access Object的缩写，它没有什么神秘之处，实现起来基本如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class UserDao {    @Autowired    JdbcTemplate jdbcTemplate;    User getById(long id) {        ...    }    List&lt;User&gt; getUsers(int page) {        ...    }    User createUser(User user) {        ...    }    User updateUser(User user) {        ...    }    void deleteUser(User user) {        ...    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Spring提供了一个<code>JdbcDaoSupport</code>类，用于简化DAO的实现。这个<code>JdbcDaoSupport</code>没什么复杂的，核心代码就是持有一个<code>JdbcTemplate</code>：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public abstract class JdbcDaoSupport extends DaoSupport {    private JdbcTemplate jdbcTemplate;    public final void setJdbcTemplate(JdbcTemplate jdbcTemplate) {        this.jdbcTemplate = jdbcTemplate;        initTemplateConfig();    }    public final JdbcTemplate getJdbcTemplate() {        return this.jdbcTemplate;    }    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>它的意图是子类直接从<code>JdbcDaoSupport</code>继承后，可以随时调用<code>getJdbcTemplate()</code>获得<code>JdbcTemplate</code>的实例。那么问题来了：因为<code>JdbcDaoSupport</code>的<code>jdbcTemplate</code>字段没有标记<code>@Autowired</code>，所以，子类想要注入<code>JdbcTemplate</code>，还得自己想个办法：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Component@Transactionalpublic class UserDao extends JdbcDaoSupport {    @Autowired    JdbcTemplate jdbcTemplate;    @PostConstruct    public void init() {        super.setJdbcTemplate(jdbcTemplate);    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>有的童鞋可能看出来了：既然<code>UserDao</code>都已经注入了<code>JdbcTemplate</code>，那再把它放到父类里，通过<code>getJdbcTemplate()</code>访问岂不是多此一举？</p>
+<p>如果使用传统的XML配置，并不需要编写<code>@Autowired JdbcTemplate jdbcTemplate</code>，但是考虑到现在基本上是使用注解的方式，我们可以编写一个<code>AbstractDao</code>，专门负责注入<code>JdbcTemplate</code>：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public abstract class AbstractDao extends JdbcDaoSupport {    @Autowired    private JdbcTemplate jdbcTemplate;    @PostConstruct    public void init() {        super.setJdbcTemplate(jdbcTemplate);    }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样，子类的代码就非常干净，可以直接调用<code>getJdbcTemplate()</code>：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Component@Transactionalpublic class UserDao extends AbstractDao {    public User getById(long id) {        return getJdbcTemplate().queryForObject(                "SELECT * FROM users WHERE id = ?",                new BeanPropertyRowMapper&lt;&gt;(User.class),                id        );    }    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>倘若肯再多写一点样板代码，就可以把<code>AbstractDao</code>改成泛型，并实现<code>getById()</code>，<code>getAll()</code>，<code>deleteById()</code>这样的通用方法：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public abstract class AbstractDao&lt;T&gt; extends JdbcDaoSupport {    private String table;    private Class&lt;T&gt; entityClass;    private RowMapper&lt;T&gt; rowMapper;    public AbstractDao() {        // 获取当前类型的泛型类型:        this.entityClass = getParameterizedType();        this.table = this.entityClass.getSimpleName().toLowerCase() + "s";        this.rowMapper = new BeanPropertyRowMapper&lt;&gt;(entityClass);    }    public T getById(long id) {        return getJdbcTemplate().queryForObject("SELECT * FROM " + table + " WHERE id = ?", this.rowMapper, id);    }    public List&lt;T&gt; getAll(int pageIndex) {        int limit = 100;        int offset = limit * (pageIndex - 1);        return getJdbcTemplate().query("SELECT * FROM " + table + " LIMIT ? OFFSET ?",                new Object[] { limit, offset },                this.rowMapper);    }    public void deleteById(long id) {        getJdbcTemplate().update("DELETE FROM " + table + " WHERE id = ?", id);    }    ...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样，每个子类就自动获得了这些通用方法：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Component@Transactionalpublic class UserDao extends AbstractDao&lt;User&gt; {    // 已经有了:    // User getById(long)    // List&lt;User&gt; getAll(int)    // void deleteById(long)}@Component@Transactionalpublic class BookDao extends AbstractDao&lt;Book&gt; {    // 已经有了:    // Book getById(long)    // List&lt;Book&gt; getAll(int)    // void deleteById(long)}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可见，DAO模式就是一个简单的数据访问模式，是否使用DAO，根据实际情况决定，因为很多时候，直接在Service层操作数据库也是完全没有问题的。</p>
+<h2 id="集成Hibernate"><a href="#集成Hibernate" class="headerlink" title="集成Hibernate"></a>集成Hibernate</h2><h2 id="集成JPA"><a href="#集成JPA" class="headerlink" title="集成JPA"></a>集成JPA</h2><h2 id="集成Mybatis"><a href="#集成Mybatis" class="headerlink" title="集成Mybatis"></a>集成Mybatis</h2><h2 id="设计ORM"><a href="#设计ORM" class="headerlink" title="设计ORM"></a>设计ORM</h2></body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/Study/Java/Spring/%E4%BD%BF%E7%94%A8AOP/">使用AOP</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
