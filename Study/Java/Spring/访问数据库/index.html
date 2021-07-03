@@ -24,7 +24,7 @@
 <meta property="og:description" content="数据库基本上是现代应用程序的标准存储，绝大多数程序都把自己的业务数据存储在关系数据库中，可见，访问数据库几乎是所有应用程序必备能力。我们在前面已经介绍了Java程序访问数据库的标准接口JDBC，它的实现方式非常简洁，即：Java标准库定义接口，各数据库厂商以“驱动”的形式实现接口。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-06-28T03:19:24.000Z">
-<meta property="article:modified_time" content="2021-07-02T06:26:30.396Z">
+<meta property="article:modified_time" content="2021-07-03T02:00:49.550Z">
 <meta property="article:author" content="WanZixin">
 <meta name="twitter:card" content="summary">
 
@@ -256,7 +256,7 @@
         <span class="column is-narrow">
             
             
-            2 hours read (About 14004 words)
+            2 hours read (About 14044 words)
         </span>
         
     </div>
@@ -741,14 +741,16 @@
 
 <p>编写XML配置的优点是可以组装出动态SQL，并且把所有SQL操作集中在一起，缺点是配置起来太繁琐，调用方法时如果想查看SQL还需要定位到XML配置中。这里我们不介绍XML的配置方式，需要了解的童鞋请自行阅读<a target="_blank" rel="noopener" href="https://mybatis.org/mybatis-3/zh/configuration.html">官方文档</a>。</p>
 <p>使用MyBatis最大的问题是所有SQL都需要全部手写，优点是执行的SQL就是我们自己写的SQL，对SQL进行优化非常简单，也可以编写任意复杂的SQL，或者使用数据库的特定语法，但切换数据库可能就不太容易。好消息是大部分项目并没有切换数据库的需求，完全可以针对某个数据库编写尽可能优化的SQL。</p>
-<h2 id="设计ORM"><a href="#设计ORM" class="headerlink" title="设计ORM"></a>设计ORM</h2><p>//TODO</p>
+<h2 id="设计ORM"><a href="#设计ORM" class="headerlink" title="设计ORM"></a>设计ORM</h2><p>ORM框架就是自动映射数据库表结构到Java Bean的工具，设计并实现一个简单高效的ORM框架并不难。</p>
 </body></html>
     
     </div>
     
     
     <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/Study/Java/Spring/%E5%BC%80%E5%8F%91Web%E5%BA%94%E7%94%A8/">开发Web应用</a>
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">
