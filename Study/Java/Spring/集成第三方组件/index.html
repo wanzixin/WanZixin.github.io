@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>集成第三方组件 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="Spring框架不仅提供了标准的IoC容器、AOP支持、数据库支持以及WebMVC等标准功能，还可以非常方便地集成许多常用的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="集成第三方组件">
+<meta property="og:url" content="https://wanzixin.github.io/Study/Java/Spring/%E9%9B%86%E6%88%90%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BB%84%E4%BB%B6/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="Spring框架不仅提供了标准的IoC容器、AOP支持、数据库支持以及WebMVC等标准功能，还可以非常方便地集成许多常用的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-07-11T02:18:09.000Z">
+<meta property="article:modified_time" content="2021-07-12T06:29:20.022Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#集成JavaMail">1&nbsp;&nbsp;<b>集成JavaMail</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#集成JMS">2&nbsp;&nbsp;<b>集成JMS</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结">2.1&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#使用Scheduler">3&nbsp;&nbsp;<b>使用Scheduler</b></a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            集成第三方组件
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>Jul 11 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a><span>></span><a class="article-category-link" href="/categories/Study/Java/Spring/">Spring</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            30 minutes read (About 4453 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>Spring框架不仅提供了标准的IoC容器、AOP支持、数据库支持以及WebMVC等标准功能，还可以非常方便地集成许多常用的<span id="more"></span>第三方组件：</p>
+<ul>
+<li>可以集成JavaMail发送邮件</li>
+<li>可以集成JMS消息服务</li>
+<li>可以集成Quartz实现定时任务</li>
+<li>可以集成Redis等服务</li>
+</ul>
+<p>本章我们介绍如何在Spring中简单快捷地集成这些第三方组件。</p>
+<h2 id="集成JavaMail"><a href="#集成JavaMail" class="headerlink" title="集成JavaMail"></a>集成JavaMail</h2><p>在Spring中可以集成JavaMail。在服务器端，我们主要以发送邮件为主，例如在注册成功、登录时、购物付款后通知用户，基本上不会遇到接收用户邮件的情况，所以本节我们只讨论如何在Spring发送邮件。</p>
+<p>在Spring中，发送邮件最终也是需要JavaMail，Spring只对JavaMail做了一点简单封装。为了在Spring中集成JavaMail，我们在<code>pom.xml</code>中添加Web相关依赖以及如下依赖：</p>
+<ul>
+<li>org.springframework:spring-context-support:5.2.0.RELEASE</li>
+<li>javax.mail:javax.mail-api:1.6.2</li>
+<li>com.sun.mail:javax.mail:1.6.2</li>
+</ul>
+<p>我们希望用户在注册成功后能收到注册邮件，为此，我们先定义一个<code>JavaMailSender</code>的Bean：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Bean</span></span><br><span class="line"><span class="hljs-function">JavaMailSender <span class="hljs-title">createJavaMailSender</span><span class="hljs-params">(</span></span></span><br><span class="line"><span class="hljs-params"><span class="hljs-function">        // smtp.properties:</span></span></span><br><span class="line"><span class="hljs-params"><span class="hljs-function">        <span class="hljs-meta">@Value("${smtp.host}")</span> String host,</span></span></span><br><span class="line"><span class="hljs-params"><span class="hljs-function">        <span class="hljs-meta">@Value("${smtp.port}")</span> <span class="hljs-keyword">int</span> port,</span></span></span><br><span class="line"><span class="hljs-params"><span class="hljs-function">        <span class="hljs-meta">@Value("${smtp.auth}")</span> String auth,</span></span></span><br><span class="line"><span class="hljs-params"><span class="hljs-function">        <span class="hljs-meta">@Value("${smtp.username}")</span> String username,</span></span></span><br><span class="line"><span class="hljs-params"><span class="hljs-function">        <span class="hljs-meta">@Value("${smtp.password}")</span> String password,</span></span></span><br><span class="line"><span class="hljs-params"><span class="hljs-function">        <span class="hljs-meta">@Value("${smtp.debug:true}")</span> String debug)</span></span></span><br><span class="line"><span class="hljs-function"></span>{</span><br><span class="line">    <span class="hljs-keyword">var</span> mailSender = <span class="hljs-keyword">new</span> JavaMailSenderImpl();</span><br><span class="line">    mailSender.setHost(host);</span><br><span class="line">    mailSender.setPort(port);</span><br><span class="line">    mailSender.setUsername(username);</span><br><span class="line">    mailSender.setPassword(password);</span><br><span class="line">    Properties props = mailSender.getJavaMailProperties();</span><br><span class="line">    props.put(<span class="hljs-string">"mail.transport.protocol"</span>, <span class="hljs-string">"smtp"</span>);</span><br><span class="line">    props.put(<span class="hljs-string">"mail.smtp.auth"</span>, auth);</span><br><span class="line">    <span class="hljs-keyword">if</span> (port == <span class="hljs-number">587</span>) {</span><br><span class="line">        props.put(<span class="hljs-string">"mail.smtp.starttls.enable"</span>, <span class="hljs-string">"true"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">if</span> (port == <span class="hljs-number">465</span>) {</span><br><span class="line">        props.put(<span class="hljs-string">"mail.smtp.socketFactory.port"</span>, <span class="hljs-string">"465"</span>);</span><br><span class="line">        props.put(<span class="hljs-string">"mail.smtp.socketFactory.class"</span>, <span class="hljs-string">"javax.net.ssl.SSLSocketFactory"</span>);</span><br><span class="line">    }</span><br><span class="line">    props.put(<span class="hljs-string">"mail.debug"</span>, debug);</span><br><span class="line">    <span class="hljs-keyword">return</span> mailSender;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这个JavaMailSender接口的实现类是JavaMainlSenderImpl，初始化时，传入的参数与JavaMail完全一致。另外注意到需要注入的属性是从<code>smtp.properties</code>中读取的，因此，AppConfig导入的就不止一个<code>.properties</code>文件，可以导入多个：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span></span><br><span class="line"><span class="hljs-meta">@ComponentScan</span></span><br><span class="line"><span class="hljs-meta">@EnableWebMvc</span></span><br><span class="line"><span class="hljs-meta">@EnableTransactionManagement</span></span><br><span class="line"><span class="hljs-meta">@PropertySource({ "classpath:/jdbc.properties", "classpath:/smtp.properties" })</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>下一步是封装一个<code>MailService</code>，并定义<code>sendRegistrationMail()</code>方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span> </span>{</span><br><span class="line">    <span class="hljs-meta">@Value("${smtp.from}")</span></span><br><span class="line">    String from;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Autowired</span></span><br><span class="line">    JavaMailSender mailSender;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sendRegistrationMail</span><span class="hljs-params">(User user)</span> </span>{</span><br><span class="line">        <span class="hljs-keyword">try</span> {</span><br><span class="line">            MimeMessage mimeMessage = mailSender.createMimeMessage();</span><br><span class="line">            MimeMessageHelper helper = <span class="hljs-keyword">new</span> MimeMessageHelper(mimeMessage, <span class="hljs-string">"utf-8"</span>);</span><br><span class="line">            helper.setFrom(from);</span><br><span class="line">            helper.setTo(user.getEmail());</span><br><span class="line">            helper.setSubject(<span class="hljs-string">"Welcome to Java course!"</span>);</span><br><span class="line">            String html = String.format(<span class="hljs-string">"&lt;p&gt;Hi, %s,&lt;/p&gt;&lt;p&gt;Welcome to Java course!&lt;/p&gt;&lt;p&gt;Sent at %s&lt;/p&gt;"</span>, user.getName(), LocalDateTime.now());</span><br><span class="line">            helper.setText(html, <span class="hljs-keyword">true</span>);</span><br><span class="line">            mailSender.send(mimeMessage);</span><br><span class="line">        } <span class="hljs-keyword">catch</span> (MessagingException e) {</span><br><span class="line">            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(e);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>观察上述代码，<code>MimeMessage</code>是JavaMail的邮件对象，而<code>MimeMessageHelper</code>是Spring提供的用于简化设置<code>MimeMessage</code>的类，比如我们设置HTML邮件就可以直接调用<code>setText(String text, boolean html)</code>，而不必再调用比较繁琐的JavaMail接口方法。最后一步，调用<code>JavaMailSender.send()</code>方法把邮件发送出去。</p>
+<p>在MVC的某个Controller某个方法中，当用户注册成功后，我们就启动一个新线程来异步来发送邮件：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">User user = userService.register(email, password, name);</span><br><span class="line">logger.info(<span class="hljs-string">"user registered: {}"</span>, user.getEmail());</span><br><span class="line"><span class="hljs-comment">// send registration mail:</span></span><br><span class="line"><span class="hljs-keyword">new</span> Thread(() -&gt; {</span><br><span class="line">    mailService.sendRegistrationMail(user);</span><br><span class="line">}).start();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>因为发送邮件是一种耗时的任务，从几秒到几分钟不等，因此，异步发送是保证页面能快速显示的必要措施。这里我们新起了一个线程，但实际上还有更优化的方法，我们下一节讨论。</p>
+<h2 id="集成JMS"><a href="#集成JMS" class="headerlink" title="集成JMS"></a>集成JMS</h2><p>JMS即Java Message Service，是JavaEE的消息服务接口，JMS主要有两个版本1.1和2.0，2.0相比主要是简化了收发消息的代码。</p>
+<p>所谓消息服务，就是两个进程之间，通过消息服务器传递消息。使用消息服务，而不是直接调用对方的API的好处是：</p>
+<ul>
+<li>双方各自无需知晓对方的存在，消息可以异步处理，因为消息服务器会在Consumer离线的时候自动缓存消息</li>
+<li>如果Producer发送的消息频率高于Consumer的处理能力，消息可以积压在消息服务器，不至于压垮Consumer</li>
+<li>通过一个消息服务器，可以连接多个Producer和多个Consumer</li>
+</ul>
+<p>因为消息服务在各类应用程序中非常有用，所以JavaEE专门定义了JMS规范。注意到JMS是一组接口定义，如果我们要使用JMS，还需要选择一个具体的JMS产品。常用的JMS服务器有开源的ActiveMQ，商业服务器如WebLogic、WebSphere等也内置了JMS支持。这里我们选择开源的ActiveMQ作为JMS服务器，在开发JMS之前，我们先安装ActiveMQ。</p>
+<blockquote>
+<p>现在问题来了：从官网下载ActiveMQ时，蹦出一个页面，让我们选择ActiveMQ Classic或者ActiveMQ Artemis，这两个是什么关系，又有什么区别？</p>
+<p>实际上ActiveMQ Classic原来就叫ActiveMQ，是Apache开发的基于JMS 1.1的消息服务器，目前稳定版本号是5.x，而ActiveMQ Artemis是由RedHat捐赠的<a target="_blank" rel="noopener" href="https://hornetq.jboss.org/">HornetQ</a>服务器代码的基础上开发的，目前稳定版本号是2.x。和ActiveMQ Classic相比，Artemis版的代码与Classic完全不同，并且，它支持JMS 2.0，使用基于Netty的异步IO，大大提升了性能。此外，Artemis不仅提供了JMS接口，它还提供了AMQP接口，STOMP接口和物联网使用的MQTT接口。选择Artemis，相当于一鱼四吃。</p>
+<p>所以，我们这里直接选择ActiveMQ Artemis。从官网<a target="_blank" rel="noopener" href="https://activemq.apache.org/components/artemis/download/">下载</a>最新的2.x版本，解压后设置环境变量<code>ARTEMIS_HOME</code>，指向Artemis根目录，例如<code>C:\Apps\artemis</code>，然后，把<code>ARTEMIS_HOME/bin</code>加入PATH环境变量：</p>
+<ul>
+<li>Windows下添加<code>%ARTEMIS_HOME%\bin</code>到Path路径</li>
+<li>Mac和Linux下添加<code>$ARTEMIS_HOME/bin</code>到PATH路径</li>
+</ul>
+</blockquote>
+<p>Artemis有个很好的设计，就是它把程序和数据完全分离了。我们解压后的ARTEMIS_HOME目录是程序目录，要启动一个Artemis服务，还需要创建一个数据目录。我们把数据目录直接设定在项目<code>spring-integration-jms</code>的<code>jms-data</code>目录下。执行命令<code>artemis create jms-data</code>。</p>
+<p>在创建过程中，会要求用户输入连接用户和口令，这里我们设定<code>admin</code>和<code>password</code>，以及是否允许匿名访问，选择<code>N</code>。此数据目录<code>jms-data</code>不仅包含消息数据、日志，还自动创建了两个启动服务器的命令<code>bin/artemis</code>和<code>bin/artemis-service</code>，前者在前台启动运行，按<code>Ctrl+C</code>结束，后者会一直在后台运行。</p>
+<p>我们把目录切换到<code>jms-data/bin</code>，直接运行<code>artemis run</code>即可启动Artemis服务。启动成功后，Artemis提示可以通过URL<code>http://localhost:8161/console</code>访问管理后台，注意不要关闭命令行窗口。</p>
+<p>在编写JMS代码前，首先得理解JMS的消息模型。JMS把生产消息的一方成为Producer，处理消息的一方称为Consumer。有两种类型的消息通道，一种是Queue：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌────────┐    ┌────────┐    ┌────────┐</span><br><span class="line">│Producer│───&gt;│ Queue  │───&gt;│Consumer│</span><br><span class="line">└────────┘    └────────┘    └────────┘</span><br></pre></td></tr></tbody></table></figure>
+
+<p>一种是Topic：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">                            ┌────────┐</span><br><span class="line">                         ┌─&gt;│Consumer│</span><br><span class="line">                         │  └────────┘</span><br><span class="line">┌────────┐    ┌────────┐ │  ┌────────┐</span><br><span class="line">│Producer│───&gt;│ Topic  │─┼─&gt;│Consumer│</span><br><span class="line">└────────┘    └────────┘ │  └────────┘</span><br><span class="line">                         │  ┌────────┐</span><br><span class="line">                         └─&gt;│Consumer│</span><br><span class="line">                            └────────┘</span><br></pre></td></tr></tbody></table></figure>
+
+<p>它们的区别在于，Queue是一对一的通道，如果Consumer离线无法处理消息时，Queue会把消息存起来，等Consumer连接的时候发给它。设定了持久化机制的Queue不会丢失消息。如果有多个Consumer接入同一个Queue，那么它们等效于以集群的方式处理消息。例如，发送方发送的消息是A，B，C，D，E，F，两个Consumer可能分别收到A，C，E和B，D，F，即每个消息只会交给其中一个Consumer处理。</p>
+<p>Topic则是一种一对多的通道。一个Producer发送的消息会被多个Consumer同时接收到，即每个Consumer会收到一份完整的信息流。那么如果一个Consumer暂时离线，一段时间后又重新上线，那么在离线期间产生的消息还能不能收到？这取决于消息服务器对Topic类型消息的持久化机制，如果消息服务器不存储Topic消息，那么离线的Consumer会丢失部分离线时期的消息；如果消息服务器存储了Topic消息，那么离线的Consumer可以收到自上次离线后产生的所有消息。JMS规范通过Consumer指定一个持久化订阅可以在上线后收取所有离线期间的消息，如果指定的是非持久化订阅，那么离线期间的消息会全部丢失。</p>
+<p>细心的朋友可能发现了，如果一个Topic的消息全部被持久化了，并且只有一个Consumer，那么它和Queue其实是一样的。实际上，很多消息服务器内部只有Topic类型的消息架构，Queue可以通过Topic“模拟”出来。</p>
+<p>无论是Queue还是Topic，对Producer没什么要求。多个Producer也可以写入同一个Queue或Topic，此时消息服务器内部会自动排序确保消息总是有序的。</p>
+<p>以上是消息服务的基本模型。具体到某个消息服务器时，Producer和Consumer通常是通过TCP协议连接消息服务器的。编写JMS程序时，又会遇到<code>ConnectionFactory</code>、<code>Connection</code>、<code>Session</code>等概念，其实这和JDBC连接是类似的：</p>
+<ul>
+<li>ConnectionFactory：代表一个到消息服务器的连接池，类似JDBC的DataSource</li>
+<li>Connection：代表一个到消息服务器的连接，类似JDBC的Connection</li>
+<li>Session：代表一个经过认证后的连接会话</li>
+<li>Message：代表一个消息对象</li>
+</ul>
+<p>在JMS 1.1中，发送消息的典型代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">try</span> {</span><br><span class="line">    Connection connection = <span class="hljs-keyword">null</span>;</span><br><span class="line">    <span class="hljs-keyword">try</span> {</span><br><span class="line">        <span class="hljs-comment">// 创建连接:</span></span><br><span class="line">        connection = connectionFactory.createConnection();</span><br><span class="line">        <span class="hljs-comment">// 创建会话:</span></span><br><span class="line">        Session session = connection.createSession(<span class="hljs-keyword">false</span>,Session.AUTO_ACKNOWLEDGE);</span><br><span class="line">        <span class="hljs-comment">// 创建一个Producer并关联到某个Queue:</span></span><br><span class="line">        MessageProducer messageProducer = session.createProducer(queue);</span><br><span class="line">        <span class="hljs-comment">// 创建一个文本消息:</span></span><br><span class="line">        TextMessage textMessage = session.createTextMessage(text);</span><br><span class="line">        <span class="hljs-comment">// 发送消息:</span></span><br><span class="line">        messageProducer.send(textMessage);</span><br><span class="line">    } <span class="hljs-keyword">finally</span> {</span><br><span class="line">        <span class="hljs-comment">// 关闭连接:</span></span><br><span class="line">        <span class="hljs-keyword">if</span> (connection != <span class="hljs-keyword">null</span>) {</span><br><span class="line">            connection.close();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">} <span class="hljs-keyword">catch</span> (JMSException ex) {</span><br><span class="line">    <span class="hljs-comment">// 处理JMS异常</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>JMS 2.0改进了一些API接口，其中，<code>JMSContext</code>实现了<code>AutoCloseable</code>接口，可以使用<code>try(resource)</code>语法，代码更简单。发送消息变得更简单：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">try</span> (JMSContext context = connectionFactory.createContext()) {</span><br><span class="line">    context.createProducer().send(queue, text);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>有了以上预备知识，我们就可以开发开发JMS应用了。</p>
+<p>首先，在<code>pom.xml</code>中添加依赖：</p>
+<ul>
+<li>org.springframework:spring-jms:5.2.0.RELEASE</li>
+<li>javax.jms:javax.jms-api:2.0.1</li>
+<li>org.apache.activemq:artemis-jms-client:2.13.0</li>
+<li>io.netty:netty-handler-proxy:4.1.45.Final</li>
+</ul>
+<p>在AppConfig上添加<code>@EnableJms</code>让Spring自动扫描JMS相关的Bean，并加载JMS配置文件<code>jms.properties</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span></span><br><span class="line"><span class="hljs-meta">@ComponentScan</span></span><br><span class="line"><span class="hljs-meta">@EnableWebMvc</span></span><br><span class="line"><span class="hljs-meta">@EnableJms</span> <span class="hljs-comment">// 启用JMS</span></span><br><span class="line"><span class="hljs-meta">@EnableTransactionManagement</span></span><br><span class="line"><span class="hljs-meta">@PropertySource({ "classpath:/jdbc.properties", "classpath:/jms.properties" })</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>首先创建的Bean是ConnectionFactory，即连接消息服务器的连接池：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Bean</span></span><br><span class="line"><span class="hljs-function">ConnectionFactory <span class="hljs-title">createJMSConnectionFactory</span><span class="hljs-params">(</span></span></span><br><span class="line"><span class="hljs-params"><span class="hljs-function">    <span class="hljs-meta">@Value("${jms.uri:tcp://localhost:61616}")</span> String uri,</span></span></span><br><span class="line"><span class="hljs-params"><span class="hljs-function">    <span class="hljs-meta">@Value("${jms.username:admin}")</span> String username,</span></span></span><br><span class="line"><span class="hljs-params"><span class="hljs-function">    <span class="hljs-meta">@Value("${jms.password:password}")</span> String password)</span></span></span><br><span class="line"><span class="hljs-function"></span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ActiveMQJMSConnectionFactory(uri, username, password);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>因为我们使用的消息服务器是ActiveMQ Artemis，所以<code>ConnectionFactory</code>的实现类就是消息服务器提供的<code>ActiveMQJMSConnectionFactory</code>，它需要的参数均由配置文件读取后传入，并设置默认值。</p>
+<p>我们再创建一个<code>JmsTemplate</code>，它是Spring提供的一个工具类，和<code>JdbcTemplate</code>类似，可以简化发送消息的代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Bean</span></span><br><span class="line"><span class="hljs-function">JmsTemplate <span class="hljs-title">createJmsTemplate</span><span class="hljs-params">(<span class="hljs-meta">@Autowired</span> ConnectionFactory connectionFactory)</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> JmsTemplate(connectionFactory);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>下一步要创建的是<code>JmsListenerContainerFactory</code>，</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Bean("jmsListenerContainerFactory")</span></span><br><span class="line"><span class="hljs-function">DefaultJmsListenerContainerFactory <span class="hljs-title">createJmsListenerContainerFactory</span><span class="hljs-params">(<span class="hljs-meta">@Autowired</span> ConnectionFactory connectionFactory)</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">var</span> factory = <span class="hljs-keyword">new</span> DefaultJmsListenerContainerFactory();</span><br><span class="line">    factory.setConnectionFactory(connectionFactory);</span><br><span class="line">    <span class="hljs-keyword">return</span> factory;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>除了必须指定Bean的名称是<code>jmsListenerContainerFactory</code>外，这个Bean的作用是处理和Consumer相关的Bean。我们先跳过它的原理，继续编写<code>MessagingService</code>来发送消息：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessagingService</span> </span>{</span><br><span class="line">    <span class="hljs-meta">@Autowired</span> ObjectMapper objectMapper;</span><br><span class="line">    <span class="hljs-meta">@Autowired</span> JmsTemplate jmsTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sendMailMessage</span><span class="hljs-params">(MailMessage msg)</span> <span class="hljs-keyword">throws</span> Exception </span>{</span><br><span class="line">        String text = objectMapper.writeValueAsString(msg);</span><br><span class="line">        jmsTemplate.send(<span class="hljs-string">"jms/queue/mail"</span>, <span class="hljs-keyword">new</span> MessageCreator() {</span><br><span class="line">            <span class="hljs-function"><span class="hljs-keyword">public</span> Message <span class="hljs-title">createMessage</span><span class="hljs-params">(Session session)</span> <span class="hljs-keyword">throws</span> JMSException </span>{</span><br><span class="line">                <span class="hljs-keyword">return</span> session.createTextMessage(text);</span><br><span class="line">            }</span><br><span class="line">        });</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>JMS的消息类型支持以下几种：</p>
+<ul>
+<li>TextMessage：文本消息</li>
+<li>BytesMessage：二进制消息</li>
+<li>MapMessage：包含多个Key-Value对的消息</li>
+<li>ObjectMessage：直接序列化Java对象的消息</li>
+<li>StreamMessage：一个包含基本类型序列的消息</li>
+</ul>
+<p>最常用的是发送基于JSON的文本消息，上述代码通过<code>JmsTemplate</code>创建一个<code>TextMessage</code>并发送到名称为<code>jms/queue/mail</code>的Queue。</p>
+<blockquote>
+<p>注意：Artemis消息服务器默认配置下会自动创建Queue，因此不必手动创建一个名为<code>jms/queue/mail</code>的Queue，但不是所有的消息服务器都会自动创建Queue，生产环境的消息服务器通常会关闭自动创建功能，需要手动创建Queue。</p>
+</blockquote>
+<p>注意到<code>MailMessage</code>是我们自定义的一个JavaBean，真正的JMS消息是创建的<code>TextMessage</code>，它的内容是JSON。</p>
+<p>当用户注册成功后，我们就调用<code>MessagingService.sendMailMessage()</code>发送一条JMS消息，代码十分简单。</p>
+<p>下面我们详细讨论如何处理消息，即编写Consumer。从理论上讲，可以创建另一个Java进程来处理消息，但对于我们这个简单的Web程序来说没有必要，直接在同一个Web应用中接收并处理消息即可。</p>
+<p>处理消息的核心代码是编写一个Bean，并在处理方法上标注<code>@JmsListener</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailMessageListener</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">final</span> Logger logger = LoggerFactory.getLogger(getClass());</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Autowired</span> ObjectMapper objectMapper;</span><br><span class="line">    <span class="hljs-meta">@Autowired</span> MailService mailService;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@JmsListener(destination = "jms/queue/mail", concurrency = "10")</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onMailMessageReceived</span><span class="hljs-params">(Message message)</span> <span class="hljs-keyword">throws</span> Exception </span>{</span><br><span class="line">        logger.info(<span class="hljs-string">"received message: "</span> + message);</span><br><span class="line">        <span class="hljs-keyword">if</span> (message <span class="hljs-keyword">instanceof</span> TextMessage) {</span><br><span class="line">            String text = ((TextMessage) message).getText();</span><br><span class="line">            MailMessage mm = objectMapper.readValue(text, MailMessage.class);</span><br><span class="line">            mailService.sendRegistrationMail(mm);</span><br><span class="line">        } <span class="hljs-keyword">else</span> {</span><br><span class="line">            logger.error(<span class="hljs-string">"unable to process non-text message!"</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意到<code>@JmsListener</code>指定了Queue的名称，因此，凡是发送到此Queue的消息都会被这个<code>onMessageReceived()</code>方法处理，方法参数是JMS的Message接口，我们通过强制转型为<code>TextMessage</code>并提取JSON，反序列化后获得自定义的JavaBean，也就获得了发送邮件所需要的信息。</p>
+<p>Spring处理JMS消息的流程是什么？</p>
+<p>如果我们直接调用JMS的API来处理消息，那么编写的代码大致如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// 创建JMS连接:</span></span><br><span class="line">Connection connection = connectionFactory.createConnection();</span><br><span class="line"><span class="hljs-comment">// 创建会话:</span></span><br><span class="line">Session session = connection.createSession(<span class="hljs-keyword">false</span>, Session.AUTO_ACKNOWLEDGE);</span><br><span class="line"><span class="hljs-comment">// 创建一个Consumer:</span></span><br><span class="line">MessageConsumer consumer = session.createConsumer(queue);</span><br><span class="line"><span class="hljs-comment">// 为Consumer指定一个消息处理器:</span></span><br><span class="line">consumer.setMessageListener(<span class="hljs-keyword">new</span> MessageListener() { </span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onMessage</span><span class="hljs-params">(Message message)</span> </span>{</span><br><span class="line">        <span class="hljs-comment">// 在此处理消息... </span></span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="hljs-comment">// 启动接收消息的循环:</span></span><br><span class="line">connection.start();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>我们自己编写的<code>MailMessageListener.onMailMessageReceived()</code>相当于消息处理器：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">consumer.setMessageListener(<span class="hljs-keyword">new</span> MessageListener() { </span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onMessage</span><span class="hljs-params">(Message message)</span> </span>{</span><br><span class="line">        mailMessageListener.onMailMessageReceived(message); </span><br><span class="line">    }</span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
+
+<p>所以，Spring根据<code>AppConfig</code>的注解<code>@EnableJms</code>自动扫描带有<code>@JmsListener</code>的Bean方法，并为其创建一个<code>MessageListener</code>把它包装起来。</p>
+<p>注意到前面我们还创建了一个<code>JmsListenerContainerFactory</code>的Bean，它的作用就是为每个<code>MessageListener</code>创建<code>MessageConsumer</code>并启动消息接收循环。</p>
+<p>再注意到<code>@JmsListener</code>还有一个<code>concurrency</code>参数，10表示可以最多同时并发处理10个消息，<code>5-10</code>表示并发处理的线程可以在5~10之间调整。</p>
+<p>因此，Spring在通过<code>MessageListener</code>接收到消息后，并不是直接调用<code>mailMessageListener.onMailMessageReceived()</code>，而是用线程池调用，因此，要时刻牢记，<code>onMailMessageReceived()</code>方法可能被多线程并发执行，一定要保证线程安全。</p>
+<p>我们总结一下Spring接收消息的步骤：</p>
+<p>通过<code>JmsListenerContainerFactory</code>配合<code>@EnableJms</code>扫描所有<code>@JmsListener</code>方法，自动创建<code>MessageConsumer</code>、<code>MessageListener</code>以及线程池，启动消息循环接收处理消息，最终由我们自己编写的<code>@JmsListener</code>方法处理消息，可能会由多线程同时并发处理。</p>
+<p>要验证消息发送和处理，我们注册一个新用户，可以看到如下日志输出：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2020-06-02 08:04:27 INFO  c.i.learnjava.web.UserController - user registered: bob@example.com</span><br><span class="line">2020-06-02 08:04:27 INFO  c.i.l.service.MailMessageListener - received message: ActiveMQMessage[ID:9fc5...]:PERSISTENT/ClientMessageImpl[messageID=983, durable=true, address=jms/queue/mail, ...]]</span><br><span class="line">2020-06-02 08:04:27 INFO  c.i.learnjava.service.MailService - [send mail] sending registration mail to bob@example.com...</span><br><span class="line">2020-06-02 08:04:30 INFO  c.i.learnjava.service.MailService - [send mail] registration mail was sent to bob@example.com.</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可见，消息被成功发送到Artemis，然后在很短的时间内被接收处理了。</p>
+<p>使用消息服务对发送Email进行改造的好处是，发送Email的能力通常是有限的，通过JMS消息服务，如果短时间内需要给大量用户发送Email，可以先把消息堆积在JMS服务器上慢慢发送，对于批量发送邮件、短信等尤其有用。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>JMS是Java的消息服务，可以通过JMS服务器实现消息的异步处理。消息服务主要解决Producer和Consumer生产和处理速度不匹配的问题。</p>
+<h2 id="使用Scheduler"><a href="#使用Scheduler" class="headerlink" title="使用Scheduler"></a>使用Scheduler</h2><p>// TODO</p>
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/Study/Java/Spring/%E5%BC%80%E5%8F%91Web%E5%BA%94%E7%94%A8/">开发Web应用</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
