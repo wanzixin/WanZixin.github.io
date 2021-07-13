@@ -24,7 +24,7 @@
 <meta property="og:description" content="Spring框架不仅提供了标准的IoC容器、AOP支持、数据库支持以及WebMVC等标准功能，还可以非常方便地集成许多常用的">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-07-11T02:18:09.000Z">
-<meta property="article:modified_time" content="2021-07-12T06:29:20.022Z">
+<meta property="article:modified_time" content="2021-07-13T02:57:54.207Z">
 <meta property="article:author" content="WanZixin">
 <meta name="twitter:card" content="summary">
 
@@ -145,6 +145,20 @@
                     
                     <a class="navbar-item" href="#使用Scheduler">3&nbsp;&nbsp;<b>使用Scheduler</b></a>
                     
+                    
+                    
+                    <a class="navbar-item" href="#使用Cron任务">3.1&nbsp;&nbsp;使用Cron任务</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#集成Quartz">3.2&nbsp;&nbsp;集成Quartz</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#集成JMX">4&nbsp;&nbsp;<b>集成JMX</b></a>
+                    
                 </div>
             </div>
             
@@ -184,7 +198,7 @@
         <span class="column is-narrow">
             
             
-            30 minutes read (About 4453 words)
+            38 minutes read (About 5707 words)
         </span>
         
     </div>
@@ -324,7 +338,45 @@
 <p>可见，消息被成功发送到Artemis，然后在很短的时间内被接收处理了。</p>
 <p>使用消息服务对发送Email进行改造的好处是，发送Email的能力通常是有限的，通过JMS消息服务，如果短时间内需要给大量用户发送Email，可以先把消息堆积在JMS服务器上慢慢发送，对于批量发送邮件、短信等尤其有用。</p>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>JMS是Java的消息服务，可以通过JMS服务器实现消息的异步处理。消息服务主要解决Producer和Consumer生产和处理速度不匹配的问题。</p>
-<h2 id="使用Scheduler"><a href="#使用Scheduler" class="headerlink" title="使用Scheduler"></a>使用Scheduler</h2><p>// TODO</p>
+<h2 id="使用Scheduler"><a href="#使用Scheduler" class="headerlink" title="使用Scheduler"></a>使用Scheduler</h2><p>在许多应用程序中，经常需要执行定时任务。例如，每天或每月给用户发送账户汇总报表，定期检查并发送系统状态报告等等。Java本身就提供了定时执行任务的功能，在Spring中，使用定时任务更简单，不需要手写线程池相关代码，只需要两个注解。</p>
+<p>我们还是以实际代码为例，建立工程<code>spring-integration-schedule</code>，无需额外的依赖，我们可以直接在<code>AppConfig</code>中加上<code>@EnableScheduling</code>就开启了定时任务的支持：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span></span><br><span class="line"><span class="hljs-meta">@ComponentScan</span></span><br><span class="line"><span class="hljs-meta">@EnableWebMvc</span></span><br><span class="line"><span class="hljs-meta">@EnableScheduling</span> <span class="hljs-comment">// 开启定时任务</span></span><br><span class="line"><span class="hljs-meta">@EnableTransactionManagement</span></span><br><span class="line"><span class="hljs-meta">@PropertySource({ "classpath:/jdbc.properties", "classpath:/task.properties" })</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后，我们可以直接在一个Bean中编写一个<code>public void</code>无参数方法，然后加上<code>@Scheduled</code>注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TaskService</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">final</span> Logger logger = LoggerFactory.getLogger(getClass());</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Scheduled(initialDelay = 60_000, fixedRate = 60_000)</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">checkSystemStatusEveryMinute</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        logger.info(<span class="hljs-string">"Start check system status..."</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上述注解指定了启动延时60s，并以60s为间隔执行任务。直接运行应用程序，就可以在控制台看到定时任务打印的日志。如果没有看到定时任务的日志，需要检查：</p>
+<ul>
+<li>是否忘记了在<code>AppConfig</code>中标注<code>@EnableScheduling</code></li>
+<li>是否忘记了在定时任务的方法所在的class标注<code>@Component</code></li>
+</ul>
+<p>除了可以使用<code>fixedRate</code>外，还可以使用<code>fixedDelay</code>。FixedRate是指任务总是以固定的时间间隔触发，不管任务执行多长时间，而FixedDelay是指上一次任务执行完毕后，等待固定的时间间隔，再执行下一次任务。</p>
+<p>有的童鞋在实际开发中会遇到一个问题，因为Java的注解全部是常量，写死了<code>fixedDelay=30000</code>，如果根据实际情况要改成60秒怎么办，只能重新编译？</p>
+<p>我们可以把定时任务的配置放到配置文件中，例如<code>task.properties</code>：</p>
+<figure class="highlight properties hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">task.checkDiskSpace</span>=<span class="hljs-string">30000</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样就可以随时修改配置文件而无需动代码。但是在代码中，我们需要用<code>fixedDelayString</code>取代<code>fixedDelay</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TaskService</span> </span>{</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Scheduled(initialDelay = 30_000, fixedDelayString = "${task.checkDiskSpace:30000}")</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">checkDiskSpaceEveryMinute</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        logger.info(<span class="hljs-string">"Start check disk space..."</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意到上述代码的注解参数<code>fixedDelayString</code>是一个属性占位符，并配有默认值30000，Spring在处理<code>@Scheduled</code>注解时，如果遇到<code>String</code>，会根据占位符自动用配置项替换，这样就可以灵活地修改定时任务的配置。</p>
+<p>此外，<code>fixedDelayString</code>还可以使用更易读的<code>Duration</code>，例如：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Scheduled(initialDelay = 30_000, fixedDelayString = "${task.checkDiskSpace:PT2M30S}")</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>以字符串<code>PT2M30S</code>表示的<code>Duration</code>就是2分30秒，请参考LocalDateTime一节的Duration相关部分。多个<code>@Scheduled</code>方法完全可以放到一个Bean中，这样便于统一管理各类定时任务。</p>
+<h3 id="使用Cron任务"><a href="#使用Cron任务" class="headerlink" title="使用Cron任务"></a>使用Cron任务</h3><p>还有一类定时任务，它不是简单地重复，而是按时间触发，我们把这类任务称为定时任务，比如：</p>
+<ul>
+<li>每天凌晨2:15执行报表任务</li>
+<li>每个工作日12:00执行特定任务</li>
+</ul>
+<p>Cron源自Unix/Linux系统自带的crond守护进程，以一个简洁的表达式定义任务触发时间。在Spring中，也可以使用Cron表达式来执行Cron任务。Cron表达式详解<a target="_blank" rel="noopener" href="https://www.cnblogs.com/javahr/p/8318728.html">指路</a>。</p>
+<p>在Spring中，我们定义一个每天凌晨2:15执行的任务：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TaskService</span> </span>{</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Scheduled(cron = "${task.report:0 15 2 * * *}")</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">cronDailyReport</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        logger.info(<span class="hljs-string">"Start daily report task..."</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Cron任务同样可以使用属性占位符，这样修改起来更加方便。实际上它可以取代fixedRate类型的定时任务。</p>
+<h3 id="集成Quartz"><a href="#集成Quartz" class="headerlink" title="集成Quartz"></a>集成Quartz</h3><p>在Spring中使用定时任务和Cron任务都非常简单，但是要注意到，这些任务的调度都是在每个JVM进程中的。如果本机启动两个进程，或者多台机器上启动应用，这些进程的定时任务和Cron任务都是独立运行互不影响的。</p>
+<p>如果一些定时任务要以集群的方式运行，例如每天23:00检查任务，只需要集群中一台运行即可，这时可以考虑使用Quartz。Quartz可以配置一个JDBC数据源，以便存储所有的任务调度计划以及任务执行状态。也可以使用内存来调度任务，但这样配置就和使用Spring的调度没啥区别了，额外集成Quartz的意义就不大。</p>
+<p>Quartz的JDBC配置比较复杂，Spring对其也有一定的支持。要详细了解Quartz的集成，请参考Spring的文档。思考：如果不使用Quartz的JDBC配置，多个Spring应用同时运行时，如何保证某个任务只在某一台机器执行？</p>
+<h2 id="集成JMX"><a href="#集成JMX" class="headerlink" title="集成JMX"></a>集成JMX</h2><p>// TODO</p>
 </body></html>
     
     </div>
