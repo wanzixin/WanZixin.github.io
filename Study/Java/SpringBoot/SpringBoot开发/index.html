@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
+<link href="/zh-cn/Study/Java/SpringBoot/SpringBoot%E5%BC%80%E5%8F%91/" rel="alternate" hreflang="zh-CN" />
+    
 
 
 <meta name="description" content="">
@@ -24,7 +26,7 @@
 <meta property="og:description" content="我们在前面详细介绍了Spring框架，它的主要功能包括IoC容器、AOP支持、事务支持、MVC开发以及强大的第三方集成功能等。那么SpringBoot又是什么？它和Spring是什么关系？">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-07-14T02:20:48.000Z">
-<meta property="article:modified_time" content="2021-07-17T03:23:12.876Z">
+<meta property="article:modified_time" content="2021-07-18T02:46:59.705Z">
 <meta property="article:author" content="WanZixin">
 <meta name="twitter:card" content="summary">
 
@@ -185,6 +187,18 @@
                     
                     <a class="navbar-item" href="#使用Conditional">7&nbsp;&nbsp;<b>使用Conditional</b></a>
                     
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#加载配置文件">8&nbsp;&nbsp;<b>加载配置文件</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#禁用自动配置">9&nbsp;&nbsp;<b>禁用自动配置</b></a>
+                    
                 </div>
             </div>
             
@@ -224,7 +238,7 @@
         <span class="column is-narrow">
             
             
-            34 minutes read (About 5079 words)
+            40 minutes read (About 5976 words)
         </span>
         
     </div>
@@ -249,7 +263,7 @@
 <figure class="highlight xml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">include</span> <span class="hljs-attr">resource</span>=<span class="hljs-string">"org/springframework/boot/logging/logback/defaults.xml"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">appender</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"CONSOLE"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">encoder</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">pattern</span>&gt;</span>${CONSOLE_LOG_PATTERN}<span class="hljs-tag">&lt;/<span class="hljs-name">pattern</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">charset</span>&gt;</span>utf8<span class="hljs-tag">&lt;/<span class="hljs-name">charset</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;/<span class="hljs-name">encoder</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">appender</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"APP_LOG"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">encoder</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">pattern</span>&gt;</span>${FILE_LOG_PATTERN}<span class="hljs-tag">&lt;/<span class="hljs-name">pattern</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">charset</span>&gt;</span>utf8<span class="hljs-tag">&lt;/<span class="hljs-name">charset</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;/<span class="hljs-name">encoder</span>&gt;</span></span><br><span class="line">          <span class="hljs-tag">&lt;<span class="hljs-name">file</span>&gt;</span>app.log<span class="hljs-tag">&lt;/<span class="hljs-name">file</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">rollingPolicy</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"ch.qos.logback.core.rolling.FixedWindowRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">maxIndex</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">maxIndex</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">fileNamePattern</span>&gt;</span>app.log.%i<span class="hljs-tag">&lt;/<span class="hljs-name">fileNamePattern</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;/<span class="hljs-name">rollingPolicy</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">triggeringPolicy</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">MaxFileSize</span>&gt;</span>1MB<span class="hljs-tag">&lt;/<span class="hljs-name">MaxFileSize</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;/<span class="hljs-name">triggeringPolicy</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">root</span> <span class="hljs-attr">level</span>=<span class="hljs-string">"INFO"</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">appender-ref</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">"CONSOLE"</span> /&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">appender-ref</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">"APP_LOG"</span> /&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">root</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
 
 <p>它主要通过<code>&lt;include resource="..."&gt;</code>引入SpringBoot的缺省配置，这样我们就可以引用类似<code>${CONSOLE_LOG_PATTERN}</code>这样的变量。上述配置定义了一个控制台输出和文件输出，可根据需要修改。</p>
-<p><code>static</code>时静态文件目录，<code>templates</code>是模板文件目录。注意它们不再存放在<code>src/main/webapp</code>下，而是直接放到<code>src/main/resources</code>这个classpath目录下，因为SpringBoot已经不需要专门的<code>webapp</code>目录了。</p>
+<p><code>static</code>是静态文件目录，<code>templates</code>是模板文件目录。注意它们不再存放在<code>src/main/webapp</code>下，而是直接放到<code>src/main/resources</code>这个classpath目录下，因为SpringBoot已经不需要专门的<code>webapp</code>目录了。</p>
 <p>以上就是SpringBoot的标准目录结构，它完全是一个基于Java应用的普通Java项目。</p>
 <p>我们再来看源码目录结构：</p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">src/main/java</span><br><span class="line">└── com</span><br><span class="line">    └── itranswarp</span><br><span class="line">        └── learnjava</span><br><span class="line">            ├── Application.java</span><br><span class="line">            ├── entity</span><br><span class="line">            │   └── User.java</span><br><span class="line">            ├── service</span><br><span class="line">            │   └── UserService.java</span><br><span class="line">            └── web</span><br><span class="line">                └── UserController.java</span><br></pre></td></tr></tbody></table></figure>
@@ -419,7 +433,53 @@
 <figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-meta">@Profile("!default")</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CloudStorageService</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">StorageService</span> </span>{</span><br><span class="line">    <span class="hljs-meta">@Value("${storage.cloud.bucket:}")</span></span><br><span class="line">    String bucket;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Value("${storage.cloud.access-key:}")</span></span><br><span class="line">    String accessKey;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Value("${storage.cloud.access-secret:}")</span></span><br><span class="line">    String accessSecret;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">final</span> Logger logger = LoggerFactory.getLogger(getClass());</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@PostConstruct</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span></span></span><br><span class="line">        logger.info(<span class="hljs-string">"Initializing cloud storage..."</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Override</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> InputStream <span class="hljs-title">openInputStream</span><span class="hljs-params">(String uri)</span> <span class="hljs-keyword">throws</span> IOException </span>{</span><br><span class="line">        <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span></span></span><br><span class="line">        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IOException(<span class="hljs-string">"File not found: "</span> + uri);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Override</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">store</span><span class="hljs-params">(String extName, InputStream input)</span> <span class="hljs-keyword">throws</span> IOException </span>{</span><br><span class="line">        <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span></span></span><br><span class="line">        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IOException(<span class="hljs-string">"Unable to access cloud storage."</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 <p>注意到<code>LocalStorageService</code>使用了条件装配<code>@Profile("default")</code>，即默认启用<code>LocalStorageService</code>，而<code>CloudStorageService</code>使用了条件装配<code>@Profile("!default")</code>，即非<code>default</code>环境时，自动启用<code>CloudStorageService</code>。这样，一套代码，就实现了不同环境启用不同的配置。</p>
-<h2 id="使用Conditional"><a href="#使用Conditional" class="headerlink" title="使用Conditional"></a>使用Conditional</h2><p>//TODO</p>
+<h2 id="使用Conditional"><a href="#使用Conditional" class="headerlink" title="使用Conditional"></a>使用Conditional</h2><p>使用Profile能根据不同的Profile进行条件装配，但是Profile控制比较糙，如果想要精细控制，例如，配置本地存储、AWS存储和阿里云存储，将来很可能会增加Azure存储等，用Profile就很难实现。Spring本身提供了条件装配<code>@Conditional</code>，但是自己要写比较复杂的Condition来做判断，比较麻烦。SpringBoot则为我们提供了几个非常实用的条件：</p>
+<ul>
+<li>@ConditionalOnProperty：如果有指定的配置，条件生效</li>
+<li>@ConditionalOnBean：如果有指定的Bean，条件生效</li>
+<li>@ConditionalOnMissingBean：如果没有指定的Bean，条件生效</li>
+<li>@ConditionalOnMissingClass：如果没有指定的Class，条件生效</li>
+<li>@ConditionalOnWebApplication：在Web环境中条件生效</li>
+<li>@ConditionalOnExpression：根据表达式判断条件是否生效</li>
+</ul>
+<p>我们以最常用的<code>@ConditionalOnProperty</code>为例，把上一节的<code>StorageService</code>改写如下。首先，定义配置<code>storage.type=xxx</code>用作判断条件，默认为<code>local</code>：</p>
+<figure class="highlight yaml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-attr">storage:</span></span><br><span class="line">  <span class="hljs-attr">type:</span> <span class="hljs-string">${STORAGE_TYPE:local}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>设定为local时，启动<code>LocalStorageService</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-meta">@ConditionalOnProperty(value = "storage.type", havingValue = "local", matchIfMissing = true)</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LocalStorageService</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">StorageService</span> </span>{</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>设定为<code>aws</code>时，启用<code>AwsStorageService</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-meta">@ConditionalOnProperty(value = "storage.type", havingValue = "aws")</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AwsStorageService</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">StorageService</span> </span>{</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>设定为<code>aliyun</code>时，启用<code>AliyunStorageService</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-meta">@ConditionalOnProperty(value = "storage.type", havingValue = "aliyun")</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AliyunStorageService</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">StorageService</span> </span>{</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意到<code>LocalStorageService</code>的注解，当指定配置为<code>local</code>，或者配置不存在，均启用<code>LocalStorageService</code>。由此可见，SpringBoot提供的条件装配使得应用程序更加具有灵活性。</p>
+<h2 id="加载配置文件"><a href="#加载配置文件" class="headerlink" title="加载配置文件"></a>加载配置文件</h2><p>加载配置文件可以直接使用注解<code>@Value</code>，例如，我们定义一个最大允许上传的文件大小的配置：</p>
+<figure class="highlight yaml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-attr">storage:</span></span><br><span class="line">  <span class="hljs-attr">local:</span></span><br><span class="line">    <span class="hljs-attr">max-size:</span> <span class="hljs-number">102400</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>在某个FileUploader里获取该配置：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FileUploader</span> </span>{</span><br><span class="line">    <span class="hljs-meta">@Value("${storage.local.max-size:102400}")</span></span><br><span class="line">    <span class="hljs-keyword">int</span> maxSize;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在另一个UploadFilter中，因为要检查文件的MD5，同时也要检查输入流的大小，因此，也需要该配置：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UploadFilter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Filter</span> </span>{</span><br><span class="line">    <span class="hljs-meta">@Value("${storage.local.max-size:100000}")</span></span><br><span class="line">    <span class="hljs-keyword">int</span> maxSize;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>多次引用同一个<code>@Value</code>不但麻烦，而且<code>@Value</code>使用字符串，缺少编译器检查，容易造成多处引用不一致。</p>
+<p>为了更好地管理配置，SpringBoot允许创建一个Bean，持有一组配置，并由SpringBoot自动注入。</p>
+<p>假设我们在<code>application.yml</code>中添加了如下配置：</p>
+<figure class="highlight yaml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-attr">storage:</span></span><br><span class="line">  <span class="hljs-attr">local:</span></span><br><span class="line">    <span class="hljs-comment"># 文件存储根目录:</span></span><br><span class="line">    <span class="hljs-attr">root-dir:</span> <span class="hljs-string">${STORAGE_LOCAL_ROOT:/var/storage}</span></span><br><span class="line">    <span class="hljs-comment"># 最大文件大小，默认100K:</span></span><br><span class="line">    <span class="hljs-attr">max-size:</span> <span class="hljs-string">${STORAGE_LOCAL_MAX_SIZE:102400}</span></span><br><span class="line">    <span class="hljs-comment"># 是否允许空文件:</span></span><br><span class="line">    <span class="hljs-attr">allow-empty:</span> <span class="hljs-literal">false</span></span><br><span class="line">    <span class="hljs-comment"># 允许的文件类型:</span></span><br><span class="line">    <span class="hljs-attr">allow-types:</span> <span class="hljs-string">jpg,</span> <span class="hljs-string">png,</span> <span class="hljs-string">gif</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以首先定义一个JavaBean，持有该组配置：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StorageConfiguration</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">private</span> String rootDir;</span><br><span class="line">    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> maxSize;</span><br><span class="line">    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> allowEmpty;</span><br><span class="line">    <span class="hljs-keyword">private</span> List&lt;String&gt; allowTypes;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> getters and setters</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>保证JavaBean的属性名称和配置一致即可，然后，我们添加两个注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span></span><br><span class="line"><span class="hljs-meta">@ConfigurationProperties("storage.local")</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StorageConfiguration</span> </span>{</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意<code>@ConfigurationProperties("storage.local")</code>表示将从配置项<code>storage.local</code>读取该项的所有子项配置，并且，<code>@Configuration</code>表示<code>StorageConfiguration</code>也是一个Spring管理的Bean，可直接注入到其他Bean中：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StorageService</span> </span>{</span><br><span class="line">    <span class="hljs-keyword">final</span> Logger logger = LoggerFactory.getLogger(getClass());</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Autowired</span></span><br><span class="line">    StorageConfiguration storageConfig;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@PostConstruct</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{</span><br><span class="line">        logger.info(<span class="hljs-string">"Load configuration: root-dir = {}"</span>, storageConfig.getRootDir());</span><br><span class="line">        logger.info(<span class="hljs-string">"Load configuration: max-size = {}"</span>, storageConfig.getMaxSize());</span><br><span class="line">        logger.info(<span class="hljs-string">"Load configuration: allowed-types = {}"</span>, storageConfig.getAllowTypes());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样一来，引入<code>storage.local</code>的相关配置就很容易了，因为只需要注入<code>StorageConfiguration</code>这个Bean，这样就可以由编译器检查类型，无需编写重复的<code>@Value</code>注解。</p>
+<h2 id="禁用自动配置"><a href="#禁用自动配置" class="headerlink" title="禁用自动配置"></a>禁用自动配置</h2><p>//TODO</p>
 </body></html>
     
     </div>
@@ -475,6 +535,35 @@
             </div>
             
             
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>English</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/Study/Java/SpringBoot/SpringBoot%E5%BC%80%E5%8F%91/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/Study/Java/SpringBoot/SpringBoot%E5%BC%80%E5%8F%91/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
         </div>
     </div>
 </footer>

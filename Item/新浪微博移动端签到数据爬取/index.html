@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
+<link href="/zh-cn/Item/%E6%96%B0%E6%B5%AA%E5%BE%AE%E5%8D%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%AD%BE%E5%88%B0%E6%95%B0%E6%8D%AE%E7%88%AC%E5%8F%96/" rel="alternate" hreflang="zh-CN" />
+    
 
 
 <meta name="description" content="">
@@ -16,16 +18,16 @@
 
 
 
-    <meta name="description" content="爬取网站为新浪微博移动端，相对于PC端而言网页结构简单且限制较少，签到页不需要模拟登录。以城市为单位爬取新浪微博移动端POI下的签到微博，存入csv文件。本项目开源在GitHub，地址指路。更新，西刺代理无法再使用，请更换其他代理。">
+    <meta name="description" content="爬取网站为新浪微博移动端，相对于PC端而言网页结构简单且限制较少，签到页不需要模拟登录。以城市为单位爬取新浪微博移动端POI下的签到微博，存入csv文件。本项目开源在GitHub，地址指路。 更新，西刺代理无法再使用，请更换其他代理。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="新浪微博移动端签到数据爬取">
 <meta property="og:url" content="https://wanzixin.github.io/Item/%E6%96%B0%E6%B5%AA%E5%BE%AE%E5%8D%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%AD%BE%E5%88%B0%E6%95%B0%E6%8D%AE%E7%88%AC%E5%8F%96/index.html">
 <meta property="og:site_name" content="WanZixin">
-<meta property="og:description" content="爬取网站为新浪微博移动端，相对于PC端而言网页结构简单且限制较少，签到页不需要模拟登录。以城市为单位爬取新浪微博移动端POI下的签到微博，存入csv文件。本项目开源在GitHub，地址指路。更新，西刺代理无法再使用，请更换其他代理。">
+<meta property="og:description" content="爬取网站为新浪微博移动端，相对于PC端而言网页结构简单且限制较少，签到页不需要模拟登录。以城市为单位爬取新浪微博移动端POI下的签到微博，存入csv文件。本项目开源在GitHub，地址指路。 更新，西刺代理无法再使用，请更换其他代理。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img.shields.io/badge/python-3.7-blue.svg">
 <meta property="article:published_time" content="2020-05-25T10:01:51.000Z">
-<meta property="article:modified_time" content="2021-05-30T14:24:02.109Z">
+<meta property="article:modified_time" content="2021-07-18T02:39:18.761Z">
 <meta property="article:author" content="WanZixin">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img.shields.io/badge/python-3.7-blue.svg">
@@ -194,14 +196,19 @@
         <span class="column is-narrow">
             
             
-            5 minutes read (About 686 words)
+            5 minutes read (About 689 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
         <html><head></head><body><p><img src="https://img.shields.io/badge/python-3.7-blue.svg"></p>
-<p>爬取网站为<a target="_blank" rel="noopener" href="https://m.weibo.cn/">新浪微博移动端</a>，相对于PC端而言网页结构简单且限制较少，签到页不需要模拟登录。以城市为单位爬取新浪微博移动端POI下的签到微博，存入csv文件。本项目开源在GitHub，地址<a target="_blank" rel="noopener" href="https://github.com/WanZixin/SinaWeibo-LocationSignIn-spider">指路</a>。更新，西刺代理无法再使用，请更换其他代理。<span id="more"></span></p>
+<p>爬取网站为<a target="_blank" rel="noopener" href="https://m.weibo.cn/">新浪微博移动端</a>，相对于PC端而言网页结构简单且限制较少，签到页不需要模拟登录。以城市为单位爬取新浪微博移动端POI下的签到微博，存入csv文件。本项目开源在GitHub，地址<a target="_blank" rel="noopener" href="https://github.com/WanZixin/SinaWeibo-LocationSignIn-spider">指路</a>。</p>
+<blockquote class="colorquote danger"><p>更新，西刺代理无法再使用，请更换其他代理。</p>
+</blockquote>
+
+<span id="more"></span>
+
 <h2 id="文件说明"><a href="#文件说明" class="headerlink" title="文件说明"></a>文件说明</h2><p>buildip.py，爬取 <a target="_blank" rel="noopener" href="https://www.xicidaili.com/nn/">西刺高匿代理</a> 构建代理池。<br>myemail.py，爬取完毕后发邮件给自己的邮箱。<br>wifi.py，确保网络连接不断开（网络断开后自动重连）。<br>crawler.py，爬虫本体。<br>config.ini，配置文件，配置项有邮箱，wifi名称，城市名称，城市编码。</p>
 <h2 id="爬取信息"><a href="#爬取信息" class="headerlink" title="爬取信息"></a>爬取信息</h2><table>
 <thead>
@@ -344,6 +351,35 @@
             </div>
             
             
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>English</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/Item/%E6%96%B0%E6%B5%AA%E5%BE%AE%E5%8D%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%AD%BE%E5%88%B0%E6%95%B0%E6%8D%AE%E7%88%AC%E5%8F%96/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/Item/%E6%96%B0%E6%B5%AA%E5%BE%AE%E5%8D%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%AD%BE%E5%88%B0%E6%95%B0%E6%8D%AE%E7%88%AC%E5%8F%96/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
         </div>
     </div>
 </footer>
