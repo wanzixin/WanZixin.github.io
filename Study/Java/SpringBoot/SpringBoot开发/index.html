@@ -26,7 +26,7 @@
 <meta property="og:description" content="我们在前面详细介绍了Spring框架，它的主要功能包括IoC容器、AOP支持、事务支持、MVC开发以及强大的第三方集成功能等。那么SpringBoot又是什么？它和Spring是什么关系？">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-07-14T02:20:48.000Z">
-<meta property="article:modified_time" content="2021-07-20T03:14:08.152Z">
+<meta property="article:modified_time" content="2021-07-21T02:31:07.275Z">
 <meta property="article:author" content="WanZixin">
 <meta name="twitter:card" content="summary">
 
@@ -219,6 +219,14 @@
                     
                     <a class="navbar-item" href="#集成Open-API">11.1&nbsp;&nbsp;集成Open API</a>
                     
+                    
+                    
+                    <a class="navbar-item" href="#配置反向代理">11.1.1&nbsp;&nbsp;配置反向代理</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#访问Redis">11.2&nbsp;&nbsp;访问Redis</a>
+                    
                 </div>
             </div>
             
@@ -258,7 +266,7 @@
         <span class="column is-narrow">
             
             
-            an hour read (About 7827 words)
+            an hour read (About 8545 words)
         </span>
         
     </div>
@@ -554,7 +562,25 @@
 
 <p>这个<code>ApiFilterRegistrationBean</code>和<code>AuthFilterRegistrationBean</code>又有所不同。因为我们要过滤URL，而不是针对所有URL生效，因此，在<code>@PostConstruct</code>方法中，通过<code>setFilter()</code>设置一个<code>Filter</code>实例后，再调用<code>setUrlPatterns()</code>传入要过滤的URL列表。</p>
 <h2 id="集成第三方组件"><a href="#集成第三方组件" class="headerlink" title="集成第三方组件"></a>集成第三方组件</h2><p>和Spring相比，使用SpringBoot通过自动配置即成第三方组件通常来说更简单，这一节我们详细介绍如何通过SpringBoot集成常用的第三方组件。</p>
-<h3 id="集成Open-API"><a href="#集成Open-API" class="headerlink" title="集成Open API"></a>集成Open API</h3><p>//TODO</p>
+<h3 id="集成Open-API"><a href="#集成Open-API" class="headerlink" title="集成Open API"></a>集成Open API</h3><p>Open API是一个标准，它的主要作用是描述REST API，既可以作为文档给开发者阅读，又可以让机器根据这个文档自动生成客户端代码。在SpringBoot应用中，假设我们编写了一堆REST API，如何添加Open API的支持？</p>
+<p>我们只需要在<code>pom.xml</code>中加入以下依赖：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">org.springdoc:springdoc-openapi-ui:1.4.0<br></code></pre></td></tr></tbody></table></figure>
+
+<p>然后直接启动应用，打开浏览器输入<code>http://localhost:8080/swagger-ui.html</code>，立即可以看到自动生成的API文档，这里列出了3个API，来自<code>api-controller</code>（因为定义在<code>ApiController</code>这个类中），点击某个API还可以交互，即输入API参数，点“try it out”，获得运行结果。</p>
+<p>因为我们引入<code>springdoc-openapi-ui</code>这个依赖后，它自动引入Swagger UI用来创建API文档。可以给API加入一些描述信息，例如：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RestController</span><br><span class="hljs-meta">@RequestMapping("/api")</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ApiController</span> </span>{<br>    ...<br>    <span class="hljs-meta">@Operation(summary = "Get specific user object by it's id.")</span><br>	<span class="hljs-meta">@GetMapping("/users/{id}")</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> User <span class="hljs-title">user</span><span class="hljs-params">(<span class="hljs-meta">@Parameter(description = "id of the user.")</span> <span class="hljs-meta">@PathVariable("id")</span> <span class="hljs-keyword">long</span> id)</span> </span>{<br>		<span class="hljs-keyword">return</span> userService.getUserById(id);<br>	}<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p><code>@Operation</code>可以对API进行描述，<code>@Parameter</code>可以对参数进行描述，它们的目的是用于生成API文档的描述信息。</p>
+<p>大多数情况下，不需要任何配置，我们就直接得到了一个运行时动态生成的可交互的API文档，该API文档总是和代码保持同步，大大简化了文档的编写工作。要自定义文档的样式、控制某些API显示等，请参考<a target="_blank" rel="noopener" href="https://springdoc.org/">springdoc文档</a>。</p>
+<h4 id="配置反向代理"><a href="#配置反向代理" class="headerlink" title="配置反向代理"></a>配置反向代理</h4><p>如果在服务器上，用户访问的域名是<code>https://example.com</code>，但内部是通过类似Nginx这样的反向代理访问实际的Spring Boot应用，比如<code>http://localhost:8080</code>，这个时候，在页面<code>https://example.com/swagger-ui.html</code>上，显示的URL仍然是<code>http://localhost:8080</code>，这样一来，就无法直接在页面执行API，非常不方便。</p>
+<p>这是因为Spring Boot内置的Tomcat默认获取的服务器名称是<code>localhost</code>，端口是实际监听端口，而不是对外暴露的域名和<code>80</code>或<code>443</code>端口。要让Tomcat获取到对外暴露的域名等信息，必须在Nginx配置中传入必要的HTTP Header，常用的配置如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs plaintext"># Nginx配置<br>server {<br>    ...<br>    location / {<br>        proxy_pass http://localhost:8080;<br>        proxy_set_header Host $host;<br>        proxy_set_header X-Real-IP $remote_addr;<br>        proxy_set_header X-Forwarded-Proto $scheme;<br>        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>    }<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>然后，在Spring Boot的<code>application.yml</code>中，加入如下配置：</p>
+<figure class="highlight yaml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">server:</span><br>  <span class="hljs-comment"># 实际监听端口:</span><br>  <span class="hljs-attr">port:</span> <span class="hljs-number">8080</span><br>  <span class="hljs-comment"># 从反向代理读取相关的HTTP Header:</span><br>  <span class="hljs-attr">forward-headers-strategy:</span> <span class="hljs-string">native</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>重启Spring Boot应用，即可在Swagger中显示正确的URL。</p>
+<h3 id="访问Redis"><a href="#访问Redis" class="headerlink" title="访问Redis"></a>访问Redis</h3><p>//TODO</p>
 </body></html>
     
     </div>
