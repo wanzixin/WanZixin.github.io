@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>使用AOP - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<link href="/zh-cn/%E4%BD%BF%E7%94%A8AOP/" rel="alternate" hreflang="zh-CN" />
+    
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="AOP是Aspect Oriented Programming，即面向切面编程。我们先回顾一下OOP：Object Oriented Programming，OOP作为面向对象编程的模式，获得了巨大的成功，OOP的主要功能是数据封装、继承和多态。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用AOP">
+<meta property="og:url" content="https://wanzixin.github.io/%E4%BD%BF%E7%94%A8AOP/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="AOP是Aspect Oriented Programming，即面向切面编程。我们先回顾一下OOP：Object Oriented Programming，OOP作为面向对象编程的模式，获得了巨大的成功，OOP的主要功能是数据封装、继承和多态。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-27T06:58:29.000Z">
+<meta property="article:modified_time" content="2021-06-28T03:18:12.363Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#AOP原理">1&nbsp;&nbsp;<b>AOP原理</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#装配AOP">2&nbsp;&nbsp;<b>装配AOP</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#拦截器类型">2.1&nbsp;&nbsp;拦截器类型</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#使用注解装配AOP">3&nbsp;&nbsp;<b>使用注解装配AOP</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#AOP避坑指南">4&nbsp;&nbsp;<b>AOP避坑指南</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#思考">4.1&nbsp;&nbsp;思考</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            使用AOP
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>Jun 27 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a><span>></span><a class="article-category-link" href="/categories/Study/Java/Spring/">Spring</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            29 minutes read (About 4354 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>AOP是Aspect Oriented Programming，即面向切面编程。我们先回顾一下OOP：Object Oriented Programming，OOP作为面向对象编程的模式，获得了巨大的成功，OOP的主要功能是数据封装、继承和多态。<span id="more"></span>而AOP是一种新的编程方式，它和OOP不同，OOP把系统看作多个对象的交互，AOP把系统分解为不同的关注点，或者称之为切面（Aspect）。</p>
+<p>要理解AOP的概念，我们先用OOP举例，比如一个业务组件<code>BookService</code>，它有几个业务方法：</p>
+<ul>
+<li>createBook：添加新的Book；</li>
+<li>updateBook：修改Book；</li>
+<li>deleteBook：删除Book。</li>
+</ul>
+<p>对每个业务方法，例如，<code>createBook()</code>，除了业务逻辑，还需要安全检查、日志记录和事务处理，它的代码像这样：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BookService</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">createBook</span><span class="hljs-params">(Book book)</span> </span>{<br>        securityCheck();<br>        Transaction tx = startTransaction();<br>        <span class="hljs-keyword">try</span> {<br>            <span class="hljs-comment">// 核心业务逻辑</span><br>            tx.commit();<br>        } <span class="hljs-keyword">catch</span> (RuntimeException e) {<br>            tx.rollback();<br>            <span class="hljs-keyword">throw</span> e;<br>        }<br>        log(<span class="hljs-string">"created book: "</span> + book);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>继续编写<code>updateBook()</code>，代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BookService</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">updateBook</span><span class="hljs-params">(Book book)</span> </span>{<br>        securityCheck();<br>        Transaction tx = startTransaction();<br>        <span class="hljs-keyword">try</span> {<br>            <span class="hljs-comment">// 核心业务逻辑</span><br>            tx.commit();<br>        } <span class="hljs-keyword">catch</span> (RuntimeException e) {<br>            tx.rollback();<br>            <span class="hljs-keyword">throw</span> e;<br>        }<br>        log(<span class="hljs-string">"updated book: "</span> + book);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>对于安全检查、日志、事务等代码，它们会重复出现在每个业务方法中。使用OOP，我们很难将这些四处分散的代码模块化。</p>
+<p>考察业务模型可以发现，<code>BookService</code>关心的是自身的核心逻辑，但整个系统还要求关注安全检查、日志、事务等功能，这些功能实际上“横跨”多个业务方法，为了实现这些功能，不得不在每个业务方法上重复编写代码。</p>
+<p>一种可行的方式是使用<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1281319432618017">Proxy模式</a>，将某个功能，例如，权限检查，放入Proxy中：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SecurityCheckBookService</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">BookService</span> </span>{<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> BookService target;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">SecurityCheckBookService</span><span class="hljs-params">(BookService target)</span> </span>{<br>        <span class="hljs-keyword">this</span>.target = target;<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">createBook</span><span class="hljs-params">(Book book)</span> </span>{<br>        securityCheck();<br>        target.createBook(book);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">updateBook</span><span class="hljs-params">(Book book)</span> </span>{<br>        securityCheck();<br>        target.updateBook(book);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">deleteBook</span><span class="hljs-params">(Book book)</span> </span>{<br>        securityCheck();<br>        target.deleteBook(book);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">securityCheck</span><span class="hljs-params">()</span> </span>{<br>        ...<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这种方式的缺点是比较麻烦，必须先抽取接口，然后，针对每个方法实现Proxy。</p>
+<p>另一种方法是，既然<code>SecurityCheckBookService</code>的代码都是标准的Proxy样板代码，不如把权限检查视作一种切面（Aspect），把日志、事务也视为切面，然后，以某种自动化的方式，把切面织入到核心逻辑中，实现Proxy模式。</p>
+<p>如果我们以AOP的视角来编写上述业务，可以依次实现：</p>
+<ol>
+<li>核心逻辑，即BookService；</li>
+<li>切面逻辑，即：</li>
+<li>权限检查的Aspect；</li>
+<li>日志的Aspect；</li>
+<li>事务的Aspect。</li>
+</ol>
+<p>然后，以某种方式，让框架来把上述3个Aspect以Proxy的方式“织入”到<code>BookService</code>中，这样一来，就不必编写复杂而冗长的Proxy模式。</p>
+<h2 id="AOP原理"><a href="#AOP原理" class="headerlink" title="AOP原理"></a>AOP原理</h2><p>如何把切面织入到核心逻辑中？这正是AOP需要解决的问题。换句话说，如果客户端获得了<code>BookService</code>的引用，当调用<code>bookService.createBook()</code>时，如何对调用方法进行拦截，并在拦截前后进行安全检查、日志、事务等处理，就相当于完成了所有业务功能。</p>
+<p>在Java平台上，对于AOP的织入，有3种方式：</p>
+<ol>
+<li>编译期：在编译时，由编译器把切面调用编译进字节码，这种方式需要定义新的关键字并扩展编译器，AspectJ就扩展了Java编译器，使用关键字aspect来实现织入；</li>
+<li>类加载器：在目标类被装载到JVM时，通过一个特殊的类加载器，对目标类的字节码重新“增强”；</li>
+<li>运行期：目标对象和切面都是普通Java类，通过JVM的动态代理功能或者第三方库实现运行期动态织入。</li>
+</ol>
+<p>最简单的方式是第三种，Spring的AOP实现就是基于JVM的动态代理。由于JVM的动态代理要求必须实现接口，如果一个普通类没有业务接口，就需要通过<a target="_blank" rel="noopener" href="https://github.com/cglib/cglib">CGLIB</a>或者<a target="_blank" rel="noopener" href="https://www.javassist.org/">Javassist</a>这些第三方库实现。</p>
+<p>AOP技术看上去比较神秘，但实际上，它本质就是一个动态代理，让我们把一些常用功能如权限检查、日志、事务等，从每个业务方法中剥离出来。</p>
+<p>需要特别指出的是，AOP对于解决特定问题，例如事务管理非常有用，这是因为分散在各处的事务代码几乎是完全相同的，并且它们需要的参数（JDBC的Connection）也是固定的。另一些特定问题，如日志，就不那么容易实现，因为日志虽然简单，但打印日志的时候，经常需要捕获局部变量，如果使用AOP实现日志，我们只能输出固定格式的日志，因此，使用AOP时，必须适合特定的场景。</p>
+<h2 id="装配AOP"><a href="#装配AOP" class="headerlink" title="装配AOP"></a>装配AOP</h2><p>我们不用关心AOP创造的“术语”，只需要理解AOP本质上只是一种代理模式的实现方式，在Spring的容器中实现AOP特别方便。</p>
+<p>我们以<code>UserService</code>和<code>MailService</code>为例，这两个属于核心业务逻辑，现在，我们准备给<code>UserService</code>的每个业务方法执行前添加日志，给<code>MailService</code>的每个业务方法执行前后添加日志，在Spring中，需要以下步骤：</p>
+<p>首先，我们通过Maven引入Spring对AOP的支持：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">&lt;dependency&gt;<br>    &lt;groupId&gt;org.springframework&lt;/groupId&gt;<br>    &lt;artifactId&gt;spring-aspects&lt;/artifactId&gt;<br>    &lt;version&gt;${spring.version}&lt;/version&gt;<br>&lt;/dependency&gt;<br></code></pre></td></tr></tbody></table></figure>
+
+<p>上述依赖会自动引入AspectJ，使用AspectJ实现AOP比较方便，因为它的定义比较简单。</p>
+<p>然后，我们定义一个<code>LoggingAspect</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Aspect</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LoggingAspect</span> </span>{<br>    <span class="hljs-comment">// 在执行UserService的每个方法前执行:</span><br>    <span class="hljs-meta">@Before("execution(public * com.itranswarp.learnjava.service.UserService.*(..))")</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doAccessCheck</span><span class="hljs-params">()</span> </span>{<br>        System.err.println(<span class="hljs-string">"[Before] do access check..."</span>);<br>    }<br><br>    <span class="hljs-comment">// 在执行MailService的每个方法前后执行:</span><br>    <span class="hljs-meta">@Around("execution(public * com.itranswarp.learnjava.service.MailService.*(..))")</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">doLogging</span><span class="hljs-params">(ProceedingJoinPoint pjp)</span> <span class="hljs-keyword">throws</span> Throwable </span>{<br>        System.err.println(<span class="hljs-string">"[Around] start "</span> + pjp.getSignature());<br>        Object retVal = pjp.proceed();<br>        System.err.println(<span class="hljs-string">"[Around] done "</span> + pjp.getSignature());<br>        <span class="hljs-keyword">return</span> retVal;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>观察<code>doAccessCheck()</code>方法，我们定义了一个<code>@Before</code>注解，后面的字符串是告诉AspectJ应该在何处执行该方法，这里写的意思是：执行<code>UserService</code>的每个<code>public</code>方法前执行<code>doAccessCheck()</code>代码。</p>
+<p>再观察<code>doLogging()</code>方法，我们定义了一个<code>@Around</code>注解，它和<code>@Before</code>不同，<code>@Around</code>可以决定是否执行目标方法，因此，我们在<code>doLogging()</code>内部先打印日志，再调用方法，最后打印日志后返回结果。</p>
+<p>在<code>LoggingAspect</code>类的声明处，除了用<code>@Component</code>表示它本身也是一个Bean外，我们再加上<code>@Aspect</code>注解，表示它的<code>@Before</code>标注的方法需要注入到<code>UserService</code>的每个<code>public</code>方法执行前，<code>@Around</code>标注的方法需要注入到<code>MailService</code>的每个<code>public</code>方法执行前后。</p>
+<p>紧接着，我们需要给<code>@Configuration</code>类加上一个<code>@EnableAspectJAutoProxy</code>注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-meta">@ComponentScan</span><br><span class="hljs-meta">@EnableAspectJAutoProxy</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppConfig</span> </span>{<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>Spring的IoC容器看到这个注解，就会自动查找带有<code>@Aspect</code>的Bean，然后根据每个方法的<code>@Before</code>、<code>@Around</code>等注解把AOP注入到特定的Bean中。执行代码，我们可以看到以下输出：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java">[Before] <span class="hljs-keyword">do</span> access check...<br>[Around] start <span class="hljs-keyword">void</span> com.itranswarp.learnjava.service.MailService.sendRegistrationMail(User)<br>Welcome, test!<br>[Around] done <span class="hljs-keyword">void</span> com.itranswarp.learnjava.service.MailService.sendRegistrationMail(User)<br>[Before] <span class="hljs-keyword">do</span> access check...<br>[Around] start <span class="hljs-keyword">void</span> com.itranswarp.learnjava.service.MailService.sendLoginMail(User)<br>Hi, Bob! You are logged in at <span class="hljs-number">2020</span>-<span class="hljs-number">02</span>-14T23:<span class="hljs-number">13</span>:<span class="hljs-number">52.167996</span>+08:<span class="hljs-number">00</span>[Asia/Shanghai]<br>[Around] done <span class="hljs-keyword">void</span> com.itranswarp.learnjava.service.MailService.sendLoginMail(User)<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这说明执行业务逻辑前后，确实执行了我们定义的Aspect（即<code>LoggingAspect</code>的方法）。</p>
+<p>有些童鞋会问，<code>LoggingAspect</code>定义的方法，是如何注入到其他Bean的呢？</p>
+<p>其实AOP的原理非常简单。我们以<code>LoggingAspect.doAccessCheck()</code>为例，要把它注入到<code>UserService</code>的每个<code>public</code>方法中，最简单的方法是编写一个子类，并持有原始实例的引用：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> UserServiceAopProxy extends UserService {<br>    <span class="hljs-keyword">private</span> UserService target;<br>    <span class="hljs-keyword">private</span> LoggingAspect aspect;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">UserServiceAopProxy</span><span class="hljs-params">(UserService target, LoggingAspect aspect)</span> </span>{<br>        <span class="hljs-keyword">this</span>.target = target;<br>        <span class="hljs-keyword">this</span>.aspect = aspect;<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> User <span class="hljs-title">login</span><span class="hljs-params">(String email, String password)</span> </span>{<br>        <span class="hljs-comment">// 先执行Aspect的代码:</span><br>        aspect.doAccessCheck();<br>        <span class="hljs-comment">// 再执行UserService的逻辑:</span><br>        <span class="hljs-keyword">return</span> target.login(email, password);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> User <span class="hljs-title">register</span><span class="hljs-params">(String email, String password, String name)</span> </span>{<br>        aspect.doAccessCheck();<br>        <span class="hljs-keyword">return</span> target.register(email, password, name);<br>    }<br><br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这些都是Spring容器启动时为我们自动创建的注入了Aspect的子类，它取代了原始的<code>UserService</code>（原始的<code>UserService</code>实例作为内部变量隐藏在<code>UserServiceAopProxy</code>中）。如果我们打印从Spring容器获取的<code>UserService</code>实例类型，它类似<code>UserService$$EnhancerBySpringCGLIB$$1f44e01c</code>，实际上是Spring使用CGLIB动态创建的子类，但对于调用方来说，感觉不到任何区别。</p>
+<blockquote>
+<p>Spring对接口类型使用JDK动态代理，对普通类使用CGLIB创建子类。如果一个Bean的class是final，Spring将无法为其创建子类。</p>
+</blockquote>
+<p>可见，虽然Spring容器内部实现AOP的逻辑比较复杂（需要使用AspectJ解析注解，并通过CGLIB实现代理类），但我们使用AOP非常简单，一共需要三步：</p>
+<ol>
+<li>定义执行方法，并在方法上通过AspectJ的注解告诉Spring应该在何处调用此方法；</li>
+<li>标记<code>@Component</code>和<code>@Aspect</code>；</li>
+<li>在<code>@Configuration</code>类上标注<code>@EnableAspectJAutoProxy</code>。</li>
+</ol>
+<p>至于AspectJ的注入语法则比较复杂，请参考<a target="_blank" rel="noopener" href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop-pointcuts-examples">Spring文档</a>。</p>
+<p>Spring也提供其他方法来装配AOP，但都没有使用AspectJ注解的方式来得简洁明了，所以我们不再作介绍。</p>
+<h3 id="拦截器类型"><a href="#拦截器类型" class="headerlink" title="拦截器类型"></a>拦截器类型</h3><p>顾名思义，拦截器有以下类型：</p>
+<ul>
+<li>@Before：这种拦截器先执行拦截代码，再执行目标代码。如果拦截器抛异常，那么目标代码就不执行了；</li>
+<li>@After：这种拦截器先执行目标代码，再执行拦截器代码。无论目标代码是否抛异常，拦截器代码都会执行；</li>
+<li>@AfterReturning：和@After不同的是，只有当目标代码正常返回时，才执行拦截器代码；</li>
+<li>@AfterThrowing：和@After不同的是，只有当目标代码抛出了异常时，才执行拦截器代码；</li>
+<li>@Around：能完全控制目标代码是否执行，并可以在执行前后、抛异常后执行任意拦截代码，可以说是包含了上面所有功能。</li>
+</ul>
+<h2 id="使用注解装配AOP"><a href="#使用注解装配AOP" class="headerlink" title="使用注解装配AOP"></a>使用注解装配AOP</h2><p>上一节我们讲解了使用AspectJ的注解，并配合一个复杂的<code>execution(* xxx.Xyz.*(..))</code>语法来定义应该如何装配AOP。</p>
+<p>在实际项目中，这种写法其实很少使用。假设你写了一个<code>SecurityAspect</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Aspect</span><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SecurityAspect</span> </span>{    <span class="hljs-meta">@Before("execution(public * com.itranswarp.learnjava.service.*.*(..))")</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">check</span><span class="hljs-params">()</span> </span>{        <span class="hljs-keyword">if</span> (SecurityContext.getCurrentUser() == <span class="hljs-keyword">null</span>) {            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"check failed"</span>);        }    }}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>基本能实现无差别全覆盖，即某个包下面的所有Bean的所有方法都会被这个<code>check()</code>方法拦截。</p>
+<p>还有的童鞋喜欢用方法名前缀进行拦截：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Around("execution(public * update*(..))")</span><span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">doLogging</span><span class="hljs-params">(ProceedingJoinPoint pjp)</span> <span class="hljs-keyword">throws</span> Throwable </span>{    <span class="hljs-comment">// 对update开头的方法切换数据源:    String old = setCurrentDataSource("master");    Object retVal = pjp.proceed();    restoreCurrentDataSource(old);    return retVal;}</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>这种非精准打击误伤面更大，因为从方法前缀区分是否是数据库操作是非常不可取的。</p>
+<p>我们在使用AOP时，要注意到虽然Spring容器可以把指定的方法通过AOP规则装配到指定的Bean的指定方法前后，但是，如果自动装配时，因为不恰当的范围，容易导致意想不到的结果，即很多不需要AOP代理的Bean也被自动代理了，并且，后续新增的Bean，如果不清楚现有的AOP装配规则，容易被强迫装配。</p>
+<p>使用AOP时，被装配的Bean最好自己能清清楚楚地知道自己被安排了。例如，Spring提供的<code>@Transactional</code>就是一个非常好的例子。如果我们自己写的Bean希望在一个数据库事务中被调用，就标注上<code>@Transactional</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{    <span class="hljs-comment">// 有事务:    @Transactional    public User createUser(String name) {        ...    }    // 无事务:    public boolean isValidName(String name) {        ...    }    // 有事务:    @Transactional    public void updateUser(User user) {        ...    }}</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>或者直接在class级别注解，表示“所有public方法都被安排了”：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><span class="hljs-meta">@Transactionalpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{    ...}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>通过<code>@Transactional</code>，某个方法是否启用了事务就一清二楚了。因此，装配AOP的时候，使用注解是最好的方式。</p>
+<p>我们以一个实际例子演示如何使用注解实现AOP装配。为了监控应用程序的性能，我们定义一个性能监控的注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Target(METHOD)</span><span class="hljs-meta">@Retention(RUNTIME)</span><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> MetricTime {    <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span></span>;}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>在需要被监控的关键方法上标注该注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{    <span class="hljs-comment">// 监控register()方法性能:    @MetricTime("register")    public User register(String email, String password, String name) {        ...    }    ...}</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>然后，我们定义<code>MetricAspect</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Aspect</span><span class="hljs-meta">@Componentpublic</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MetricAspect</span> </span>{    <span class="hljs-meta">@Around("@annotation(metricTime)")</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">metric</span><span class="hljs-params">(ProceedingJoinPoint joinPoint, MetricTime metricTime)</span> <span class="hljs-keyword">throws</span> Throwable </span>{        String name = metricTime.value();        <span class="hljs-keyword">long</span> start = System.currentTimeMillis();        <span class="hljs-keyword">try</span> {            <span class="hljs-keyword">return</span> joinPoint.proceed();        } <span class="hljs-keyword">finally</span> {            <span class="hljs-keyword">long</span> t = System.currentTimeMillis() - start;            <span class="hljs-comment">// 写入日志或发送至JMX:            System.err.println("[Metrics] " + name + ": " + t + "ms");        }    }}</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>注意<code>metric()</code>方法标注了<code>@Around("@annotation(metricTime)")</code>，它的意思是，符合条件的目标方法是带有<code>@MetricTime</code>注解的方法，因为<code>metric()</code>方法参数类型是<code>MetricTime</code>（注意参数名是<code>metricTime</code>不是<code>MetricTime</code>），我们通过它获取性能监控的名称。</p>
+<p>有了<code>@MetricTime</code>注解，再配合<code>MetricAspect</code>，任何Bean，只要方法标注了<code>@MetricTime</code>注解，就可以自动实现性能监控。运行代码，输出结果如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Welcome, Bob![Metrics] register: 16ms<br></code></pre></td></tr></tbody></table></figure>
+
+<h2 id="AOP避坑指南"><a href="#AOP避坑指南" class="headerlink" title="AOP避坑指南"></a>AOP避坑指南</h2><p>例如，UserService的初始化在<code>UserService$$EnhancerBySpringCGLIB</code>中并未执行，原因是，没必要初始化proxy的成员变量，因为proxy的目的是代理方法。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> ZoneId zoneId = ZoneId.systemDefault();<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">UserService</span><span class="hljs-params">()</span> </span>{}<br>}<br></code></pre></td></tr></tbody></table></figure>
+<p>实际上，成员变量的初始化是在构造方法中完成的，这样才是编译器实际编译的代码。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> ZoneId zoneId;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">UserService</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">super</span>(); <span class="hljs-comment">// 构造方法的第一行代码总是调用super()</span><br>        zoneId = ZoneId.systemDefault(); <span class="hljs-comment">// 继续初始化成员变量</span><br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>然而，对于Spring通过CGLIB动态创建的<code>UserService$$EnhancerBySpringCGLIB</code>代理类，它的构造方法中，并未调用<code>super()</code>，因此，从父类继承的成员变量，包括<code>final</code>类型的成员变量，统统没有初始化。</p>
+<p>那Java语言规定，任何类的构造方法，第一行必须调用<code>super()</code>，如果没有，编译器也会自动加上，怎么Spring的CGLIB就可以搞特殊？</p>
+<p>这是因为自动加<code>super()</code>的功能是Java编译器实现的，它发现你没加，就自动给加上，发现你加错了，就报编译错误。但实际上，如果直接构造字节码，一个类的构造方法中，不一定非要调用<code>super()</code>。Spring使用CGLIB构造的Proxy类，是直接生成字节码，并没有<code>源码-编译-字节码</code>这个步骤。因此，<strong>Spring通过CGLIB创建的代理类，不会初始化代理类自身继承的任何成员变量，包括final类型的成员变量！</strong></p>
+<p>那么，启动了AOP后，应该如何解决这个问题呢？</p>
+<p>很简单，只需要把直接访问字段的代码，改为通过方法访问。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MailService</span> </span>{<br>    <span class="hljs-meta">@Autowired</span><br>    UserService userService;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">sendMail</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-comment">// 不要直接访问UserService的字段:</span><br>        ZoneId zoneId = userService.getZoneId();<br>        ...<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>此时，无论注入的UserService是原始实例还是代理实例，<code>getZoneId()</code>都能正常工作，因为代理类会覆写<code>getZoneId()</code>方法，并将其委托给原始实例。</p>
+<p>但如果我们添加一个<code>public final</code>的方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserService</span> </span>{<br>    ...<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> ZoneId <span class="hljs-title">getFinalZoneId</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> zoneId;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>在<code>MailService</code>中调用<code>getFinalZoneId()</code>时，又会出现<code>NullPointerException</code>。这是因为，代理类无法覆写final方法（这一点绕不开JVM的ClassLoader检查），该方法返回的是代理类的<code>zoneId</code>字段，即<code>null</code>。</p>
+<p>因此，正确使用AOP，我们需要一个避坑指南：</p>
+<ol>
+<li>访问被注入的Bean时，总是调用方法而非直接访问字段；</li>
+<li>编写Bean时，如果可能会被代理，就不要编写<code>public final</code>方法。</li>
+</ol>
+<p>这样才能保证有没有AOP，代码都能正常工作。</p>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>为什么Spring刻意不初始化Proxy继承的字段？</p>
+<p>如果一个Bean不允许任何AOP代理，应该怎么做来“保护”自己在运行期不会被代理？</p>
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/">访问数据库</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/IoC%E5%AE%B9%E5%99%A8/">IoC容器</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>English</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/%E4%BD%BF%E7%94%A8AOP/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/%E4%BD%BF%E7%94%A8AOP/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>

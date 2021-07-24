@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>设计模式 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<link href="/zh-cn/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="alternate" hreflang="zh-CN" />
+    
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="设计模式，即Design Patterns，是指在软件设计中，被反复使用的代码设计经验。使用设计模式的目的是为了可重用代码，提高代码的可扩展性和可维护性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式">
+<meta property="og:url" content="https://wanzixin.github.io/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="设计模式，即Design Patterns，是指在软件设计中，被反复使用的代码设计经验。使用设计模式的目的是为了可重用代码，提高代码的可扩展性和可维护性。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-10T10:54:11.000Z">
+<meta property="article:modified_time" content="2021-06-15T12:24:33.954Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#概述">1&nbsp;&nbsp;<b>概述</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#创建型模式">2&nbsp;&nbsp;<b>创建型模式</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#工厂方法">2.1&nbsp;&nbsp;工厂方法</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结">2.1.1&nbsp;&nbsp;小结</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#抽象工厂">2.2&nbsp;&nbsp;抽象工厂</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#生成器">2.3&nbsp;&nbsp;生成器</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#原型">2.4&nbsp;&nbsp;原型</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#单例">2.5&nbsp;&nbsp;单例</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结-1">2.5.1&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#结构型模式">3&nbsp;&nbsp;<b>结构型模式</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#适配器">3.1&nbsp;&nbsp;适配器</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结-2">3.1.1&nbsp;&nbsp;小结</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#桥接">3.2&nbsp;&nbsp;桥接</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#组合">3.3&nbsp;&nbsp;组合</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#装饰器">3.4&nbsp;&nbsp;装饰器</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#外观">3.5&nbsp;&nbsp;外观</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#享元">3.6&nbsp;&nbsp;享元</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#代理">3.7&nbsp;&nbsp;代理</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#远程代理">3.7.1&nbsp;&nbsp;远程代理</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#虚代理">3.7.2&nbsp;&nbsp;虚代理</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#保护代理">3.7.3&nbsp;&nbsp;保护代理</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#智能引用">3.7.4&nbsp;&nbsp;智能引用</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结-3">3.7.5&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#行为型模式">4&nbsp;&nbsp;<b>行为型模式</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#责任链">4.1&nbsp;&nbsp;责任链</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#命令">4.2&nbsp;&nbsp;命令</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#解释器">4.3&nbsp;&nbsp;解释器</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#迭代器">4.4&nbsp;&nbsp;迭代器</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#中介">4.5&nbsp;&nbsp;中介</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#备忘录">4.6&nbsp;&nbsp;备忘录</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#观察者">4.7&nbsp;&nbsp;观察者</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#状态">4.8&nbsp;&nbsp;状态</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#策略">4.9&nbsp;&nbsp;策略</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#模板方法">4.10&nbsp;&nbsp;模板方法</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#访问者">4.11&nbsp;&nbsp;访问者</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            设计模式
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>Jun 10 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            2 hours read (About 15335 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>设计模式，即Design Patterns，是指在软件设计中，被反复使用的代码设计经验。使用设计模式的目的是为了可重用代码，提高代码的可扩展性和可维护性。<span id="more"></span></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>为什么要使用设计模式？根本原因还是软件开发要实现可维护、可扩展，就必须尽量复用代码，并且降低代码耦合度。设计模式主要是基于OOP编程提炼的，它基于以下几个原则：</p>
+<ol>
+<li>开闭原则。开闭原则（Open Closed Principle）是指，软件应该对扩展开放，而对修改关闭。这里的意思是，在增加新功能时，能不改代码就尽量不要改，如果只增加代码就完成了新功能，那是最好的。</li>
+<li>里氏替换原则。里氏替换原则是一种面向对象的设计原则，即如果我们调用一个父类的方法可以成功，那么替换成子类调用也应该完全可以运行。</li>
+</ol>
+<p>设计模式是把一些常用的设计模式提炼出一个个模式，然后给每个模式命名，这样在使用的时候更方便交流。GoF（提出设计模式这个术语的四个人）把23个常用模式分为创建型模式、结构型模式和行为型模式三类。学习设计模式，关键的是学习设计思想，不能简单地生搬硬套，也不能为了使用设计模式而过度设计，要合理平衡设计的复杂性和灵活性，并意识到设计模式也不是万能的。</p>
+<h2 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h2><p>创建型模式关注点是如何创建对象，其核心思想是把对象的创建和使用相分离，这样使得两者能相对独立地变换。</p>
+<h3 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h3><p>定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method使一个类的实例化延迟到其子类。工厂方法即Factory Method，是一种对象创建型模式。工厂方法的目的是使得创建对象和使用对象是想分离的，并且客户端总是引用抽象工厂和抽象产品。</p>
+<p>我们来举个例子，假设我们希望实现一个解析字符串到<code>Number</code>的<code>Factory</code>，可以这么定义。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">NumberFactory</span> </span>{<br>    <span class="hljs-comment">// 创建方法:</span><br>    <span class="hljs-function">Number <span class="hljs-title">parse</span><span class="hljs-params">(String s)</span></span>;<br><br>    <span class="hljs-comment">// 获取工厂实例:</span><br>    <span class="hljs-function"><span class="hljs-keyword">static</span> NumberFactory <span class="hljs-title">getFactory</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> impl;<br>    }<br><br>    <span class="hljs-keyword">static</span> NumberFactory impl = <span class="hljs-keyword">new</span> NumberFactoryImpl();<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>客户端如何创建<code>NumberFactoryImpl</code>呢？通常我们会在接口<code>Factory</code>中定义一个静态方法<code>getFactory()</code>来返回真正的子类。</p>
+<p>有了工厂接口，再编写一个工厂的实现类。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NumberFactoryImpl</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">NumberFactory</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Number <span class="hljs-title">parse</span><span class="hljs-params">(String s)</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> BigDecimal(s);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>产品接口是<code>Number</code>，<code>NumberFactoryImpl</code>返回的实际产品是<code>BigDecimal</code>。</p>
+<p>在客户端中，我们只需要和工厂接口<code>NumberFactory</code>以及抽象产品<code>Number</code>打交道。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">NumberFactory factory = NumberFactory.getFactory();<br>Number result = factory.parse(<span class="hljs-string">"123.456"</span>);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>调用方可以完全忽略真正的工厂<code>NumberFactoryImpl</code>和实际产品<code>BigDecimal</code>，这样做的好处是允许创建产品的代码独立地变化，而不会影响到调用方。</p>
+<p>有的同学就会问了：一个简单的<code>parse()</code>需要写这么复杂的工厂吗？实际上，大多数情况下，我们并不需要抽象工厂，而是通过静态方法直接返回产品，即：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NumberFactory</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Number <span class="hljs-title">parse</span><span class="hljs-params">(String s)</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> BigDecimal(s);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这种简化的使用静态方法创建产品的方式，称为静态工厂方法（Static Factory Method）。静态工厂方法广泛应用在Java标准库中，例如：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Integer n = Integer.valueOf(<span class="hljs-number">100</span>);<br></code></pre></td></tr></tbody></table></figure>
+
+<p><code>Integer</code>既是产品也是静态工厂。它提供了静态方法<code>valueOf()</code>来创建<code>Integer</code>，那么，这种方式和直接使用<code>new</code>操作符有何区别？使用静态方法的好处在于，<code>valueOf()</code>内部可能会使用<code>new</code>创建一个新的<code>Integer</code>实例，也可能直接返回一个缓存的<code>Integer</code>实例，此时会减少内存消耗提升速度。对调用方来说没必要在意这些细节。而如果调用方直接使用new操作符，那么就失去了使用缓存优化的可能性。</p>
+<p>我们经常使用的另一个静态工厂方法是<code>List.of()</code>，这个静态工厂方法可以接收可变参数，然后返回List接口。需要注意的是，调用方获取的产品总是<code>List</code>接口，而且并不关心它的实际类型。即使调用方知道<code>List</code>产品的实际类型是<code>java.util.ImmutableCollections$ListN</code>，也不要去强制转型为子类，因为静态工厂方法<code>List.of()</code>保证返回<code>List</code>，但也完全可以修改为返回<code>java.util.ArrayList</code>。</p>
+<blockquote>
+<p>总是引用接口而非实现类，能允许变换子类而不影响调用方，即尽可能面向对象编程</p>
+</blockquote>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>工厂方法是指定义工厂接口和产品接口，但如何创建实际工厂和实际产品被推迟到子类实现，从而使调用方只和抽象工厂与抽象产品打交道。</p>
+<p>实际更常用的是更简单的静态工厂方法，它允许工厂内部对创建产品进行优化。</p>
+<p>调用方尽量持有接口或抽象类，避免持有具体类型的子类，以便工厂方法能随时切换不同的子类返回，却不影响调用方代码。</p>
+<h3 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h3><p>抽象工厂模式（Abstract Factory）是一个比较复杂的创建型模式。抽象工厂模式和工厂方法不太一样，它要解决的问题比较复杂，不但工厂是抽象的，产品是抽象的，而且有多个产品需要创建，因此，这个抽象工厂会对应到多个实际工厂，每个实际工厂负责创建多个实际产品。</p>
+<p>这类似于多个供应商提供相类似产品。我们举个例子：假设我们希望为用户提供一个Markdown文本转换为HTML和Word的服务，它的接口定义如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">AbstractFactory</span> </span>{<br>    <span class="hljs-comment">// 创建Html文档:</span><br>    <span class="hljs-function">HtmlDocument <span class="hljs-title">createHtml</span><span class="hljs-params">(String md)</span></span>;<br>    <span class="hljs-comment">// 创建Word文档:</span><br>    <span class="hljs-function">WordDocument <span class="hljs-title">createWord</span><span class="hljs-params">(String md)</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>上面的抽象工厂仅仅是一个接口，没有任何代码。同样的，因为HtmlDocument和WordDocument都比较复杂，现在我们并不知道如何实现它们，所以只有接口：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Html文档接口:</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">HtmlDocument</span> </span>{<br>    <span class="hljs-function">String <span class="hljs-title">toHtml</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">save</span><span class="hljs-params">(Path path)</span> <span class="hljs-keyword">throws</span> IOException</span>;<br>}<br><br><span class="hljs-comment">// Word文档接口:</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">WordDocument</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">save</span><span class="hljs-params">(Path path)</span> <span class="hljs-keyword">throws</span> IOException</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这样，我们就定义好了抽象工厂AbstractFactory和两个抽象产品HtmlDocument和WordDocument。实现它们比较困难，我们决定让供应商来完成。</p>
+<p>现在市场上有两家供应商：FastDoc Soft的产品便宜，并且转换速度快，而GoodDoc Soft的产品贵，但转换效果好。我们决定同时使用这两家供应商的产品，以便给免费用户和付费用户提供不同的服务。</p>
+<p>我们先看看FastDoc Soft的产品是如何实现的。首先，FastDoc Soft必须要有实际的产品，即<code>FastHtmlDocument</code>和<code>FastWordDocument</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FastHtmlDocument</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">HtmlDocument</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toHtml</span><span class="hljs-params">()</span> </span>{<br>        ...<br>    }<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">save</span><span class="hljs-params">(Path path)</span> <span class="hljs-keyword">throws</span> IOException </span>{<br>        ...<br>    }<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FastWordDocument</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">WordDocument</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">save</span><span class="hljs-params">(Path path)</span> <span class="hljs-keyword">throws</span> IOException </span>{<br>        ...<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>然后，FastDoc Soft必须提供一个实际的工厂来生产这两种产品，即<code>FastFactory</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FastFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">AbstractFactory</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> HtmlDocument <span class="hljs-title">createHtml</span><span class="hljs-params">(String md)</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> FastHtmlDocument(md);<br>    }<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> WordDocument <span class="hljs-title">createWord</span><span class="hljs-params">(String md)</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> FastWordDocument(md);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这样，我们就可以使用FastDoc Soft的服务了。客户端编写代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 创建AbstractFactory，实际类型是FastFactory:</span><br>AbstractFactory factory = <span class="hljs-keyword">new</span> FastFactory();<br><span class="hljs-comment">// 生成Html文档:</span><br>HtmlDocument html = factory.createHtml(<span class="hljs-string">"#Hello\nHello, world!"</span>);<br>html.save(Paths.get(<span class="hljs-string">"."</span>, <span class="hljs-string">"fast.html"</span>));<br><span class="hljs-comment">// 生成Word文档:</span><br>WordDocument word = factory.createWord(<span class="hljs-string">"#Hello\nHello, world!"</span>);<br>word.save(Paths.get(<span class="hljs-string">"."</span>, <span class="hljs-string">"fast.doc"</span>));<br></code></pre></td></tr></tbody></table></figure>
+
+<p>如果我们要同时使用GoodDoc Soft的服务怎么办？因为用了抽象工厂模式，GoodDoc Soft只需要根据我们定义的抽象工厂和抽象产品接口，实现自己的实际工厂和实际产品即可：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 实际工厂:</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GoodFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">AbstractFactory</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> HtmlDocument <span class="hljs-title">createHtml</span><span class="hljs-params">(String md)</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> GoodHtmlDocument(md);<br>    }<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> WordDocument <span class="hljs-title">createWord</span><span class="hljs-params">(String md)</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> GoodWordDocument(md);<br>    }<br>}<br><br><span class="hljs-comment">// 实际产品:</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GoodHtmlDocument</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">HtmlDocument</span> </span>{<br>    ...<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GoodWordDocument</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">HtmlDocument</span> </span>{<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>客户端要使用GoodDoc Soft的服务，只需要把原来的<code>new FastFactory()</code>切换为<code>new GoodFactory()</code>。</p>
+<p>注意到，客户端代码除了通过new创建了<code>FastFactory</code>和<code>GoodFactory</code>外，其余代码只引用了产品接口，并未引用任何实际产品。如果把创建工厂的代码放到<code>AbstractFactory</code>中，就可以连实际工厂也屏蔽了。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">AbstractFactory</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> AbstractFactory <span class="hljs-title">createFactory</span><span class="hljs-params">(String name)</span> </span>{<br>        <span class="hljs-keyword">if</span> (name.equalsIgnoreCase(<span class="hljs-string">"fast"</span>)) {<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> FastFactory();<br>        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (name.equalsIgnoreCase(<span class="hljs-string">"good"</span>)) {<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> GoodFactory();<br>        } <span class="hljs-keyword">else</span> {<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalArgumentException(<span class="hljs-string">"Invalid factory name"</span>);<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h3 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h3><p>生成器模式（Builder）是使用多个“小型工厂”来最终创建出一个完整对象。当我们使用Builder时，一般来说，是因为创建这个对象的步骤比较多，每个步骤都需要一个零部件，最终组合成一个完整的对象。</p>
+<p>我们仍然以Markdown转HTML为例，因为直接编写一个完整的转换器比较困难，但如果针对类似下面的一行文本：</p>
+<figure class="highlight markdown hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># this is a heading</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>转换成HTML就很简单：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">&lt;h1&gt;<span class="hljs-keyword">this</span> is a heading&lt;/h1&gt;<br></code></pre></td></tr></tbody></table></figure>
+
+<p>因此，我们把Markdown转HTML看作一行一行转换，每一行根据语法，使用不同的转换器：</p>
+<ul>
+<li>如果以<code>#</code>开头，使用<code>HeadingBuilder</code>转换</li>
+<li>如果以<code>&gt;</code>开头，使用<code>QuoteBuilder</code>转换</li>
+<li>如果以<code>---</code>开头，使用<code>HrBuilder</code>转换</li>
+<li>其余使用<code>ParagraphBuilder</code>转换</li>
+</ul>
+<p>这个HtmlBuilder写出来如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HtmlBuilder</span> </span>{<br>    <span class="hljs-keyword">private</span> HeadingBuilder headingBuilder = <span class="hljs-keyword">new</span> HeadingBuilder();<br>    <span class="hljs-keyword">private</span> HrBuilder hrBuilder = <span class="hljs-keyword">new</span> HrBuilder();<br>    <span class="hljs-keyword">private</span> ParagraphBuilder paragraphBuilder = <span class="hljs-keyword">new</span> ParagraphBuilder();<br>    <span class="hljs-keyword">private</span> QuoteBuilder quoteBuilder = <span class="hljs-keyword">new</span> QuoteBuilder();<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toHtml</span><span class="hljs-params">(String markdown)</span> </span>{<br>        StringBuilder buffer = <span class="hljs-keyword">new</span> StringBuilder();<br>        markdown.lines().forEach(line -&gt; {<br>            <span class="hljs-keyword">if</span> (line.startsWith(<span class="hljs-string">"#"</span>)) {<br>                buffer.append(headingBuilder.buildHeading(line)).append(<span class="hljs-string">'\n'</span>);<br>            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (line.startsWith(<span class="hljs-string">"&gt;"</span>)) {<br>                buffer.append(quoteBuilder.buildQuote(line)).append(<span class="hljs-string">'\n'</span>);<br>            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (line.startsWith(<span class="hljs-string">"---"</span>)) {<br>                buffer.append(hrBuilder.buildHr(line)).append(<span class="hljs-string">'\n'</span>);<br>            } <span class="hljs-keyword">else</span> {<br>                buffer.append(paragraphBuilder.buildParagraph(line)).append(<span class="hljs-string">'\n'</span>);<br>            }<br>        });<br>        <span class="hljs-keyword">return</span> buffer.toString();<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>注意观察上述代码，<code>HtmlBuilder</code>并不是一次性把整个Markdown转换为HTML，而是一行一行转换，而且它自己并不会将某一行转换为特定的HTML，而是根据特性把每一行都“委托”给一个<code>XxxBuilder</code>去转换。最后，把所有转换的结果组合起来，返回给客户端。</p>
+<p>这样一来，我们只需要针对每一种类型编写不同的Builder。例如，针对以<code>#</code>开头的行，需要<code>HeadingBuilder</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HeadingBuilder</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">buildHeading</span><span class="hljs-params">(String line)</span> </span>{<br>        <span class="hljs-keyword">int</span> n = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span> (line.charAt(<span class="hljs-number">0</span>) == <span class="hljs-string">'#'</span>) {<br>            n++;<br>            line = line.substring(<span class="hljs-number">1</span>);<br>        }<br>        <span class="hljs-keyword">return</span> String.format(<span class="hljs-string">"&lt;h%d&gt;%s&lt;/h%d&gt;"</span>, n, line.strip(), n);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>注意：实际解析Markdown是带有状态的，即下一行的语义可能与上一行相关。这里我们做了简化，认为每一行可以独立转换。</p>
+</blockquote>
+<p>可见，使用Builder模式时，适用于创建的对象比较复杂，最好一步一步创建出“零件”，最后再装配起来。</p>
+<p>JavaMail的<code>MimeMessage</code>就可以看作是一个Builder模式，只不过Builder和最终产品合二为一，都是<code>MimeMessage</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java">Multipart multipart = <span class="hljs-keyword">new</span> MimeMultipart();<br><span class="hljs-comment">// 添加text:</span><br>BodyPart textpart = <span class="hljs-keyword">new</span> MimeBodyPart();<br>textpart.setContent(body, <span class="hljs-string">"text/html;charset=utf-8"</span>);<br>multipart.addBodyPart(textpart);<br><span class="hljs-comment">// 添加image:</span><br>BodyPart imagepart = <span class="hljs-keyword">new</span> MimeBodyPart();<br>imagepart.setFileName(fileName);<br>imagepart.setDataHandler(<span class="hljs-keyword">new</span> DataHandler(<span class="hljs-keyword">new</span> ByteArrayDataSource(input, <span class="hljs-string">"application/octet-stream"</span>)));<br>multipart.addBodyPart(imagepart);<br><br>MimeMessage message = <span class="hljs-keyword">new</span> MimeMessage(session);<br><span class="hljs-comment">// 设置发送方地址:</span><br>message.setFrom(<span class="hljs-keyword">new</span> InternetAddress(<span class="hljs-string">"me@example.com"</span>));<br><span class="hljs-comment">// 设置接收方地址:</span><br>message.setRecipient(Message.RecipientType.TO, <span class="hljs-keyword">new</span> InternetAddress(<span class="hljs-string">"xiaoming@somewhere.com"</span>));<br><span class="hljs-comment">// 设置邮件主题:</span><br>message.setSubject(<span class="hljs-string">"Hello"</span>, <span class="hljs-string">"UTF-8"</span>);<br><span class="hljs-comment">// 设置邮件内容为multipart:</span><br>message.setContent(multipart);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>很多时候，我们可以简化Builder模式，以链式调用的方式来创建对象。例如，我们经常这样编写代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">StringBuilder builder = <span class="hljs-keyword">new</span> StringBuilder();<br>builder.append(secure ? <span class="hljs-string">"https://"</span> : <span class="hljs-string">"http://"</span>)<br>       .append(<span class="hljs-string">"www.liaoxuefeng.com"</span>)<br>       .append(<span class="hljs-string">"/"</span>)<br>       .append(<span class="hljs-string">"?t=0"</span>);<br>String url = builder.toString();<br></code></pre></td></tr></tbody></table></figure>
+
+<p>由于我们经常需要构造URL字符串，可以使用Builder模式编写一个URLBuilder，调用方式如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">String url = URLBuilder.builder() <span class="hljs-comment">// 创建Builder</span><br>        .setDomain(<span class="hljs-string">"www.liaoxuefeng.com"</span>) <span class="hljs-comment">// 设置domain</span><br>        .setScheme(<span class="hljs-string">"https"</span>) <span class="hljs-comment">// 设置scheme</span><br>        .setPath(<span class="hljs-string">"/"</span>) <span class="hljs-comment">// 设置路径</span><br>        .setQuery(Map.of(<span class="hljs-string">"a"</span>, <span class="hljs-string">"123"</span>, <span class="hljs-string">"q"</span>, <span class="hljs-string">"K&amp;R"</span>)) <span class="hljs-comment">// 设置query</span><br>        .build(); <span class="hljs-comment">// 完成build</span><br></code></pre></td></tr></tbody></table></figure>
+
+<h3 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h3><p>原型模式，即Prototype，指创建新对象的时候，根据现有的一个原型创建。</p>
+<p>我们举个例子：如果我们已经有了一个<code>String[]</code>数组，想再创建一个一模一样的<code>String[]</code>数组，怎么写？实际上创建过程很简单，就是把现有数组的元素复制到新数组。如果我们把这个创建过程封装一下，就成了原型模式。用代码实现如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 原型:</span><br>String[] original = { <span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Pear"</span>, <span class="hljs-string">"Banana"</span> };<br><span class="hljs-comment">// 新对象:</span><br>String[] copy = Arrays.copyOf(original, original.length);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>对于普通类，我们如何实现原型拷贝？Java的Object提供了一个<code>clone()</code>方法，它的意图就是复制一个新的对象出来，我们需要实现一个<code>Cloneable</code>接口，来标识一个对象是“可复制”的。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Cloneable</span> </span>{<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> id;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> score;<br><br>    <span class="hljs-comment">// 复制新对象并返回:</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">clone</span><span class="hljs-params">()</span> </span>{<br>        Student std = <span class="hljs-keyword">new</span> Student();<br>        std.id = <span class="hljs-keyword">this</span>.id;<br>        std.name = <span class="hljs-keyword">this</span>.name;<br>        std.score = <span class="hljs-keyword">this</span>.score;<br>        <span class="hljs-keyword">return</span> std;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>使用的时候，因为clone()的方法签名定义在Object中，返回类型也是Object，所以强制转型，比较麻烦。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">Student std1 = <span class="hljs-keyword">new</span> Student();<br>std1.setId(<span class="hljs-number">123</span>);<br>std1.setName(<span class="hljs-string">"Bob"</span>);<br>std1.setScore(<span class="hljs-number">88</span>);<br><span class="hljs-comment">// 复制新对象:</span><br>Student std2 = (Student) std1.clone();<br></code></pre></td></tr></tbody></table></figure>
+
+<p>实际上，使用原型模式更好的方式是定义一个<code>copy()</code>方法，返回明确的类型。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span> </span>{<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> id;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> score;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Student <span class="hljs-title">copy</span><span class="hljs-params">()</span> </span>{<br>        Student std = <span class="hljs-keyword">new</span> Student();<br>        std.id = <span class="hljs-keyword">this</span>.id;<br>        std.name = <span class="hljs-keyword">this</span>.name;<br>        std.score = <span class="hljs-keyword">this</span>.score;<br>        <span class="hljs-keyword">return</span> std;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>原型模式应用不是很广泛，因为很多实例会持有类似文件、Socket这样的资源，而这些资源是无法复制给另一个对象共享的，只有存储简单类型的“值”对象可以复制。</p>
+<h3 id="单例"><a href="#单例" class="headerlink" title="单例"></a>单例</h3><p>单例模式，即Singleton，是为了保证在一个进程中，某个类有且仅有一个实例。因为这个类只有一个实例，因此，自然不能让调用方使用<code>new Xyz()</code>来创建实例了。所以，单例的构造方法必须是<code>private</code>，这样就防止了调用方自己创建实例。但在类的内部，可以用一个静态字段来引用唯一创建的实例。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>{<br>    <span class="hljs-comment">// 静态字段引用唯一实例:</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Singleton INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br><br>    <span class="hljs-comment">// private构造方法保证外部无法实例化:</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>{<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>那么，外部调用方如何获取这唯一的实例呢？提供一个静态方法返回这个实例。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>{<br>    <span class="hljs-comment">// 静态字段引用唯一实例:</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Singleton INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br><br>    <span class="hljs-comment">// 通过静态方法返回实例:</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> INSTANCE;<br>    }<br><br>    <span class="hljs-comment">// private构造方法保证外部无法实例化:</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>{<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>或者直接把static变量暴露出去。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>{<br>    <span class="hljs-comment">// 静态字段引用唯一实例:</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Singleton INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br><br>    <span class="hljs-comment">// private构造方法保证外部无法实例化:</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>{<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>所以，单例模式的实现方式很简单：</p>
+<ol>
+<li>只有<code>private</code>构造方法，确保外部无法实例化；</li>
+<li>通过<code>private static</code>变量持有唯一实例，保证全局唯一性；</li>
+<li>通过<code>public static</code>方法返回此唯一实例，使外部调用方能获取到实例。</li>
+</ol>
+<p>Java标准库有一些类就是单例，例如<code>Runtime</code>这个类：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">Runtime runtime = Runtime.getRuntime();<br></code></pre></td></tr></tbody></table></figure>
+
+<p>有些童鞋可能听说过延迟加载，即在调用方第一次调用<code>getInstance()</code>时才初始化全局唯一实例，类似这样：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>{<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Singleton INSTANCE = <span class="hljs-keyword">null</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">if</span> (INSTANCE == <span class="hljs-keyword">null</span>) {<br>            INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br>        }<br>        <span class="hljs-keyword">return</span> INSTANCE;<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>{<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>遗憾的是，这种写法在多线程中是错误的，在竞争条件下会创建出多个实例。必须对整个方法进行加锁：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>{<br>    <span class="hljs-keyword">if</span> (INSTANCE == <span class="hljs-keyword">null</span>) {<br>        INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br>    }<br>    <span class="hljs-keyword">return</span> INSTANCE;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>但加锁会严重影响并发性能。还有些童鞋听说过双重检查，类似这样：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>{<br>    <span class="hljs-keyword">if</span> (INSTANCE == <span class="hljs-keyword">null</span>) {<br>        <span class="hljs-keyword">synchronized</span> (Singleton.class) {<br>            <span class="hljs-keyword">if</span> (INSTANCE == <span class="hljs-keyword">null</span>) {<br>                INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br>            }<br>        }<br>    }<br>    <span class="hljs-keyword">return</span> INSTANCE;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>然而，由于Java的内存模型，双重检查在这里不成立。要真正实现延迟加载，只能通过Java的ClassLoader机制完成。如果没有特殊的需求，使用Singleton模式的时候，最好不要延迟加载，这样会使代码更简单。</p>
+<p>另一种实现Singleton的方式是利用Java的<code>enum</code>，因为Java保证枚举类的每个枚举都是单例，所以我们只需要编写一个只有一个枚举的类即可：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">World</span> </span>{<br>    <span class="hljs-comment">// 唯一枚举:</span><br>	INSTANCE;<br><br>	<span class="hljs-keyword">private</span> String name = <span class="hljs-string">"world"</span>;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>{<br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.name;<br>	}<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>{<br>		<span class="hljs-keyword">this</span>.name = name;<br>	}<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>枚举类也完全可以像其他类那样定义自己的字段、方法，这样上面这个<code>World</code>类在调用方看来就可以这么用：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">String name = World.INSTANCE.getName();<br></code></pre></td></tr></tbody></table></figure>
+
+<p>使用枚举实现Singleton还避免了第一种方式实现Singleton的一个潜在问题：即序列化和反序列化会绕过普通类的<code>private</code>构造方法从而创建出多个实例，而枚举类就没有这个问题。</p>
+<p>那我们什么时候应该用Singleton呢？实际上，很多程序，尤其是Web程序，大部分服务类都应该被视作Singleton，如果全部按Singleton的写法写，会非常麻烦，所以，通常是通过约定让框架（例如Spring）来实例化这些类，保证只有一个实例，调用方自觉通过框架获取实例而不是<code>new</code>操作符：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span> <span class="hljs-comment">// 表示一个单例组件</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyService</span> </span>{<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>因此，除非确有必要，否则Singleton模式一般以“约定”为主，不会刻意实现它。</p>
+<h4 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h4><p>Singleton模式是为了保证一个程序的运行期间，某个类有且只有一个全局唯一实例；</p>
+<p>Singleton模式既可以严格实现，也可以以约定的方式把普通类视作单例。</p>
+<h2 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h2><p>结构型模式主要涉及如何组合各种对象一遍获得更好、更灵活的结构。虽然面向对象的继承机制提供了最基本的子类扩展父类的功能，但结构型模式不仅仅简单地使用继承，而更多地通过组合和运行期的动态组合来实现更灵活的功能。</p>
+<h3 id="适配器"><a href="#适配器" class="headerlink" title="适配器"></a>适配器</h3><p>适配器模式是Adapter，也称Wrapper，是指如果一个接口需要B结构，但是待传入的对象却是A接口，怎么办？</p>
+<blockquote>
+<p>如果去美国，我们随身带的电器是无法直接使用的，因为美国的插座标准和中国不同，所以，我们需要一个适配器</p>
+</blockquote>
+<p>在程序设计中，适配器也是类似的。我们已经有一个<code>Task</code>类，实现了<code>Callable</code>接口：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Task</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Callable</span>&lt;<span class="hljs-title">Long</span>&gt; </span>{<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">long</span> num;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Task</span><span class="hljs-params">(<span class="hljs-keyword">long</span> num)</span> </span>{<br>        <span class="hljs-keyword">this</span>.num = num;<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Long <span class="hljs-title">call</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{<br>        <span class="hljs-keyword">long</span> r = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">long</span> n = <span class="hljs-number">1</span>; n &lt;= <span class="hljs-keyword">this</span>.num; n++) {<br>            r = r + n;<br>        }<br>        System.out.println(<span class="hljs-string">"Result: "</span> + r);<br>        <span class="hljs-keyword">return</span> r;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>现在，我们想通过一个线程去执行它：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">Callable&lt;Long&gt; callable = <span class="hljs-keyword">new</span> Task(<span class="hljs-number">123450000L</span>);<br>Thread thread = <span class="hljs-keyword">new</span> Thread(callable); <span class="hljs-comment">// compile error!</span><br>thread.start();<br></code></pre></td></tr></tbody></table></figure>
+
+<p>发现编译不过！因为<code>Thread</code>接收<code>Runnable</code>接口，但不接收<code>Callable</code>接口，怎么办？一个办法是改写Task类，把实现的<code>Callable</code>改为<code>Runnable</code>，但这样做不好，因为Task很可能在其他地方作为Callable被调用，改写Task的接口，会导致其他正常工作的代码无法编译。</p>
+<p>另一个办法不用改写<code>Task</code>类，而是用一个Adapter，把这个<code>Callable</code>接口“变成”<code>Runnable</code>接口，这样，就可以正常编译：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">Callable&lt;Long&gt; callable = <span class="hljs-keyword">new</span> Task(<span class="hljs-number">123450000L</span>);<br>Thread thread = <span class="hljs-keyword">new</span> Thread(<span class="hljs-keyword">new</span> RunnableAdapter(callable));<br>thread.start();<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这个<code>RunnableAdapter</code>类就是Adapter，它接收一个<code>Callable</code>，输出一个<code>Runnable</code>。怎么实现这个<code>RunnableAdapter</code>呢？我们先看完整的代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RunnableAdapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span> </span>{<br>    <span class="hljs-comment">// 引用待转换接口:</span><br>    <span class="hljs-keyword">private</span> Callable&lt;?&gt; callable;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">RunnableAdapter</span><span class="hljs-params">(Callable&lt;?&gt; callable)</span> </span>{<br>        <span class="hljs-keyword">this</span>.callable = callable;<br>    }<br><br>    <span class="hljs-comment">// 实现指定接口:</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-comment">// 将指定接口调用委托给转换接口调用:</span><br>        <span class="hljs-keyword">try</span> {<br>            callable.call();<br>        } <span class="hljs-keyword">catch</span> (Exception e) {<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(e);<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>编写一个Adapter的步骤如下：</p>
+<ol>
+<li>实现目标接口，这里是<code>Runnable</code></li>
+<li>内部持有一个待转换接口的引用，这里是通过字段持有<code>Callable</code>接口</li>
+<li>在目标接口的实现方法内部，调用待转换接口的方法</li>
+</ol>
+<p>这样一来，Thread就可以接收这个<code>RunnableAdapter</code>，因为它实现了<code>Runnable</code>接口。<code>Thread</code>作为调用方，它会调用<code>RunnableAdapter</code>的<code>run()</code>方法，在这个<code>run()</code>方法内部，又调用了<code>Callable</code>的<code>call()</code>方法，相当于<code>Thread</code>通过一层转换，间接调用了<code>Callable</code>的<code>call()</code>方法。</p>
+<p>适配器模式在Java标准库中有广泛应用。比如我们持有数据类型是<code>String[]</code>，但是需要<code>List</code>接口时，可以用一个Adapter：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">String[] exist = <span class="hljs-keyword">new</span> String[] {<span class="hljs-string">"Good"</span>, <span class="hljs-string">"morning"</span>, <span class="hljs-string">"Bob"</span>, <span class="hljs-string">"and"</span>, <span class="hljs-string">"Alice"</span>};<br>Set&lt;String&gt; set = <span class="hljs-keyword">new</span> HashSet&lt;&gt;(Arrays.asList(exist));<br></code></pre></td></tr></tbody></table></figure>
+
+<p>注意到<code>List&lt;T&gt; Arrays.asList(T[])</code>就相当于一个转换器，它可以把数组转换为<code>List</code>。</p>
+<p>我们再看一个例子：假设我们持有一个<code>InputStream</code>，希望调用<code>readText(Reader)</code>方法，但它的参数类型是<code>Reader</code>而不是<code>InputStream</code>，怎么办？</p>
+<p>当然是使用适配器，把<code>InputStream</code>“变成”<code>Reader</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">InputStream input = Files.newInputStream(Paths.get(<span class="hljs-string">"/path/to/file"</span>));<br>Reader reader = <span class="hljs-keyword">new</span> InputStreamReader(input, <span class="hljs-string">"UTF-8"</span>);<br>readText(reader);<br></code></pre></td></tr></tbody></table></figure>
+
+<p><code>InputStreamReader</code>就是Java标准库提供的<code>Adapter</code>，它负责把一个<code>InputStream</code>适配为<code>Reader</code>。类似的还有<code>OutputStreamWriter</code>。</p>
+<p>如果我们把<code>readText(Reader)</code>方法参数从<code>Reader</code>改为<code>FileReader</code>，会有什么问题？这个时候，因为我们需要一个<code>FileReader</code>类型，就必须把<code>InputStream</code>适配为<code>FileReader</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">FileReader reader = <span class="hljs-keyword">new</span> InputStreamReader(input, <span class="hljs-string">"UTF-8"</span>); <span class="hljs-comment">// compile error!</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>直接使用<code>InputStreamReader</code>这个Adapter是不行的，因为它只能转换出<code>Reader</code>接口。事实上，要把<code>InputStream</code>转换为<code>FileReader</code>也不是不可能，但需要花费十倍以上的功夫。这时，面向抽象编程这一原则就体现出了威力：持有高层接口不但代码更灵活，而且把各种接口组合起来也更容易。<strong>一旦持有某个具体的子类类型，要想做一些改动就非常困难</strong>。</p>
+<h4 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h4><p>Adapter模式可以将一个A接口转换为B接口。编写Adapter实际上就是编写了一个实现了B接口，并且内部持有A接口的类，在Adapter内部将B接口的调用“转换”为A接口的调用。<strong>只有A、B接口均是抽象接口时，才能非常简单地实现Adapter模式</strong>。</p>
+<h3 id="桥接"><a href="#桥接" class="headerlink" title="桥接"></a>桥接</h3><p>桥接模式的定义非常玄乎，直接理解不太容易，所以我们还是举例子。</p>
+<blockquote>
+<p>假设某个汽车厂商生产三种品牌的汽车：Big、Tiny和Boss，每种品牌又可以选择燃油、纯电和混合动力。如果用传统的继承来表示各个最终车型，一共有3个抽象类加9个最终子类。如果要新增一个品牌，或者加一个新的引擎（比如核动力），那么子类的数量增长更快。所以，桥接模式就是为了避免直接继承带来的子类爆炸。</p>
+</blockquote>
+<p>我们来看看桥接模式如何解决上述问题。</p>
+<p>在桥接模式中，首先把<code>Car</code>按品牌进行子类化，但是，每个品牌选择什么发动机，不再使用子类扩充，而是通过一个抽象的“修正”类，以组合的形式引入。我们来看看具体的实现。</p>
+<p>首先定义抽象类<code>Car</code>，它引用一个<code>Engine</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Car</span> </span>{<br>    <span class="hljs-comment">// 引用Engine:</span><br>    <span class="hljs-keyword">protected</span> Engine engine;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Car</span><span class="hljs-params">(Engine engine)</span> </span>{<br>        <span class="hljs-keyword">this</span>.engine = engine;<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title">drive</span><span class="hljs-params">()</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p><code>Engine</code>的定义如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Engine</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>紧接着，在一个“修正”的抽象类<code>RefinedCar</code>中定义一些额外操作：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RefinedCar</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Car</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">RefinedCar</span><span class="hljs-params">(Engine engine)</span> </span>{<br>        <span class="hljs-keyword">super</span>(engine);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">drive</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">this</span>.engine.start();<br>        System.out.println(<span class="hljs-string">"Drive "</span> + getBrand() + <span class="hljs-string">" car..."</span>);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> String <span class="hljs-title">getBrand</span><span class="hljs-params">()</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这样一来，最终的不同品牌继承自<code>RefinedCar</code>，例如<code>BossCar</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BossCar</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">RefinedCar</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">BossCar</span><span class="hljs-params">(Engine engine)</span> </span>{<br>        <span class="hljs-keyword">super</span>(engine);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getBrand</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"Boss"</span>;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>而针对每一种引擎，继承自<code>Engine</code>，例如<code>HybridEngine</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HybridEngine</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Engine</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>{<br>        System.out.println(<span class="hljs-string">"Start Hybrid Engine..."</span>);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>客户端通过自己选择一个品牌，再配合一种引擎，得到最终的Car：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">RefinedCar car = <span class="hljs-keyword">new</span> BossCar(<span class="hljs-keyword">new</span> HybridEngine());<br>car.drive();<br></code></pre></td></tr></tbody></table></figure>
+
+<p>使用桥接模式的好处在于，如果要增加一种引擎，只需要针对<code>Engine</code>派生一个新的子类，如果要增加一个品牌，只需要针对<code>RefinedCar</code>派生一个子类，任何<code>RefinedCar</code>的子类都可以和任何一种<code>Engine</code>自由组合，即一辆汽车的两个维度：品牌和引擎都可以独立地变化。</p>
+<p>桥接模式实现比较复杂，实际应用也非常少，但它提供的设计思想值得借鉴，即不要过度使用继承，而是优先拆分某些部件，使用组合的方式来扩展功能。</p>
+<p><strong>桥接模式通过分离一个抽象接口和它的实现部分，使得设计可以按两个维度独立扩展</strong>。</p>
+<h3 id="组合"><a href="#组合" class="headerlink" title="组合"></a>组合</h3><p>组合模式（Composite）经常用于树形结构，为了简化代码，使用Composite可以把一个叶节点和父节点统一起来处理。举个例子，在XML和HTML中，从根结点开始，每个节点都可能包含任意个其他节点，这些层层嵌套的节点就构成了一棵树。</p>
+<p>要以树的结构表示XML，我们可以先抽象出节点类型Node。对于一个<code>&lt;abc&gt;</code>这样的节点，我们称之为ElementNode，他可以包含任意个子节点。而对于普通文本，我们把它看作TextNode，它没有子节点。此外，还可以有注释节点。</p>
+<p>通过ElementNode、TextNode和CommentNode，我们就可以构造出一棵树。</p>
+<p>类似地，像文件夹和文件、GUI窗口的各种组件，都符合Composite模式的定义。</p>
+<h3 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h3><p>装饰器模式（Decorator），是一种在运行期动态给某个对象的实例增加功能的方法。</p>
+<p>我们在IO的<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1298364142452770">Filter模式</a>一节中其实已经讲过装饰器模式了。在Java标准库中，<code>InputStream</code>是抽象类，<code>FileInputStream</code>、<code>ServletInputStream</code>、<code>Socket.getInputStream()</code>这些<code>InputStream</code>都是最终数据源。</p>
+<p>现在，如果要给不同的最终数据源增加缓冲功能、计算签名功能、加密解密功能，那么，3个最终数据源、3种功能一共需要9个子类。如果继续增加最终数据源，或者增加新功能，子类会爆炸式增长，这种设计方式显然是不可取的。</p>
+<p>Decorator模式的目的就是把一个一个的附加功能，用Decorator的方式给一层一层地累加到原始数据源上，最终，通过组合获得我们想要的功能。</p>
+<p>例如：给<code>FileInputStream</code>增加缓冲和解压缩功能，用Decorator模式写出来如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 创建原始的数据源:</span><br>InputStream fis = <span class="hljs-keyword">new</span> FileInputStream(<span class="hljs-string">"test.gz"</span>);<br><span class="hljs-comment">// 增加缓冲功能:</span><br>InputStream bis = <span class="hljs-keyword">new</span> BufferedInputStream(fis);<br><span class="hljs-comment">// 增加解压缩功能:</span><br>InputStream gis = <span class="hljs-keyword">new</span> GZIPInputStream(bis);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>或者一次性写成这样：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">InputStream input = <span class="hljs-keyword">new</span> GZIPInputStream( <span class="hljs-comment">// 第二层装饰</span><br>                        <span class="hljs-keyword">new</span> BufferedInputStream( <span class="hljs-comment">// 第一层装饰</span><br>                            <span class="hljs-keyword">new</span> FileInputStream(<span class="hljs-string">"test.gz"</span>) <span class="hljs-comment">// 核心功能</span><br>                        ));<br></code></pre></td></tr></tbody></table></figure>
+
+<p>观察<code>BufferedInputStream</code>和<code>GZIPInputStream</code>，它们实际上都是从<code>FilterInputStream</code>继承的，这个<code>FilterInputStream</code>就是一个抽象的Decorator。Decorator是用于实现各个附加功能的抽象装饰器，对应到IO的就是<code>FilterInputStream</code>。而从Decorator派生的就是一个一个的装饰器，它们每个都有独立的功能，对应到IO的就是<code>BufferedInputStream</code>、<code>GZIPInputStream</code>等。</p>
+<p>Decorator模式有什么好处？它实际上把核心功能和附加功能给分开了。核心功能指<code>FileInputStream</code>这些真正读数据的源头，附加功能指加缓冲、压缩、解密这些功能。如果我们要新增核心功能，就增加Component的子类，例如<code>ByteInputStream</code>。如果我们要增加附加功能，就增加Decorator的子类，例如<code>CipherInputStream</code>。两部分都可以独立地扩展，而具体如何附加功能，由调用方自由组合，从而极大地增强了灵活性。</p>
+<h3 id="外观"><a href="#外观" class="headerlink" title="外观"></a>外观</h3><p>外观模式，即Facade，它的基本思想是：如果客户端要跟许多子系统打交道，那么客户端需要了解各个子系统的接口，比较麻烦。如果有一个统一的“中介”，让客户端只跟中介打交道，中介再去跟各个子系统打交道，对客户端来说就比较简单。所以Facade就相当于搞了一个中介。</p>
+<p>很多Web程序，内部有多个子系统提供服务，经常使用一个统一的Facade入口，例如一个<code>RestApiController</code>，使得外部用户调用的时候，只关心Facade提供的接口，不用管内部到底是哪个子系统处理的。</p>
+<p>更复杂的Web程序，会有多个Web服务，这个时候，经常会使用一个统一的网关入口来自动转发到不同的Web服务，这种提供统一入口的网关就是Gateway，它本质上也是一个Facade，但可以附加一些用户认证、限流限速的额外服务。</p>
+<h3 id="享元"><a href="#享元" class="headerlink" title="享元"></a>享元</h3><p>享元（Flyweight）的核心思想很简单，如果一个对象实例一经创建就不可变，那么反复创建相同的实例就没有必要，直接向调用方返回一个共享的实例就行，这样即节省内存，又可以减少创建对象的过程，提高运行速度。</p>
+<p>享元模式在Java标准库中有很多应用。我们知道，包装类型如<code>Byte</code>、<code>Integer</code>都是不变类，因此，反复创建同一个值相同的包装类型是没有必要的。以<code>Integer</code>为例，如果我们通过<code>Integer.valueOf()</code>这个静态工厂方法创建<code>Integer</code>实例，当传入的<code>int</code>范围在<code>-128</code>~`+127<code>之间时，会直接返回缓存的</code>Integer<code>实例。对于</code>Byte<code>来说，因为它一共只有256个状态，所以，通过</code>Byte.valueOf()<code>创建的</code>Byte`实例，全部都是缓存对象。</p>
+<p>因此，享元模式就是通过工厂方法创建对象，在工厂方法内部，很可能返回缓存的实例，而不是新创建实例，从而实现不可变实例的复用。</p>
+<p>在实际应用中，享元模式主要应用于缓存，即客户端如果重复请求某些对象，不必每次查询数据库或者读取文件，而是直接返回内存中缓存的数据。</p>
+<p>在实际应用中，我们经常使用成熟的缓存库，例如<a target="_blank" rel="noopener" href="https://github.com/google/guava">Guava</a>的<a target="_blank" rel="noopener" href="https://github.com/google/guava/blob/master/guava/src/com/google/common/cache/Cache.java">Cache</a>，因为它提供了最大缓存数量限制、定时过期等实用功能。</p>
+<h3 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h3><p>代理模式，即Proxy，它和Adapter模式很相似。Adapter模式用于把A接口转换为B接口，而Proxy模式把A接口转为A接口，Proxy就是给A接口再包一层。</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">public AProxy implements A {<br>    private A a;<br>    public AProxy(A a) {<br>        this.a = a;<br>    }<br>    public void a() {<br>    if (getCurrentUser().isRoot()) {<br>        this.a.a();<br>    } else {<br>        throw new SecurityException("Forbidden");<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>我们在调用<code>this.a.a()</code>的前后，加了一些额外代码。这样一来，我们就可以实现权限检查，只有复合要求的用户，才会真正调用目标方法，否则会直接抛出异常。</p>
+<p>为啥不把权限检查的功能直接写到目标实例A的内部？</p>
+<p>因为我们编写代码的原则有：</p>
+<ul>
+<li>职责清晰：一个类只负责一件事；</li>
+<li>易于测试：一次只测一个功能。</li>
+</ul>
+<p>用Proxy实现这个权限检查，我们可以获得更清晰、更简洁的代码：</p>
+<ul>
+<li>A接口：只定义接口；</li>
+<li>ABusiness类：只实现A接口的业务逻辑；</li>
+<li>APermissionProxy类：只实现A接口的权限检查代理。</li>
+</ul>
+<p>如果我们希望编写其他类型的代理，可以继续增加类似ALogProxy，而不必对现有的A接口、ABusiness类进行修改。</p>
+<p>实际上权限检查只是代理模式的一种应用。Proxy还广泛应用在：</p>
+<h4 id="远程代理"><a href="#远程代理" class="headerlink" title="远程代理"></a>远程代理</h4><p>远程代理即Remote Proxy，本地的调用者持有的接口实际上是一个代理，这个代理负责把对接口的方法访问转换成远程调用，然后返回结果。Java内置的RMI机制就是一个完整的远程代理模式。</p>
+<h4 id="虚代理"><a href="#虚代理" class="headerlink" title="虚代理"></a>虚代理</h4><p>虚代理即Virtual Proxy，它让调用者先持有一个代理对象，但真正的对象尚未创建。如果没有必要，这个真正的对象是不会被创建的，直到客户端需要真的必须调用时，才创建真正的对象。JDBC的连接池返回的JDBC连接（Connection对象）就可以是一个虚代理，即获取连接时根本没有任何实际的数据库连接，直到第一次执行JDBC查询或更新操作时，才真正创建实际的JDBC连接。</p>
+<h4 id="保护代理"><a href="#保护代理" class="headerlink" title="保护代理"></a>保护代理</h4><p>保护代理即Protection Proxy，它用代理对象控制对原始对象的访问，常用于鉴权。</p>
+<h4 id="智能引用"><a href="#智能引用" class="headerlink" title="智能引用"></a>智能引用</h4><p>智能引用即Smart Reference，它也是一种代理对象，如果有很多客户端对它进行访问，通过内部的计数器可以在外部调用者都不使用后自动释放它。</p>
+<h4 id="小结-3"><a href="#小结-3" class="headerlink" title="小结"></a>小结</h4><p>有的童鞋会发现Proxy模式和Decorator模式有些类似。确实，这两者看起来很像，但区别在于：Decorator模式让调用者自己创建核心类，然后组合各种功能，而Proxy模式决不能让调用者自己创建再组合，否则就失去了代理的功能。Proxy模式让调用者认为获取到的是核心类接口，但实际上是代理类。</p>
+<p>代理模式通过封装一个已有接口，并向调用方返回相同的接口类型，能让调用方在不改变任何代码的前提下增强某些功能（例如，鉴权、延迟加载、连接池复用等）。使用Proxy模式要求调用方持有接口，作为Proxy的类也必须实现相同的接口类型。</p>
+<h2 id="行为型模式"><a href="#行为型模式" class="headerlink" title="行为型模式"></a>行为型模式</h2><p>行为型模式主要涉及算法和对象间的职责分配。通过使用对象组合，行为型模式可以描述一组对象应该如何协作来完成一个整体任务。</p>
+<h3 id="责任链"><a href="#责任链" class="headerlink" title="责任链"></a>责任链</h3><p>责任链模式（Chain of Responsibility）是一种处理请求的模式，它让多个处理器都有机会处理该请求，直到其中某个处理成功为止。责任链模式把多个处理器串成链，然后让请求在链上传递。</p>
+<p>在实际场景中，财务审批就是一个责任链模式。假设某个员工需要报销一笔费用，审核者可以分为：</p>
+<ul>
+<li>Manager：只能审核1000元以下的报销；</li>
+<li>Director：只能审核10000元以下的报销；</li>
+<li>CEO：可以审核任意额度。</li>
+</ul>
+<p>用责任链模式设计此报销流程时，每个审核者只关心自己责任范围内的请求，并且处理它。对于超出自己责任范围的，扔给下一个审核者处理，这样，将来继续添加审核者的时候，不用改动现有逻辑。</p>
+<p>责任链模式很容易理解，但需要注意的是，<code>Handler</code>的添加顺序很重要，如果顺序不对，处理的结果可能就是不符合要求的。</p>
+<p>此外，责任链模式有很多变种。有些责任链的实现方式是通过某个<code>Handler</code>手动调用下一个<code>Handler</code>来传递<code>Request</code>。还有一些责任链模式，每个<code>Handler</code>都有机会处理<code>Request</code>，通常这种责任链被称为拦截器（<code>Interceptor</code>）或者过滤器（<code>Filter</code>），它的目的不是找到某个<code>Handler</code>处理掉<code>Request</code>，而是每个<code>Handler</code>都做一些工作，比如：记录日志，检查权限，准备相关资源……。</p>
+<p>例如，JavaEE的Servlet规范定义的Filter就是一种责任链模式，它不但允许每个Filter都有机会处理请求，还允许每个Filter决定是否将请求“放行”给下一个Filter。这种模式不但允许一个Filter自行决定处理<code>ServletRequest</code>和<code>ServletResponse</code>，还可以“伪造”<code>ServletRequest</code>和<code>ServletResponse</code>以便让下一个<code>Filter</code>处理，能实现非常复杂的功能。</p>
+<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><p>命令模式（Command）是指，把请求封装成一个命令，然后执行该命令。</p>
+<p>我们用一个<code>StringBuilder</code>模拟一个文本编辑器，它支持<code>copy()</code>、<code>paste()</code>、<code>add()</code>、<code>delete()</code>等方法。</p>
+<p>正常情况，我们像这样调用<code>TextEditor</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">TextEditor editor = <span class="hljs-keyword">new</span> TextEditor();<br>editor.add(<span class="hljs-string">"Command pattern in text editor.\n"</span>);<br>editor.copy();<br>editor.paste();<br>System.out.println(editor.getState());<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这是直接调用方法，调用方需要了解<code>TextEditor</code>的所有接口信息。</p>
+<p>如果改用命令模式，我们就要把调用方发送命令和执行方执行命令分开。怎么分？</p>
+<p>解决方案是引入一个<code>Command</code>接口：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Command</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">execute</span><span class="hljs-params">()</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>调用方创建一个对应的<code>Command</code>，然后执行，并不关心内部是如何具体执行的。</p>
+<p>为了支持<code>CopyCommand</code>和<code>PasteCommand</code>这两个命令，我们从<code>Command</code>接口派生：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CopyCommand</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Command</span> </span>{<br>    <span class="hljs-comment">// 持有执行者对象:</span><br>    <span class="hljs-keyword">private</span> TextEditor receiver;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">CopyCommand</span><span class="hljs-params">(TextEditor receiver)</span> </span>{<br>        <span class="hljs-keyword">this</span>.receiver = receiver;<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">execute</span><span class="hljs-params">()</span> </span>{<br>        receiver.copy();<br>    }<br>}<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PasteCommand</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Command</span> </span>{<br>    <span class="hljs-keyword">private</span> TextEditor receiver;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">PasteCommand</span><span class="hljs-params">(TextEditor receiver)</span> </span>{<br>        <span class="hljs-keyword">this</span>.receiver = receiver;<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">execute</span><span class="hljs-params">()</span> </span>{<br>        receiver.paste();<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>最后我们把<code>Command</code>和<code>TextEditor</code>组装一下，客户端这么写：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java">TextEditor editor = <span class="hljs-keyword">new</span> TextEditor();<br>editor.add(<span class="hljs-string">"Command pattern in text editor.\n"</span>);<br><span class="hljs-comment">// 执行一个CopyCommand:</span><br>Command copy = <span class="hljs-keyword">new</span> CopyCommand(editor);<br>copy.execute();<br>editor.add(<span class="hljs-string">"----\n"</span>);<br><span class="hljs-comment">// 执行一个PasteCommand:</span><br>Command paste = <span class="hljs-keyword">new</span> PasteCommand(editor);<br>paste.execute();<br>System.out.println(editor.getState());<br></code></pre></td></tr></tbody></table></figure>
+
+<p>有同学会问了：写了一大堆Command，多了好多个类，还不如直接写方便。实际上，使用命令模式，确实增加了系统的复杂度。如果需求很简单，那么直接调用显然更直观且更简单。那么我们还需要命令模式吗？答案是视需求而定。如果<code>TextEditor</code>复杂到一定程度，并且需要支持Undo、Redo的功能时，就需要使用命令模式，因为我们可以给每个命令增加<code>undo()</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Command</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">execute</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">undo</span><span class="hljs-params">()</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>然后把执行的一系列命令用<code>List</code>保存起来，就既能支持Undo，又能支持Redo。这个时候，我们又需要一个<code>Invoker</code>对象，负责执行命令并保存历史命令.</p>
+<p>可见，模式带来的设计复杂度的增加是随着需求而增加的，它减少的是系统各组件的耦合度。</p>
+<p><strong>命令模式的设计思想是把命令的创建和执行想分离</strong>，使得调用者无需关心具体的执行过程。</p>
+<h3 id="解释器"><a href="#解释器" class="headerlink" title="解释器"></a>解释器</h3><p>解释器模式（Interpreter）是一种针对特定问题设计的一种解决方案。例如，匹配字符串的时候，由于匹配条件非常灵活，使得通过代码来实现非常不灵活。举个例子，针对以下的匹配条件：</p>
+<ul>
+<li>以<code>+</code>开头的数字表示的区号和电话号码，如<code>+861012345678</code>；</li>
+<li>以英文开头，后接英文和数字，并以.分隔的域名，如<code>www.liaoxuefeng.com</code>；</li>
+<li>以<code>/</code>开头的文件路径，如<code>/path/to/file.txt</code>；</li>
+<li>…</li>
+</ul>
+<p>因此，需要一种通用的表示方法——正则表达式来进行匹配。正则表达式就是一个字符串，但要把正则表达式解析为语法树，然后再匹配指定的字符串，就需要一个解释器。</p>
+<p>实现一个完整的正则表达式的解释器非常复杂，但是使用解释器模式却很简单：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">String s = <span class="hljs-string">"+861012345678"</span>;<br>System.out.println(s.matches(<span class="hljs-string">"^\\+\\d+$"</span>));<br></code></pre></td></tr></tbody></table></figure>
+
+<p>类似的，当我们使用JDBC时，执行的SQL语句虽然是字符串，但最终需要数据库服务器的SQL解释器来把SQL“翻译”成数据库服务器能执行的代码，这个执行引擎也非常复杂，但对于使用者来说，仅仅需要写出SQL字符串即可。</p>
+<p>解释器模式通过抽象语法树实现对用户输入的解释执行，解释器模式的实现通常非常复杂，且一般只能解决一类特定问题。</p>
+<h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h3><p>迭代器模式（Iterator）实际上在Java的集合类中已经广泛使用了。我们以<code>List</code>为例，要遍历<code>ArrayList</code>，即使我们知道它的内部存储了一个<code>Object[]</code>数组，也不应该直接使用数组索引去遍历，因为这样需要了解集合内部的存储结构。如果使用<code>Iterator</code>遍历，那么，<code>ArrayList</code>和<code>LinkedList</code>都可以以一种统一的接口来遍历：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;String&gt; list = ...<br><span class="hljs-keyword">for</span> (Iterator&lt;String&gt; it = list.iterator(); it.hasNext(); ) {<br>    String s = it.next();<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>实际上，Iterator模式十分有用，因此，Java允许我们直接把任何支持<code>Iterator</code>的集合对象用<code>foreach</code>循环写出来：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;String&gt; list = ...<br><span class="hljs-keyword">for</span> (String s : list) {<br>	...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>然后由Java编译器完成Iterator模式的所有循环代码。</p>
+<p>虽然我们对如何使用Iterator有了一定了解，但是如何实现一个Iterator模式呢？我们以一个自定义集合为例，通过Iterator模式实现倒序遍历。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReverseArrayCollection</span>&lt;<span class="hljs-title">T</span>&gt; <span class="hljs-keyword">implements</span> <span class="hljs-title">Iterable</span>&lt;<span class="hljs-title">T</span>&gt; </span>{<br>    <span class="hljs-comment">// 以数组形式持有集合:</span><br>    <span class="hljs-keyword">private</span> T[] array;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ReverseArrayCollection</span><span class="hljs-params">(T... objs)</span> </span>{<br>        <span class="hljs-keyword">this</span>.array = Arrays.copyOfRange(objs, <span class="hljs-number">0</span>, objs.length);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Iterator&lt;T&gt; <span class="hljs-title">iterator</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> ???;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>实现Iterator模式的关键是返回一个<code>Iterator</code>对象，该对象知道集合的内部结构，因为它可以实现倒序遍历。我们使用Java的内部类实现这个<code>Iterator</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReverseArrayCollection</span>&lt;<span class="hljs-title">T</span>&gt; <span class="hljs-keyword">implements</span> <span class="hljs-title">Iterable</span>&lt;<span class="hljs-title">T</span>&gt; </span>{<br>    <span class="hljs-keyword">private</span> T[] array;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ReverseArrayCollection</span><span class="hljs-params">(T... objs)</span> </span>{<br>        <span class="hljs-keyword">this</span>.array = Arrays.copyOfRange(objs, <span class="hljs-number">0</span>, objs.length);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Iterator&lt;T&gt; <span class="hljs-title">iterator</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ReverseIterator();<br>    }<br><br>    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReverseIterator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Iterator</span>&lt;<span class="hljs-title">T</span>&gt; </span>{<br>        <span class="hljs-comment">// 索引位置:</span><br>        <span class="hljs-keyword">int</span> index;<br><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ReverseIterator</span><span class="hljs-params">()</span> </span>{<br>            <span class="hljs-comment">// 创建Iterator时,索引在数组末尾:</span><br>            <span class="hljs-keyword">this</span>.index = ReverseArrayCollection.<span class="hljs-keyword">this</span>.array.length;<br>        }<br><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">hasNext</span><span class="hljs-params">()</span> </span>{<br>            <span class="hljs-comment">// 如果索引大于0,那么可以移动到下一个元素(倒序往前移动):</span><br>            <span class="hljs-keyword">return</span> index &gt; <span class="hljs-number">0</span>;<br>        }<br><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> T <span class="hljs-title">next</span><span class="hljs-params">()</span> </span>{<br>            <span class="hljs-comment">// 将索引移动到下一个元素并返回(倒序往前移动):</span><br>            index--;<br>            <span class="hljs-keyword">return</span> array[index];<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>使用内部类的好处是内部类隐含地持有一个它所在对象的<code>this</code>引用，可以通过<code>ReverseArrayCollection.this</code>引用到它所在的集合。上述代码实现的逻辑非常简单，但是实际应用时，如果考虑到多线程访问，当一个线程正在迭代某个集合，而另一个线程修改了集合的内容时，是否能继续安全地迭代，还是抛出<code>ConcurrentModificationException</code>，就需要更仔细地设计。</p>
+<h3 id="中介"><a href="#中介" class="headerlink" title="中介"></a>中介</h3><p>中介模式（Mediator）又称调停者模式，它的目的是把多方会谈变成双方会谈，从而实现多方的松耦合。</p>
+<p>比如考虑一个简单的点餐输入。复选框有汉堡、鸡块、薯条、咖啡，按钮有全选、反选、取消所有。它的复杂性在于，当复选框变化时，它会影响三个按钮的是否可点击的状态。所以这是一个多方会谈，逻辑写起来很复杂。如果我们引入一个中介，把多方会谈变成多个双方会谈，虽然多了一个对象，但对象之间的关系变简单了。</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs ascii">┌─────────────────┐     ┌─────────────────┐<br>│  CheckBox List  │&lt;───&gt;│SelectAll Button │<br>└─────────────────┘     └─────────────────┘<br>         ▲ ▲                     ▲<br>         │ └─────────────────────┤<br>         ▼                       │<br>┌─────────────────┐     ┌────────┴────────┐<br>│SelectNone Button│&lt;────│ Inverse Button  │<br>└─────────────────┘     └─────────────────┘<br><br>            ┌─────────────────┐<br>     ┌─────&gt;│  CheckBox List  │<br>     │      └─────────────────┘<br>     │      ┌─────────────────┐<br>     │ ┌───&gt;│SelectAll Button │<br>     ▼ ▼    └─────────────────┘<br>┌─────────┐<br>│Mediator │<br>└─────────┘<br>     ▲ ▲    ┌─────────────────┐<br>     │ └───&gt;│SelectNone Button│<br>     │      └─────────────────┘<br>     │      ┌─────────────────┐<br>     └─────&gt;│ Inverse Button  │<br>            └─────────────────┘<br></code></pre></td></tr></tbody></table></figure>
+
+<p>使用Mediator模式后，我们得到了以下好处：</p>
+<ul>
+<li>各个UI组件互不引用，这样就减少了组件之间的耦合关系；</li>
+<li>Mediator用于当一个组件发生状态变化时，根据当前所有组件的状态决定更新某些组件；</li>
+<li>如果新增一个UI组件，我们只需要修改Mediator更新状态的逻辑，现有的其他UI组件代码不变。</li>
+</ul>
+<p>Mediator模式经常用在有众多交互组件的UI上。为了简化UI程序，MVC模式以及MVVM模式都可以看作是Mediator模式的扩展。</p>
+<h3 id="备忘录"><a href="#备忘录" class="headerlink" title="备忘录"></a>备忘录</h3><p>备忘录模式（Memento），主要用于捕获一个对象的内部状态，以便在将来的某个时候恢复此状态。</p>
+<p>其实我们使用的几乎所有软件都用到了备忘录模式。最简单的备忘录模式就是保存到文件，打开文件。对于文本编辑器来说，保存就是把TextEditor类的字符串存储到文件，打开就是恢复TextEditor类的状态。对于图像编辑器来说，原理是一样的，只是保存和恢复的数据格式比较复杂而已。Java的序列化也可以看作备忘录模式。</p>
+<p>在使用文本编辑器时，我们还经常使用Undo、Redo这些功能。这些功能也可以由备忘录模式实现，即不定期地把TextEditor类的字符串复制一份存起来，这样就可以Undo或Redo。</p>
+<p>标准的备忘录模式有这么几种角色：</p>
+<ol>
+<li>Memento：存储的内部状态</li>
+<li>Originator：创建一个备忘录并设置其状态</li>
+<li>Caretaker：负责保存备忘录</li>
+</ol>
+<p>实际上我们在使用备忘录模式时，不必设计地这么复杂，只需要对类似<code>TextEditor</code>的类，添加<code>getState()</code>和<code>setState()</code>即可。</p>
+<p>我们以一个文本编辑器<code>TextEditor</code>为例，它内部使用<code>StringBuilder</code>允许用户增删字符：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TextEditor</span> </span>{<br>    <span class="hljs-keyword">private</span> StringBuilder buffer = <span class="hljs-keyword">new</span> StringBuilder();<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">char</span> ch)</span> </span>{<br>        buffer.append(ch);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(String s)</span> </span>{<br>        buffer.append(s);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">delete</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">if</span> (buffer.length() &gt; <span class="hljs-number">0</span>) {<br>            buffer.deleteCharAt(buffer.length() - <span class="hljs-number">1</span>);<br>        }<br>    }<br>    <br>    <span class="hljs-comment">// 获取状态:</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getState</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> buffer.toString();<br>    }<br><br>    <span class="hljs-comment">// 恢复状态:</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setState</span><span class="hljs-params">(String state)</span> </span>{<br>        <span class="hljs-keyword">this</span>.buffer.delete(<span class="hljs-number">0</span>, <span class="hljs-keyword">this</span>.buffer.length());<br>        <span class="hljs-keyword">this</span>.buffer.append(state);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>对这个简单的文本编辑器，用一个String就可以表示其状态，对于复杂的对象模型，通常我们会用JSON、XML等更复杂的格式。</p>
+<h3 id="观察者"><a href="#观察者" class="headerlink" title="观察者"></a>观察者</h3><p>观察者模式（Observer）又称发布-订阅模式（Publish-Subscribe：Pub/Sub）。它是一种通知机制，让发送通知的一方和接收通知的一方能彼此分离，互不影响。</p>
+<p>广义的观察者模式包括所有消息系统。所谓消息系统，就是把观察者和被观察者完全分离，通过消息系统本身来通知。消息发送方称为Producer，消息接收方称为Consumer。Producer发送消息的时候，必须选择发送到哪个Topic；Consumer可以订阅自己感兴趣的Topic，从而只获得特定类型的消息。</p>
+<p>使用消息系统时，Producer和Consumer经常不在一台机器上，并且互相对对方一无所知。因为注册观察者这个动作本身都在消息系统中完成，而不是在Producer内部完成。</p>
+<h3 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h3><p>状态模式（State）经常用在带有状态的对象中。</p>
+<p>什么是状态？以QQ为例，一个用户有离线、登录、在线、忙等状态。我们用一个<code>enum</code>就可以表示不同的状态，但不同的状态要对应不同的行为，比如收到消息时：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (state == ONLINE) {<br>    <span class="hljs-comment">// 闪烁图标</span><br>} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (state == BUSY) {<br>    reply(<span class="hljs-string">"现在忙，稍后回复"</span>);<br>} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ...<br></code></pre></td></tr></tbody></table></figure>
+
+<p>状态模式的目的就是为了把上述一大串<code>if...else...</code>的逻辑拆分到不同的状态类中，使得将来增加状态类比较容易。</p>
+<p>例如，我们设计一个聊天机器人，它有两个状态：</p>
+<ul>
+<li>未连线；</li>
+<li>已连线。</li>
+</ul>
+<p>对于未连线状态，我们收到消息也不回复：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DisconnectedState</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">State</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"Bye!"</span>;<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">reply</span><span class="hljs-params">(String input)</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>对于已连线状态，我们回应收到的消息：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ConnectedState</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">State</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"Hello, I'm Bob."</span>;<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">reply</span><span class="hljs-params">(String input)</span> </span>{<br>        <span class="hljs-keyword">if</span> (input.endsWith(<span class="hljs-string">"?"</span>)) {<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">"Yes. "</span> + input.substring(<span class="hljs-number">0</span>, input.length() - <span class="hljs-number">1</span>) + <span class="hljs-string">"!"</span>;<br>        }<br>        <span class="hljs-keyword">if</span> (input.endsWith(<span class="hljs-string">"."</span>)) {<br>            <span class="hljs-keyword">return</span> input.substring(<span class="hljs-number">0</span>, input.length() - <span class="hljs-number">1</span>) + <span class="hljs-string">"!"</span>;<br>        }<br>        <span class="hljs-keyword">return</span> input.substring(<span class="hljs-number">0</span>, input.length() - <span class="hljs-number">1</span>) + <span class="hljs-string">"?"</span>;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>状态模式的关键设计思想在于状态切换，我们引入一个<code>BotContext</code>完成状态切换。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BotContext</span> </span>{<br>	<span class="hljs-keyword">private</span> State state = <span class="hljs-keyword">new</span> DisconnectedState();<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">chat</span><span class="hljs-params">(String input)</span> </span>{<br>		<span class="hljs-keyword">if</span> (<span class="hljs-string">"hello"</span>.equalsIgnoreCase(input)) {<br>            <span class="hljs-comment">// 收到hello切换到在线状态:</span><br>			state = <span class="hljs-keyword">new</span> ConnectedState();<br>			<span class="hljs-keyword">return</span> state.init();<br>		} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">"bye"</span>.equalsIgnoreCase(input)) {<br>            /  收到bye切换到离线状态:<br>			state = <span class="hljs-keyword">new</span> DisconnectedState();<br>			<span class="hljs-keyword">return</span> state.init();<br>		}<br>		<span class="hljs-keyword">return</span> state.reply(input);<br>	}<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h3 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h3><p>策略模式（Strategy）指定义一组算法，并封装到一个对象中，在运行时，可以灵活地使用其中的一个算法。策略模式在Java标准库中应用非常广泛，我们以排序为例，看看如何通过<code>Arrays.sort()</code>实现忽略大小写排序。</p>
+<p>如果我们想忽略大小写排序，就传入<code>String::compareToIgnoreCase</code>，如果我们想倒序排序，就传入<code>(s1, s2) -&gt; -s1.compareTo(s2)</code>，这个比较两个元素大小的算法就是策略。</p>
+<p>我们观察<code>Arrays.sort(T[] a, Comparator&lt;? super T&gt; c)</code>这个排序方法，它在内部实现了TimSort排序，但是，排序算法在比较两个元素大小的时候，需要借助我们传入的<code>Comparator</code>对象，才能完成比较。因此，这里的策略是指比较两个元素大小的策略，可以是忽略大小写比较，可以是倒序比较，也可以根据字符串长度比较。</p>
+<p>因此，上述排序使用到了策略模式，它实际上指，在一个方法中，流程是确定的，但是，某些关键步骤的算法依赖调用方传入的策略，这样，传入不同的策略，即可获得不同的结果，大大增强了系统的灵活性。</p>
+<p>策略模式的核心思想是在一个计算方法中把容易变换的算法抽出来作为“策略”参数传进去，从而使得新增策略不必修改原有逻辑。</p>
+<h3 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h3><p>模板方法（Template Method）是一个比较简单的模式。它的主要思想是，定义一个操作的一系列步骤，对于某些暂时确定不下来的步骤，就留给子类去实现好了，这样不同的子类就可以定义出不同的步骤。因此，模板方法的核心在于定义一个骨架。</p>
+<p>假设我们开发了一个从数据库读取设置的类：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">public class Setting {<br>    public final String getSetting(String key) {<br>        String value = readFromDatabase(key);<br>        return value;<br>    }<br><br>	private String readFromDatabase(String key) {<br>        // TODO: 从数据库读取<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>由于从数据库读取数据较慢，我们可以考虑把读取的设置缓存起来，这样下一次读取同样的key就不必再访问数据库了。但是怎么实现缓存，暂时没想好，但不妨碍我们先写出使用缓存的代码：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">public class Setting {<br>    public final String getSetting(String key) {<br>        // 先从缓存读取:<br>        String value = lookupCache(key);<br>        if (value == null) {<br>            // 在缓存中未找到,从数据库读取:<br>            value = readFromDatabase(key);<br>            System.out.println("[DEBUG] load from db: " + key + " = " + value);<br>            // 放入缓存:<br>            putIntoCache(key, value);<br>        } else {<br>            System.out.println("[DEBUG] load from cache: " + key + " = " + value);<br>        }<br>        return value;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>整个流程没有问题，但是，<code>lookupCache(key)</code>和<code>putIntoCache(key, value)</code>这两个方法还根本没实现，怎么编译通过？这个不要紧，我们声明抽象方法就可以：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">public abstract class AbstractSetting {<br>    public final String getSetting(String key) {<br>        String value = lookupCache(key);<br>        if (value == null) {<br>            value = readFromDatabase(key);<br>            putIntoCache(key, value);<br>        }<br>        return value;<br>    }<br><br>    protected abstract String lookupCache(String key);<br><br>    protected abstract void putIntoCache(String key, String value);<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>因为声明了抽象方法，自然整个类也必须是抽象类。如何实现<code>lookupCache(key)</code>和<code>putIntoCache(key, value)</code>这两个方法就交给子类了。子类其实并不关心核心代码<code>getSetting(key)</code>的逻辑，它只需要关心如何完成两个小小的子任务就可以了。</p>
+<p>假设我们希望用一个<code>Map</code>做缓存，那么可以写一个<code>LocalSetting</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LocalSetting</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractSetting</span> </span>{<br>    <span class="hljs-keyword">private</span> Map&lt;String, String&gt; cache = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> String <span class="hljs-title">lookupCache</span><span class="hljs-params">(String key)</span> </span>{<br>        <span class="hljs-keyword">return</span> cache.get(key);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">putIntoCache</span><span class="hljs-params">(String key, String value)</span> </span>{<br>        cache.put(key, value);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>如果我们要使用Redis做缓存，那么可以再写一个<code>RedisSetting</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedisSetting</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractSetting</span> </span>{<br>    <span class="hljs-keyword">private</span> RedisClient client = RedisClient.create(<span class="hljs-string">"redis://localhost:6379"</span>);<br><br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> String <span class="hljs-title">lookupCache</span><span class="hljs-params">(String key)</span> </span>{<br>        <span class="hljs-keyword">try</span> (StatefulRedisConnection&lt;String, String&gt; connection = client.connect()) {<br>            RedisCommands&lt;String, String&gt; commands = connection.sync();<br>            <span class="hljs-keyword">return</span> commands.get(key);<br>        }<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">putIntoCache</span><span class="hljs-params">(String key, String value)</span> </span>{<br>        <span class="hljs-keyword">try</span> (StatefulRedisConnection&lt;String, String&gt; connection = client.connect()) {<br>            RedisCommands&lt;String, String&gt; commands = connection.sync();<br>            commands.set(key, value);<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>客户端代码使用本地缓存的代码这么写：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">AbstractSetting setting1 = <span class="hljs-keyword">new</span> LocalSetting();<br>System.out.println(<span class="hljs-string">"test = "</span> + setting1.getSetting(<span class="hljs-string">"test"</span>));<br>System.out.println(<span class="hljs-string">"test = "</span> + setting1.getSetting(<span class="hljs-string">"test"</span>));<br></code></pre></td></tr></tbody></table></figure>
+
+<p>要改成Redis缓存，只需要把<code>LocalSetting</code>替换为<code>RedisSetting</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">AbstractSetting setting2 = <span class="hljs-keyword">new</span> RedisSetting();<br>System.out.println(<span class="hljs-string">"autosave = "</span> + setting2.getSetting(<span class="hljs-string">"autosave"</span>));<br>System.out.println(<span class="hljs-string">"autosave = "</span> + setting2.getSetting(<span class="hljs-string">"autosave"</span>));<br></code></pre></td></tr></tbody></table></figure>
+
+<p>可见，模板方法的核心思想是：父类定义骨架，子类实现某些细节。</p>
+<p>为了防止子类复写父类的骨架方法，可以在父类中对骨架方法使用<code>final</code>。对于需要子类实现的抽象方法，一般声明为<code>protected</code>，使得这些方法对外部客户端不可见。</p>
+<p>Java标准库也有很多模板方法的应用。在集合类中，<code>AbstractList</code>和<code>AbstractQueuedSynchronizer</code>都定义了很多通用操作，子类只需要实现某些必要方法。</p>
+<h3 id="访问者"><a href="#访问者" class="headerlink" title="访问者"></a>访问者</h3><p>访问者模式（Visitor）是一种操作一组对象的操作，它的目的是不改变对象的定义，但允许新增不同的访问者，来定义新的操作。</p>
+<p>这里我们只介绍简化的访问者模式。假设我们要递归遍历某个文件夹的所有子文件夹和文件，然后找出<code>.java</code>文件，正常的做法是写个递归：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">scan</span><span class="hljs-params">(File dir, List&lt;File&gt; collector)</span> </span>{<br>    <span class="hljs-keyword">for</span> (File file : dir.listFiles()) {<br>        <span class="hljs-keyword">if</span> (file.isFile() &amp;&amp; file.getName().endsWith(<span class="hljs-string">".java"</span>)) {<br>            collector.add(file);<br>        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (file.isDir()) {<br>            <span class="hljs-comment">// 递归调用:</span><br>            scan(file, collector);<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>上述代码的问题在于，扫描目录的逻辑和处理.java文件的逻辑混在了一起。如果下次需要增加一个清理<code>.class</code>文件的功能，就必须再重复写扫描逻辑。</p>
+<p>因此，访问者模式先把数据结构和其对应的操作分离开，以后如果要新增操作，只需要新增访问者，不需要改变现有逻辑。</p>
+<p>用访问者模式改写上述代码步骤如下：</p>
+<p>首先，我们需要定义访问者接口，即该访问者能够干的事情：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Visitor</span> </span>{<br>    <span class="hljs-comment">// 访问文件夹:</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">visitDir</span><span class="hljs-params">(File dir)</span></span>;<br>    <span class="hljs-comment">// 访问文件:</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">visitFile</span><span class="hljs-params">(File file)</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>紧接着，我们要定义能持有文件夹和文件的数据结构<code>FileStructure</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FileStructure</span> </span>{<br>    <span class="hljs-comment">// 根目录:</span><br>    <span class="hljs-keyword">private</span> File path;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">FileStructure</span><span class="hljs-params">(File path)</span> </span>{<br>        <span class="hljs-keyword">this</span>.path = path;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>然后，我们给<code>FileStructure</code>增加一个<code>handle()</code>方法，传入一个访问者：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FileStructure</span> </span>{<br>    ...<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">handle</span><span class="hljs-params">(Visitor visitor)</span> </span>{<br>		scan(<span class="hljs-keyword">this</span>.path, visitor);<br>	}<br><br>	<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">scan</span><span class="hljs-params">(File file, Visitor visitor)</span> </span>{<br>		<span class="hljs-keyword">if</span> (file.isDirectory()) {<br>            <span class="hljs-comment">// 让访问者处理文件夹:</span><br>			visitor.visitDir(file);<br>			<span class="hljs-keyword">for</span> (File sub : file.listFiles()) {<br>                <span class="hljs-comment">// 递归处理子文件夹:</span><br>				scan(sub, visitor);<br>			}<br>		} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (file.isFile()) {<br>            <span class="hljs-comment">// 让访问者处理文件:</span><br>			visitor.visitFile(file);<br>		}<br>	}<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这样，我们就把访问者的行为抽象出来了。如果我们要实现一种操作，例如，查找<code>.java</code>文件，就传入<code>JavaFileVisitor</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">FileStructure fs = <span class="hljs-keyword">new</span> FileStructure(<span class="hljs-keyword">new</span> File(<span class="hljs-string">"."</span>));<br>fs.handle(<span class="hljs-keyword">new</span> JavaFileVisitor());<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这个<code>JavaFileVisitor</code>实现如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">JavaFileVisitor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Visitor</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">visitDir</span><span class="hljs-params">(File dir)</span> </span>{<br>        System.out.println(<span class="hljs-string">"Visit dir: "</span> + dir);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">visitFile</span><span class="hljs-params">(File file)</span> </span>{<br>        <span class="hljs-keyword">if</span> (file.getName().endsWith(<span class="hljs-string">".java"</span>)) {<br>            System.out.println(<span class="hljs-string">"Found java file: "</span> + file);<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>类似的，如果要清理<code>.class</code>文件，可以再写一个<code>ClassFileClearnerVisitor</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ClassFileCleanerVisitor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Visitor</span> </span>{<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">visitDir</span><span class="hljs-params">(File dir)</span> </span>{<br>	}<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">visitFile</span><span class="hljs-params">(File file)</span> </span>{<br>		<span class="hljs-keyword">if</span> (file.getName().endsWith(<span class="hljs-string">".class"</span>)) {<br>			System.out.println(<span class="hljs-string">"Will clean class file: "</span> + file);<br>		}<br>	}<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>可见，访问者模式的核心是为了访问比较复杂的数据结构，不去改变数据结构，而是把对数据的操作抽象出来，在“访问”的过程中以回调函数形式在访问者中处理操作逻辑。如果要新增一组操作，那么只需要增加一个新的访问者。</p>
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/Web%E5%BC%80%E5%8F%91/">Web开发</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/%E7%AC%AC%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/">第一篇日记</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>English</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>

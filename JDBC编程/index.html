@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>JDBC编程 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<link href="/zh-cn/JDBC%E7%BC%96%E7%A8%8B/" rel="alternate" hreflang="zh-CN" />
+    
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="程序运行的时候，往往需要存储数据。现代应用程序最基本，也是使用最广泛的数据存储就是关系数据库。Java为关系数据库定义了一套标准的访问接口，JDBC（Java DataBase Connctivity），本章我们介绍如何在应用程序中使用JDBC。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JDBC编程">
+<meta property="og:url" content="https://wanzixin.github.io/JDBC%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="程序运行的时候，往往需要存储数据。现代应用程序最基本，也是使用最广泛的数据存储就是关系数据库。Java为关系数据库定义了一套标准的访问接口，JDBC（Java DataBase Connctivity），本章我们介绍如何在应用程序中使用JDBC。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-02T11:25:03.000Z">
+<meta property="article:modified_time" content="2021-06-05T07:50:49.042Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#JDBC简介">1&nbsp;&nbsp;<b>JDBC简介</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#NoSQL">1.1&nbsp;&nbsp;NoSQL</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#数据库类别">1.2&nbsp;&nbsp;数据库类别</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#JDBC">1.3&nbsp;&nbsp;JDBC</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结">1.4&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#JDBC查询">2&nbsp;&nbsp;<b>JDBC查询</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#JDBC连接">2.1&nbsp;&nbsp;JDBC连接</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#JDBC查询-1">2.2&nbsp;&nbsp;JDBC查询</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#SQL注入">2.3&nbsp;&nbsp;SQL注入</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#数据类型">2.4&nbsp;&nbsp;数据类型</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#JDBC更新">3&nbsp;&nbsp;<b>JDBC更新</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#插入">3.1&nbsp;&nbsp;插入</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#插入并获取主键">3.2&nbsp;&nbsp;插入并获取主键</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#更新">3.3&nbsp;&nbsp;更新</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#删除">3.4&nbsp;&nbsp;删除</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结-1">3.5&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#JDBC事务">4&nbsp;&nbsp;<b>JDBC事务</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#JDBC-Batch">5&nbsp;&nbsp;<b>JDBC Batch</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#JDBC连接池">6&nbsp;&nbsp;<b>JDBC连接池</b></a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            JDBC编程
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>Jun 2 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            40 minutes read (About 6066 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>程序运行的时候，往往需要存储数据。现代应用程序最基本，也是使用最广泛的数据存储就是关系数据库。Java为关系数据库定义了一套标准的访问接口，JDBC（Java DataBase Connctivity），本章我们介绍如何在应用程序中使用JDBC。<span id="more"></span></p>
+<h2 id="JDBC简介"><a href="#JDBC简介" class="headerlink" title="JDBC简介"></a>JDBC简介</h2><p>程序运行时，数据都是在内存中的。当程序终止时，通常都需要将数据保存到磁盘上，无论是保存到本地磁盘，还是通过网络保存到服务器上，最终都会将数据写入磁盘文件。如何定义数据的存储格式就是一个大问题。我们可以自定义各种保存格式。但，存储和读取都需要自己实现；不能做快速查询，只有把数据全部读取到内存中才能自己遍历，有时候数据大小远远超过了内存（比如蓝光电影，40GB的数据），根本无法全部读入内存。</p>
+<p>为了便于程序保存和读取数据，而且能通过条件快速查询到指定的数据，就出现了数据库这种专门用于集中存储和查询的软件。</p>
+<h3 id="NoSQL"><a href="#NoSQL" class="headerlink" title="NoSQL"></a>NoSQL</h3><p>你也许还听说过NoSQL数据库，很多NoSQL宣传其速度和规模远远超过关系数据库，所以很多同学觉得有了NoSQL是否就不需要SQL了呢？千万不要被他们忽悠了，连SQL都不明白怎么可能搞明白NoSQL呢？</p>
+<h3 id="数据库类别"><a href="#数据库类别" class="headerlink" title="数据库类别"></a>数据库类别</h3><p>既然我们要使用关系数据库，就必须选择一个关系数据库。目前广泛使用的关系数据库也就这么几种：</p>
+<p>付费的商用数据库：</p>
+<ul>
+<li>Oracle，典型的高富帅；</li>
+<li>SQL Server，微软自家产品，Windows定制专款；</li>
+<li>DB2，IBM的产品，听起来挺高端；</li>
+<li>Sybase，曾经跟微软是好基友，后来关系破裂，现在家境惨淡。</li>
+</ul>
+<p>这些数据库都是不开源而且付费的，最大的好处是花了钱出了问题可以找厂家解决，不过在Web的世界里，常常需要部署成千上万的数据库服务器，当然不能把大把大把的银子扔给厂家，所以，无论是Google、Facebook，还是国内的BAT，无一例外都选择了免费的开源数据库：</p>
+<ul>
+<li>MySQL，大家都在用，一般错不了；</li>
+<li>PostgreSQL，学术气息有点重，其实挺不错，但知名度没有MySQL高；</li>
+<li>sqlite，嵌入式数据库，适合桌面和移动应用。</li>
+</ul>
+<p>作为一个Java工程师，选择哪个免费数据库呢？当然是MySQL。因为MySQL普及率最高，出了错，可以很容易找到解决方法。而且，围绕MySQL有一大堆监控和运维的工具，安装和使用很方便。</p>
+<h3 id="JDBC"><a href="#JDBC" class="headerlink" title="JDBC"></a>JDBC</h3><p>JDBC时Java程序访问数据库的标准接口。</p>
+<p>使用Java程序访问数据库时，Java代码并不是直接通过TCP连接去访问数据库，而是通过JDBC接口来访问，而JDBC接口则通过JDBC驱动来实现真正对数据库的访问。</p>
+<p>例如，我们在Java代码中如果要访问MySQL，那么必须编写代码操作JDBC接口。注意到JDBC接口是Java标准库自带的，所以可以直接编译。而具体的JDBC驱动是由数据库厂商提供的，例如，MySQL的JDBC驱动由Oracle提供。因此，访问某个具体的数据库，我们只需要引入该厂商提供的JDBC驱动，就可以通过JDBC接口来访问，这样保证了Java程序编写的是一套数据库访问代码，却可以访问各种不同的数据库，因为他们都提供了标准的JDBC驱动。</p>
+<p>从代码来看，Java标准库自带的JDBC驱动其实就是定义了一组接口，而某个具体的JDBC驱动其实就是实现了这些接口的类。</p>
+<p>实际上，一个MySQL的JDBC的驱动就是一个jar包，它本身也是纯Java编写的。我们自己编写的代码只需要引用Java标准库提供的java.sql包下面的相关接口，由此再间接地通过MySQL驱动的jar包通过网络访问MySQL服务器，所有复杂的网络通讯都被封装到JDBC驱动中，因此，Java程序本身只需要引入一个MySQL驱动的jar包就可以正常访问MySQL服务器。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>使用JDBC的好处是：</p>
+<ul>
+<li>各数据库厂商使用相同的接口，Java代码不需要针对不同数据库分别开发；</li>
+<li>Java程序编译期仅依赖<code>java.sql</code>包，不依赖具体数据库的jar包；</li>
+<li>可随时替换底层数据库，访问数据库的Java代码基本不变。</li>
+</ul>
+<h2 id="JDBC查询"><a href="#JDBC查询" class="headerlink" title="JDBC查询"></a>JDBC查询</h2><p>JDBC是一套接口规范，它在哪呢？在Java的标准库<code>java.sql</code>里。接口不能直接实例化，而是必须实例化其实现类，然后通过接口引用这个实例。那么，JDBC接口的实现类在哪里？我们把某个数据库实现了JDBC接口的jar包称为JDBC驱动。</p>
+<p>例如，我们加入MySQL的驱动，添加的Maven依赖是：</p>
+<figure class="highlight xml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>mysql<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mysql-connector-java<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>5.1.47<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>runtime<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>注意到这里添加的依赖的<code>scope</code>是<code>runtime</code>，因为编译Java程序不需要MySQL的这个jar包，只有在运行期才使用。如果把<code>scope</code>改成<code>compile</code>，虽然也能正常编译，但是在IDE里写程序的时候，会多出来一大堆类似<code>com.mysql.jdbc.Connection</code>这样的类，非常容易与Java标准库的JDBC接口混淆，所以坚决不要设置<code>compile</code>。</p>
+<h3 id="JDBC连接"><a href="#JDBC连接" class="headerlink" title="JDBC连接"></a>JDBC连接</h3><p>使用JDBC时，我们先了解什么是Connection。Connection代表一个JDBC连接，它相当于Java程序到数据库的连接（通常是TCP连接）。打开一个Connection时，需要准备URL、用户名和口令。</p>
+<p>URL是由数据库厂商指定的格式，例如，MySQL的URL时：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">jdbc:mysql://&lt;hostname&gt;:&lt;port&gt;/&lt;db&gt;?key1=value1&amp;key2=value2<br></code></pre></td></tr></tbody></table></figure>
+
+<p>假设数据库运行在本机<code>localhost</code>，端口使用标准的<code>3306</code>，数据库名称是<code>learnjdbc</code>，那么URL如下：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">jdbc:mysql://localhost:3306/learnjdbc?useSSL=false&amp;characterEncoding=utf8<br></code></pre></td></tr></tbody></table></figure>
+
+<p>后面两个参数表示不使用SSL加密，使用UTF-8作为字符编码。</p>
+<p>要获取数据库连接，使用如下代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// JDBC连接的URL, 不同数据库有不同的格式:</span><br>String JDBC_URL = <span class="hljs-string">"jdbc:mysql://localhost:3306/test"</span>;<br>String JDBC_USER = <span class="hljs-string">"root"</span>;<br>String JDBC_PASSWORD = <span class="hljs-string">"password"</span>;<br><span class="hljs-comment">// 获取连接:</span><br>Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);<br><span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> 访问数据库...</span><br><span class="hljs-comment">// 关闭连接:</span><br>conn.close();<br></code></pre></td></tr></tbody></table></figure>
+
+<p>核心代码时<code>DriverManager</code>提供的静态方法<code>getConnection()</code>。<code>DriverManager</code>会自动扫描classpath，找到所有的JDBC驱动，然后根据我们传入的URL自动挑选一个合适的驱动。</p>
+<p>因为JDBC连接是一种昂贵的资源，使用后要及时释放。使用<code>try(resource)</code>来自动释放JDBC连接是一个好方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h3 id="JDBC查询-1"><a href="#JDBC查询-1" class="headerlink" title="JDBC查询"></a>JDBC查询</h3><p>获取到JDBC连接后，下一步我们就可以查询数据库了。查询数据库分以下几步：</p>
+<ol>
+<li>通过<code>Connection</code>提供的<code>createStatement()</code>方法创建一个<code>Statement</code>对象，用于执行一个查询</li>
+<li>执行<code>Statement</code>对象提供的<code>executeQuery("SELECT * FROM students")</code>并传入SQL语句，执行查询并获得返回的结果集，使用<code>ResultSet</code>来引用这个结果集</li>
+<li>反复调用<code>ResultSet</code>的<code>next()</code>方法并读取每一行结果</li>
+</ol>
+<p>完整查询代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {<br>    <span class="hljs-keyword">try</span> (Statement stmt = conn.createStatement()) {<br>        <span class="hljs-keyword">try</span> (ResultSet rs = stmt.executeQuery(<span class="hljs-string">"SELECT id, grade, name, gender FROM students WHERE gender=1"</span>)) {<br>            <span class="hljs-keyword">while</span> (rs.next()) {<br>                <span class="hljs-keyword">long</span> id = rs.getLong(<span class="hljs-number">1</span>); <span class="hljs-comment">// 注意：索引从1开始</span><br>                <span class="hljs-keyword">long</span> grade = rs.getLong(<span class="hljs-number">2</span>);<br>                String name = rs.getString(<span class="hljs-number">3</span>);<br>                <span class="hljs-keyword">int</span> gender = rs.getInt(<span class="hljs-number">4</span>);<br>            }<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p><code>Statement</code>和<code>ResultSet</code>都是需要关闭的资源，因此嵌套使用<code>try(resource)</code>确保及时关闭。</p>
+<p><code>rs.next()</code>用于判断是否有下一行记录，如果有，会自动把当前行移动到下一行（一开始获得的<code>ResultSet</code>是当前行不是第一行）。</p>
+<p><code>ResultSet</code>获取列时，索引从<code>1</code>开始而不是<code>0</code>。</p>
+<p>必须根据<code>SELECT</code>的列的对应位置来调用<code>getLong(1)</code>，<code>getString(2)</code>这些方法，否则对应位置的数据类型不对，将报错。</p>
+<h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p>使用Statement拼接字符串非常容易引发SQL注入的问题，这是因为SQL参数往往是通过方法参数传入的。</p>
+<p>我们来看一个例子：假设用户登录的验证方法如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function">User <span class="hljs-title">login</span><span class="hljs-params">(String name, String pass)</span> </span>{<br>    ...<br>    stmt.executeQuery(<span class="hljs-string">"SELECT * FROM user WHERE login='"</span> + name + <span class="hljs-string">"' AND pass='"</span> + pass + <span class="hljs-string">"'"</span>);<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>其中，参数<code>name</code>和<code>pass</code>通常都是Web页面输入后由程序接收到的。</p>
+<p>如果用户的输入是程序期待的值，就可以拼出正确的SQL。例如：name = <code>"bob"</code>，pass = <code>"1234"</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">SELECT * FROM user WHERE login=<span class="hljs-string">'bob'</span> AND pass=<span class="hljs-string">'1234'</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>但是，如果用户的输入是一个精心构造的字符串，就可以拼出意想不到的SQL，这个SQL也是正确的，但它查询的条件不是程序设计的意图。例如：name = <code>"bob' OR pass="</code>, pass = <code>" OR pass='"</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">SELECT * FROM user WHERE login=<span class="hljs-string">'bob'</span> OR pass=<span class="hljs-string">' AND pass='</span> OR pass=<span class="hljs-string">''</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>这个SQL语句执行的时候，根本不用判断口令是否正确，这样一来，登录就形同虚设。</p>
+<p>要避免SQL注入攻击，一个办法是针对所有字符串参数进行转义，但是转义很麻烦，而且需要在任何使用SQL的地方增加转义代码。</p>
+<p>还有一个办法就是使用<code>PreparedStatement</code>。使用<code>PreparedStatement</code>可以<strong>完全避免</strong>SQL注入的问题，因为<code>PreparedStatement</code>始终使用<code>?</code>作为占位符，并且把数据连同SQL本身传给数据库，这样可以保证每次传给数据库的SQL语句是相同的，只是占位符的数据不同，还能高效利用数据库本身对查询的缓存。上述登录SQL如果用<code>PreparedStatement</code>可以改写如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function">User <span class="hljs-title">login</span><span class="hljs-params">(String name, String pass)</span> </span>{<br>    ...<br>    String sql = <span class="hljs-string">"SELECT * FROM user WHERE login=? AND pass=?"</span>;<br>    PreparedStatement ps = conn.prepareStatement(sql);<br>    ps.setObject(<span class="hljs-number">1</span>, name);<br>    ps.setObject(<span class="hljs-number">2</span>, pass);<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>所以，<code>PreparedStatement</code>比<code>Statement</code>更安全，而且更快。</p>
+<blockquote>
+<p>使用Java操作数据库时，必须使用PreparedStatement，严禁任何通过参数拼接字符串的代码</p>
+</blockquote>
+<p>我们把上面使用<code>Statement</code>的代码改为使用<code>PreparedStatement</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {<br>    <span class="hljs-keyword">try</span> (PreparedStatement ps = conn.prepareStatement(<span class="hljs-string">"SELECT id, grade, name, gender FROM students WHERE gender=? AND grade=?"</span>)) {<br>        ps.setObject(<span class="hljs-number">1</span>, <span class="hljs-string">"M"</span>); <span class="hljs-comment">// 注意：索引从1开始</span><br>        ps.setObject(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);<br>        <span class="hljs-keyword">try</span> (ResultSet rs = ps.executeQuery()) {<br>            <span class="hljs-keyword">while</span> (rs.next()) {<br>                <span class="hljs-keyword">long</span> id = rs.getLong(<span class="hljs-string">"id"</span>);<br>                <span class="hljs-keyword">long</span> grade = rs.getLong(<span class="hljs-string">"grade"</span>);<br>                String name = rs.getString(<span class="hljs-string">"name"</span>);<br>                String gender = rs.getString(<span class="hljs-string">"gender"</span>);<br>            }<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>使用<code>PreparedStatement</code>和<code>Statement</code>稍有不同，必须首先调用<code>setObject()</code>设置每个占位符<code>?</code>的值，最后获取的仍然是<code>ResultSet</code>对象。</p>
+<p>另外注意到从结果集读取列时，使用<code>String</code>类型的列名比索引要易读，而且不易出错。</p>
+<p>注意到JDBC查询的返回值总是<code>ResultSet</code>，即使我们写这样的聚合查询<code>SELECT SUM(score) FROM ...</code>，也需要按结果集读取：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">ResultSet rs = ...<br><span class="hljs-keyword">if</span> (rs.next()) {<br>    <span class="hljs-keyword">double</span> sum = rs.getDouble(<span class="hljs-number">1</span>);<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>有的童鞋可能注意到了，使用JDBC的时候，我们需要在Java数据类型和SQL数据类型之间进行转换。JDBC在<code>java.sql.Types</code>定义了一组常量来表示如何映射SQL数据类型，但是平时我们使用的类型通常也就以下几种：</p>
+<table>
+<thead>
+<tr>
+<th align="center">SQL数据类型</th>
+<th align="center">Java数据类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">BIT, BOOL</td>
+<td align="center">boolean</td>
+</tr>
+<tr>
+<td align="center">INTEGER</td>
+<td align="center">int</td>
+</tr>
+<tr>
+<td align="center">BIGINT</td>
+<td align="center">long</td>
+</tr>
+<tr>
+<td align="center">REAL</td>
+<td align="center">float</td>
+</tr>
+<tr>
+<td align="center">FLOAT, DOUBLE</td>
+<td align="center">double</td>
+</tr>
+<tr>
+<td align="center">CHAR, VARCHAR</td>
+<td align="center">String</td>
+</tr>
+<tr>
+<td align="center">DECIMAL</td>
+<td align="center">BigDecimal</td>
+</tr>
+<tr>
+<td align="center">DATE</td>
+<td align="center">java.sql.Date, LocalDate</td>
+</tr>
+<tr>
+<td align="center">TIME</td>
+<td align="center">java.sql.Time, LocalTime</td>
+</tr>
+</tbody></table>
+<p>注意：只有最新的JDBC驱动才支持<code>LocalDate</code>和<code>LocalTime</code>。</p>
+<h2 id="JDBC更新"><a href="#JDBC更新" class="headerlink" title="JDBC更新"></a>JDBC更新</h2><p>数据库操作总结起来就4个字：增删改查，行话叫CRUD：Create，Retrieve，Update和Delete。查就是查询，上一节介绍过了，就是使用<code>PreparedStatement</code>进行各种<code>SELECT</code>，然后处理结果集。现在我们来看看如何使用JDBC进行增删改查。</p>
+<h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><p>插入操作是INSERT，即插入一条记录。通过JDBC插入，本质上也是用<code>PreparedStatement</code>执行一条SQL语句，不过最后不是执行<code>executeQuery()</code>，而是<code>executeUpdate()</code>。示例代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {<br>    <span class="hljs-keyword">try</span> (PreparedStatement ps = conn.prepareStatement(<br>            <span class="hljs-string">"INSERT INTO students (id, grade, name, gender) VALUES (?,?,?,?)"</span>)) {<br>        ps.setObject(<span class="hljs-number">1</span>, <span class="hljs-number">999</span>); <span class="hljs-comment">// 注意：索引从1开始</span><br>        ps.setObject(<span class="hljs-number">2</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// grade</span><br>        ps.setObject(<span class="hljs-number">3</span>, <span class="hljs-string">"Bob"</span>); <span class="hljs-comment">// name</span><br>        ps.setObject(<span class="hljs-number">4</span>, <span class="hljs-string">"M"</span>); <span class="hljs-comment">// gender</span><br>        <span class="hljs-keyword">int</span> n = ps.executeUpdate(); <span class="hljs-comment">// 1</span><br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>设置参数与查询是一样的，有几个<code>?</code>占位符就必须设置对应的参数。虽然<code>Statement</code>也可以执行插入操作，但我们仍然要严格遵循<em>绝不能手动拼SQL字符串</em>的原则，以避免安全漏洞。</p>
+<p>当成功执行<code>executeUpdate()</code>后，返回值是<code>int</code>，表示插入的记录数量。此处总是<code>1</code>，因为只插入了一条记录。</p>
+<h3 id="插入并获取主键"><a href="#插入并获取主键" class="headerlink" title="插入并获取主键"></a>插入并获取主键</h3><p>如果数据库的表设置了自增主键，那么执行INSERT语句时，并不需要指定主键，数据库会自动分配主键。对于使用自增主键的程序，有个额外的步骤，就是如何获取插入后自增主键的值。</p>
+<p>要获取自增主键，不能先插入，再查询。因为两条SQL执行期间可能有别的程序也插入了同一个表。获取自增主键的正确写法是，在创建<code>PreparedStatement</code>的时候，指定一个RETURN_GENERATED_KEYS标志位，表示JDBC驱动必须返回插入的自增主键。示例代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {<br>    <span class="hljs-keyword">try</span> (PreparedStatement ps = conn.prepareStatement(<br>            <span class="hljs-string">"INSERT INTO students (grade, name, gender) VALUES (?,?,?)"</span>,<br>            Statement.RETURN_GENERATED_KEYS)) {<br>        ps.setObject(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// grade</span><br>        ps.setObject(<span class="hljs-number">2</span>, <span class="hljs-string">"Bob"</span>); <span class="hljs-comment">// name</span><br>        ps.setObject(<span class="hljs-number">3</span>, <span class="hljs-string">"M"</span>); <span class="hljs-comment">// gender</span><br>        <span class="hljs-keyword">int</span> n = ps.executeUpdate(); <span class="hljs-comment">// 1</span><br>        <span class="hljs-keyword">try</span> (ResultSet rs = ps.getGeneratedKeys()) {<br>            <span class="hljs-keyword">if</span> (rs.next()) {<br>                <span class="hljs-keyword">long</span> id = rs.getLong(<span class="hljs-number">1</span>); <span class="hljs-comment">// 注意：索引从1开始</span><br>            }<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>注意两点：</p>
+<p>一是调用<code>prepareStatement()</code>时，第二个参数必须传入常量<code>Statement.RETURN_GENERATED_KEYS</code>，否则JDBC驱动不会返回自增主键；</p>
+<p>二是执行<code>executeUpdate()</code>方法后，必须调用<code>getGeneratedKeys()</code>获取一个<code>ResultSet</code>对象，这个对象包含了数据库自动生成的主键的值，读取该对象的每一行来获取自增主键的值。如果一次插入多条记录，那么这个<code>ResultSet</code>对象就会有多行返回值。如果插入时有多列自增，那么<code>ResultSet</code>对象的每一行都会对应多个自增值（自增列不一定必须是主键）。</p>
+<h3 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h3><p>更新操作是<code>UPDATE</code>语句，它可以一次更新若干列的记录。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {<br>    <span class="hljs-keyword">try</span> (PreparedStatement ps = conn.prepareStatement(<span class="hljs-string">"UPDATE students SET name=? WHERE id=?"</span>)) {<br>        ps.setObject(<span class="hljs-number">1</span>, <span class="hljs-string">"Bob"</span>); <span class="hljs-comment">// 注意：索引从1开始</span><br>        ps.setObject(<span class="hljs-number">2</span>, <span class="hljs-number">999</span>);<br>        <span class="hljs-keyword">int</span> n = ps.executeUpdate(); <span class="hljs-comment">// 返回更新的行数</span><br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p><code>executeUpdate()</code>返回数据库实际更新的行数。返回结果可能是正数，也可能是0（表示没有任何记录更新）。</p>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p>删除操作是<code>DELETE</code>语句，它可以一次删除若干列。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {<br>    <span class="hljs-keyword">try</span> (PreparedStatement ps = conn.prepareStatement(<span class="hljs-string">"DELETE FROM students WHERE id=?"</span>)) {<br>        ps.setObject(<span class="hljs-number">1</span>, <span class="hljs-number">999</span>); <span class="hljs-comment">// 注意：索引从1开始</span><br>        <span class="hljs-keyword">int</span> n = ps.executeUpdate(); <span class="hljs-comment">// 删除的行数</span><br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p>使用JDBC执行<code>INSERT</code>，<code>UPDATE</code>和<code>DELETE</code>都可视为更新操作。更新操作使用<code>PreparedStatement</code>的<code>executeUpdate()</code>进行，返回影响的行数。</p>
+<h2 id="JDBC事务"><a href="#JDBC事务" class="headerlink" title="JDBC事务"></a>JDBC事务</h2><p>数据库事务（Transaction）是由若干SQL语句构成的一个操作序列。有点类似于Java的<code>synchronized</code>同步。数据库系统保证一个事务中的所有SQL要么全部执行成功，要么全部不执行，即数据库事务具有ACID特性：</p>
+<ul>
+<li>Atomicity：原子性</li>
+<li>Consistency：一致性</li>
+<li>Isolation：隔离性</li>
+<li>Durability：持久性</li>
+</ul>
+<p>数据库事务可以并发执行，而数据库系统从效率考虑，对事务定义了不同的隔离级别。SQL标准定义了4种隔离级别，分别对应可能出现的数据不一致的情况：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Isolation Level</th>
+<th align="center">脏读（Dirty Read）</th>
+<th align="center">不可重复读（Non Repeatable Read）</th>
+<th align="center">幻读（Phantom Read）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Read Uncommitted</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+<tr>
+<td align="center">Read Committed</td>
+<td align="center">-</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+<tr>
+<td align="center">Repeatable Read</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">Yes</td>
+</tr>
+<tr>
+<td align="center">Serializable</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+</tbody></table>
+<p>对应用程序来说，数据库事务非常重要，很多运行着关键任务的应用程序，都必须依赖数据库事务保证程序的结果正常。</p>
+<p>要在JDBC中执行事务，本质上就是如何把多条SQL包裹在一个数据库事务中执行。我们来看JDBC的事务代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java">Connection conn = openConnection();<br><span class="hljs-keyword">try</span> {<br>    <span class="hljs-comment">// 关闭自动提交:</span><br>    conn.setAutoCommit(<span class="hljs-keyword">false</span>);<br>    <span class="hljs-comment">// 执行多条SQL语句:</span><br>    insert(); update(); delete();<br>    <span class="hljs-comment">// 提交事务:</span><br>    conn.commit();<br>} <span class="hljs-keyword">catch</span> (SQLException e) {<br>    <span class="hljs-comment">// 回滚事务:</span><br>    conn.rollback();<br>} <span class="hljs-keyword">finally</span> {<br>    conn.setAutoCommit(<span class="hljs-keyword">true</span>);<br>    conn.close();<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>其中，开启事务的关键代码是<code>conn.setAutoCommit(false)</code>，表示关闭自动提交。提交事务的代码在执行完若干条SQL语句后，调用<code>conn.commit()</code>。注意，事务不总能成功，如果事务提交失败，会抛出SQL异常（也可能在执行SQL语句的时候就抛出了），此时我们必须捕获并调用<code>conn.rollback()</code>回滚事务。最后，在<code>finally</code>中通过<code>conn.setAutoCommit(true)</code>把Connection对象的状态恢复到初始值。</p>
+<p>实际上，默认情况下，我们获取到Connection连接后，总是处于自动提交模式，也就是每执行一条SQL都是作为事务自动执行的，这也是为什么我们前面的更新操作总能成功的原因：因为默认有这种隐式事务。只要关闭了<code>Connection</code>的<code>autoCommit</code>，就可以在一个事务中执行多条语句，事务以<code>commit()</code>方法结束。</p>
+<p>如果要设定事务的隔离级别，可以使用如下代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 设定隔离级别为READ COMMITTED:</span><br>conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>如果没有调用上述方法，那么会使用数据库的默认隔离级别。MySQL的默认隔离级别是<code>REPEATABLE_READ</code>。</p>
+<h2 id="JDBC-Batch"><a href="#JDBC-Batch" class="headerlink" title="JDBC Batch"></a>JDBC Batch</h2><p>使用JDBC操作数据库的时候，经常会执行一些批量操作。</p>
+<p>很多情况下，执行JDBC时，只有占位符参数不同，所以SQL实际上是一样的。通过一个循环来执行每个<code>PreparedStatement</code>虽然可行，但是性能很低。SQL数据库对SQL语句相同，但只有参数不同的若干语句可以作为<code>batch</code>执行，即批量执行，这种操作有特别的优化，速度远远快于循环执行每个SQL。</p>
+<p>在JDBC代码中，我们可以利用SQL这一特性，把同一个SQL但参数不同的若干次操作合并为一个batch执行。我们以批量插入为例：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (PreparedStatement ps = conn.prepareStatement(<span class="hljs-string">"INSERT INTO students (name, gender, grade, score) VALUES (?, ?, ?, ?)"</span>)) {<br>    <span class="hljs-comment">// 对同一个PreparedStatement反复设置参数并调用addBatch():</span><br>    <span class="hljs-keyword">for</span> (Student s : students) {<br>        ps.setString(<span class="hljs-number">1</span>, s.name);<br>        ps.setBoolean(<span class="hljs-number">2</span>, s.gender);<br>        ps.setInt(<span class="hljs-number">3</span>, s.grade);<br>        ps.setInt(<span class="hljs-number">4</span>, s.score);<br>        ps.addBatch(); <span class="hljs-comment">// 添加到batch</span><br>    }<br>    <span class="hljs-comment">// 执行batch:</span><br>    <span class="hljs-keyword">int</span>[] ns = ps.executeBatch();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> n : ns) {<br>        System.out.println(n + <span class="hljs-string">" inserted."</span>); <span class="hljs-comment">// batch中每个SQL执行的结果数量</span><br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>执行batch和执行一个SQL不同点在于，需要对同一个<code>PreparedStatement</code>反复设置参数并调用<code>addBatch()</code>，这样就相当于给一个SQL加上了多组参数，相当于变成了“多行”SQL。</p>
+<p>第二个点是，调用的不是<code>executeUpdate()</code>，而是<code>executeBatch()</code>，因为我们设置了多组参数，相应地，返回结果也是多个<code>int</code>值，因此返回类型是<code>int[]</code>，循环int[]数据即可获得每组参数执行后影响的结果数量。</p>
+<h2 id="JDBC连接池"><a href="#JDBC连接池" class="headerlink" title="JDBC连接池"></a>JDBC连接池</h2><p>我们在多线程一章讲到过，创建线程是一个很昂贵的操作，如果有大量的小任务要执行，并且频繁地创建和销毁线程，实际上会消耗大量的系统资源，往往创建和销毁线程所耗费的时间比执行任务的时间还长。所以，为了提高效率，可以使用线程池。</p>
+<p>类似地，在执行JDBC的增删改查的操作时，如果每一次操作都来打开一次连接，操作，关闭连接，那么创建和销毁JDBC连接的开销就太大了。为了避免频繁地创建和销毁JDBC连接，可以通过使用连接池（Connection Pool）复用已创建好的连接。</p>
+<p>JDBC连接池有一个标准的接口<code>javax.sql.DataSource</code>，注意这个类位于Java标准库中，但仅仅是接口。要使用JDBC连接池，我们必须选择一个JDBC连接池的实现。常用的JDBC连接池有：</p>
+<ul>
+<li>HikariCP</li>
+<li>C3P0</li>
+<li>BoneCP</li>
+<li>Druid</li>
+</ul>
+<p>目前使用最广泛的是HikariCP。我们以HikariCP为例，先添加依赖如下：</p>
+<figure class="highlight xml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.zaxxer<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>HikariCP<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.7.1<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>紧接着，创建一个DataSource实例，这个实例就是连接池：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java">HikariConfig config = <span class="hljs-keyword">new</span> HikariConfig();<br>config.setJdbcUrl(<span class="hljs-string">"jdbc:mysql://localhost:3306/test"</span>);<br>config.setUsername(<span class="hljs-string">"root"</span>);<br>config.setPassword(<span class="hljs-string">"password"</span>);<br>config.addDataSourceProperty(<span class="hljs-string">"connectionTimeout"</span>, <span class="hljs-string">"1000"</span>); <span class="hljs-comment">// 连接超时：1秒</span><br>config.addDataSourceProperty(<span class="hljs-string">"idleTimeout"</span>, <span class="hljs-string">"60000"</span>); <span class="hljs-comment">// 空闲超时：60秒</span><br>config.addDataSourceProperty(<span class="hljs-string">"maximumPoolSize"</span>, <span class="hljs-string">"10"</span>); <span class="hljs-comment">// 最大连接数：10</span><br>DataSource ds = <span class="hljs-keyword">new</span> HikariDataSource(config);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>注意，创建DataSource也是非常昂贵的操作，所以通常DataSource实例总是作为一个全局变量存储，并贯穿整个应用程序的生命周期。</p>
+<p>有了连接池后，我们如何使用它呢？和之前的代码类似，只是获取<code>Connection</code>时，把<code>DriverManager.getConnection()</code>改为<code>ds.getConnection()</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (Connection conn = ds.getConnection()) { <span class="hljs-comment">// 在此获取连接</span><br>    ...<br>} <span class="hljs-comment">// 在此“关闭”连接</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>通过连接池获取连接时，并不需要指定JDBC的相关URL、用户名、口令等信息，因为这些信息已经存储在连接池内部了。一开始，连接池内部并没有连接，所以，第一次调用<code>ds.getConnection()</code>，会使连接池内部先创建一个<code>Connection</code>，再返回给客户端使用。当我们调用<code>conn.close()</code>时，并不是真正的关闭连接，而是释放到连接池中，以便下次获取连接时能直接返回。</p>
+<p>因此，连接池内部维护了若干<code>Connection</code>实例，如果调用<code>ds.getConnection()</code>，就选择一个空闲连接，并标记它为“正在使用”然后返回。如果对<code>Connection</code>调用<code>close()</code>，那么就把连接再次标记为“空闲”从而等待下次调用。这样一来，我们就通过连接池维护了少量连接，但可以频繁地执行大量的SQL语句。</p>
+<p>通常，连接池提供了大量的参数可以配置，例如，维护的最小、最大活动连接数，指定一个连接在空闲一段时间后自动关闭等，需要根据应用程序的负载合理地配置这些参数。此外，大多数连接池都提供了详细的实时状态以便进行监控。</p>
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">函数式编程</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/XML%E4%B8%8EJSON/">XML与JSON</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>English</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/JDBC%E7%BC%96%E7%A8%8B/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/JDBC%E7%BC%96%E7%A8%8B/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
