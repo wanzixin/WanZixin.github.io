@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>ArcGIS中自定义Python脚本工具 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<link href="/ArcGIS%E4%B8%AD%E8%87%AA%E5%AE%9A%E4%B9%89Python%E8%84%9A%E6%9C%AC%E5%B7%A5%E5%85%B7/" rel="alternate" hreflang="en" />
+    
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="ArcGIS中的ArcToolBox包含许多工具，涉及网络分析、路径分析、格式转换等诸多领域，再结合详尽的帮助文档，可以快速掌握上手一个工具的使用。当然，ArcGIS也提供自定义脚本工具，以满足用户的定制化需求。这篇文章旨在介绍ArcGIS中Python脚本工具的编写与使用，以及其中遇到的问题，以飨读者。在文章末尾给出一个自定义脚本工具的源代码，供读者参考。笔者的ArcGIS版本为10.6，自带的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ArcGIS中自定义Python脚本工具">
+<meta property="og:url" content="https://wanzixin.github.io/zh-cn/ArcGIS%E4%B8%AD%E8%87%AA%E5%AE%9A%E4%B9%89Python%E8%84%9A%E6%9C%AC%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="ArcGIS中的ArcToolBox包含许多工具，涉及网络分析、路径分析、格式转换等诸多领域，再结合详尽的帮助文档，可以快速掌握上手一个工具的使用。当然，ArcGIS也提供自定义脚本工具，以满足用户的定制化需求。这篇文章旨在介绍ArcGIS中Python脚本工具的编写与使用，以及其中遇到的问题，以飨读者。在文章末尾给出一个自定义脚本工具的源代码，供读者参考。笔者的ArcGIS版本为10.6，自带的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-27T15:24:41.000Z">
+<meta property="article:modified_time" content="2021-05-30T14:23:49.274Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/zh-cn">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="搜索" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="目录">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#ArcPy简介">1&nbsp;&nbsp;<b>ArcPy简介</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#自定义工具箱和脚本工具的步骤">2&nbsp;&nbsp;<b>自定义工具箱和脚本工具的步骤</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#编写py文件">3&nbsp;&nbsp;<b>编写py文件</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#工具参数的传入">3.1&nbsp;&nbsp;工具参数的传入</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#自定义进度对话框中的消息">3.2&nbsp;&nbsp;自定义进度对话框中的消息</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#添加描述信息">3.3&nbsp;&nbsp;添加描述信息</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#杨浦区洪水风险样例的脚本工具源码">4&nbsp;&nbsp;<b>杨浦区洪水风险样例的脚本工具源码</b></a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            ArcGIS中自定义Python脚本工具
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>7月 27 2020</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/zh-cn/categories/Item/">Item</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            15 分钟 读完 (约 2233 字)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>ArcGIS中的ArcToolBox包含许多工具，涉及网络分析、路径分析、格式转换等诸多领域，再结合详尽的帮助文档，可以快速掌握上手一个工具的使用。当然，ArcGIS也提供自定义脚本工具，以满足用户的定制化需求。这篇文章旨在介绍ArcGIS中Python脚本工具的编写与使用，以及其中遇到的问题，以飨读者。在文章末尾给出一个自定义脚本工具的源代码，供读者参考。笔者的ArcGIS版本为10.6，自带的Python版本为2.7.14，与目前主流的python3略有差别，需留心注意。<span id="more"></span></p>
+<h2 id="ArcPy简介"><a href="#ArcPy简介" class="headerlink" title="ArcPy简介"></a>ArcPy简介</h2><p>ArcPy 是以 arcgisscripting 模块为基础并继承了 arcgisscripting 功能进而构建而成的站点包。目的是为以实用高效的方式通过 Python  执行地理数据分析、数据转换、数据管理和地图自动化创建基础。在导入 ArcPy 之后，可以运行随 ArcGIS 安装的标准工具箱中的所有地理处理工具，包括有分析工具箱、制图工具箱、转换工具箱、数据管理工具箱、编辑工具箱、地理编码工具箱、线性参考工具箱、多维工具箱和空间统计工具箱。</p>
+<p>ArcPy由一系列模块组成，包括：</p>
+<table>
+<thead>
+<tr>
+<th align="center">模块中文名</th>
+<th align="center">模块名</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">数据访问模块（Data Access）</td>
+<td align="center">arcpy.da</td>
+<td align="center">数据访问模块 (arcpy.da) 是一个用于处理数据的 Python  模块。通过它可控制编辑会话、编辑操作、改进的游标支持（包括更快的性能）、表和要素类与 NumPy  数组之间相互转换的函数以及对版本化、复本、属性域和子类型工作流的支持。</td>
+</tr>
+<tr>
+<td align="center">制图模块（Mapping）</td>
+<td align="center">arcpy.mapping</td>
+<td align="center">主要是用于操作现有地图文档 (.mxd) 和图层文件 (.lyr) 的内容。此外，还提供自动执行导出和打印的功能。Arcpy.mapping 可用于自动执行地图生产；它扩展了数据驱动页面的功能，同时，因其包含导出至  PDF 文档、创建和管理 PDF 文档的函数，而为构建完整地图册所必需。最后，可将  arcpy.mapping 脚本发布为地理处理服务，并将脚本功能提供给 Web 应用程序。</td>
+</tr>
+<tr>
+<td align="center">ArcGIS空间分析扩展模块（ArcGIS Spatial Analyst）</td>
+<td align="center">arcpy.sa</td>
+<td align="center">Spatial Analyst 模块是用于分析栅格数据的 Python 模块，该模块在进行分析时将使用 ArcGIS Spatial Analyst  扩展模块 提供的功能。借助该模块可访问 Spatial Analyst 工具箱中提供的所有地理处理工具以及其他帮助程序函数和类</td>
+</tr>
+<tr>
+<td align="center">ArcGIS网络分析扩展模块（ArcGIS Network Analyst）</td>
+<td align="center">arcpy.na</td>
+<td align="center">arcpy.na 是用于使用 ArcGIS Network Analyst  扩展模块 提供的网络分析功能的 Python 模块。通过它可访问 Network  Analyst 工具箱中提供的所有地理处理工具以及允许您通过 Python 使 Network Analys  工作流自动化的其他帮助程序函数和类。</td>
+</tr>
+<tr>
+<td align="center">时间模块</td>
+<td align="center">arcpy.time</td>
+<td align="center">arcpy.time 模块包含在 Python 中处理时间增量和时区时会用到的类、方法以及属性。</td>
+</tr>
+</tbody></table>
+<h2 id="自定义工具箱和脚本工具的步骤"><a href="#自定义工具箱和脚本工具的步骤" class="headerlink" title="自定义工具箱和脚本工具的步骤"></a>自定义工具箱和脚本工具的步骤</h2><ol>
+<li>ArcMap中点开右侧“目录”，展开“工具箱”，右键单击“我的工具箱”，选择“新建”工具箱，为工具箱命名；</li>
+<li>右键单击新工具箱，选择“添加”脚本，进入脚本工具编辑页面；</li>
+<li>“名称”用于系统内部处理，全英文且不能包含空格、连接线等非法字符；“标签”是脚本工具的显示名称，便于阅读；勾选“存储相对路径名”，以便制作好的工具箱分享出去可以直接使用；“脚本文件”选择对应的.py文件；最后，设置脚本中所需要的参数，并指定好类型。</li>
+</ol>
+<h2 id="编写py文件"><a href="#编写py文件" class="headerlink" title="编写py文件"></a>编写py文件</h2><h3 id="工具参数的传入"><a href="#工具参数的传入" class="headerlink" title="工具参数的传入"></a>工具参数的传入</h3><p>比如想要编写一个按掩膜提取的脚本工具，需要输入待提取的栅格图层和作为掩膜的矢量图层，输出提取完成的栅格图层。普通.py脚本文件中，参数的传递非常容易，但是如何获取输入参数提供给ArcGIS的脚本工具呢？这是需要使用arcpy.GetParameterAsText函数，按顺序获取输入参数，并赋给特定变量以供使用。</p>
+<figure class="highlight python hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> arcpy<br><br>yp_road_shp = arcpy.GetParameterAsText(<span class="hljs-number">0</span>)<br>pond_tif = arcpy.GetParameterAsText(<span class="hljs-number">1</span>) <br>jsonPath = arcpy.GetParameterAsText(<span class="hljs-number">2</span>)<br></code></pre></td></tr></tbody></table></figure>
+
+<h3 id="自定义进度对话框中的消息"><a href="#自定义进度对话框中的消息" class="headerlink" title="自定义进度对话框中的消息"></a>自定义进度对话框中的消息</h3><p>使用arcpy.AddMessage函数向脚本工具的消息中添加自定义消息，仅需要一个字符串类型的参数做文本输出。用于自定义写入消息的四个ArcPy函数如下所示，可根据需要使用相应的函数。其中，值得注意的一点是，message需为全英文，否则单独运行无误，但作为脚本工具在ArcGIS中使用会产生意想不到的错误。</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数名</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">AddMessage(message)</td>
+<td align="center">用于一般信息性消息（严重性 = 0）</td>
+</tr>
+<tr>
+<td align="left">AddWarning(message)</td>
+<td align="center">用于警告消息（严重性 = 1）</td>
+</tr>
+<tr>
+<td align="left">AddError(message)</td>
+<td align="center">用于错误消息（严重性 = 2）</td>
+</tr>
+<tr>
+<td align="left">AddIDMessage(message_type, messageID, add_argument1, add_arrgument2)</td>
+<td align="center">用于错误和警告（由 message_type 参数确定严重性。）</td>
+</tr>
+</tbody></table>
+<h3 id="添加描述信息"><a href="#添加描述信息" class="headerlink" title="添加描述信息"></a>添加描述信息</h3><p>右键单击自定义的脚本工具，选择“项目描述”，单击左上角的“编辑”，即可为脚本工具和参数添加说明信息，以便工具可读性的提高。</p>
+<h2 id="杨浦区洪水风险样例的脚本工具源码"><a href="#杨浦区洪水风险样例的脚本工具源码" class="headerlink" title="杨浦区洪水风险样例的脚本工具源码"></a>杨浦区洪水风险样例的脚本工具源码</h2><p>上海市杨浦区，路网图层与洪水图层叠加，输出road_id（道路编码），name（道路名称），level（道路洪水等级），levelType（洪水等级范围）到json文件。</p>
+<figure class="highlight python hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">'''# -*- coding: utf-8 -*-'''</span><br><span class="hljs-comment"># python version: 2.7.14</span><br><span class="hljs-comment"># Author: Wan Zixin</span><br><span class="hljs-comment"># Date: 2020.07.23</span><br><br><span class="hljs-keyword">import</span> arcpy<br><span class="hljs-keyword">import</span> json<br><span class="hljs-keyword">import</span> codecs<br><span class="hljs-keyword">import</span> os<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">TifBand2ToShp</span>(<span class="hljs-params">pond_tif</span>):</span><br>    rasterTif_band2 = arcpy.MakeRasterLayer_management(pond_tif, <span class="hljs-string">"rasterTif_band2"</span>, <span class="hljs-string">"#"</span>, band_index=<span class="hljs-string">"2"</span>) <span class="hljs-comment"># 波段索引从1开始计</span><br>    rasterTif_band2_shp_name = byproductDir+<span class="hljs-string">'\\'</span>+os.path.basename(pond_tif).split(<span class="hljs-string">'.'</span>)[<span class="hljs-number">0</span>]+<span class="hljs-string">'.shp'</span><br>    rasterTif_band2_shp = arcpy.RasterToPolygon_conversion(rasterTif_band2, rasterTif_band2_shp_name, <span class="hljs-string">"NO_SIMPLIFY"</span>)<br>    <span class="hljs-comment">#arcpy.AddMessage("Step1 tif文件band2转为shp文件已完成。")</span><br>    arcpy.AddMessage(<span class="hljs-string">"Step1 tif's ban2 to shapefile is done."</span>)<br>    <span class="hljs-keyword">return</span> rasterTif_band2_shp_name<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">InteractTwoShps</span>(<span class="hljs-params">shp1,shp2,jsonPath</span>):</span><br>    infos = []<br>    interact_shp_name = byproductDir+<span class="hljs-string">'/'</span>+<span class="hljs-string">"myInteract_"</span>+ os.path.basename(shp1)<br>    interact_shp = arcpy.Intersect_analysis([shp1, shp2], interact_shp_name)<br>    <span class="hljs-comment"># arcpy.AddMessage("Step2 shp文件叠加操作已完成。")</span><br>    arcpy.AddMessage (<span class="hljs-string">'Step2 shapefile interact is done.'</span>)<br><br>    <br>    fields = [<span class="hljs-string">'road_id'</span>, <span class="hljs-string">'name'</span>, <span class="hljs-string">'gridcode'</span>]<br>    <span class="hljs-keyword">with</span> arcpy.da.SearchCursor(interact_shp, fields) <span class="hljs-keyword">as</span> cursor:<br>        <span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> cursor:<br>            info={}<br>            info[<span class="hljs-string">"road_id"</span>]=row[<span class="hljs-number">0</span>];<br>            info[<span class="hljs-string">"name"</span>]=row[<span class="hljs-number">1</span>];<br><br>            g_legend = getLegend(row[<span class="hljs-number">2</span>])<br>            info[<span class="hljs-string">"level"</span>] = g_legend;<br>            g_code = getLevelType(g_legend)<br>            info[<span class="hljs-string">"levelType"</span>] = g_code;            <br>            infos.append(info)<br><br>    infos_new = []<br>    infos_new = reviseInfos(infos);<br>    jsonData = json.dumps(infos_new, ensure_ascii = <span class="hljs-literal">False</span>, encoding=<span class="hljs-string">"gb2312"</span>)<br>    f = codecs.<span class="hljs-built_in">open</span>(jsonPath, <span class="hljs-string">'w'</span>,encoding=<span class="hljs-string">'utf-8'</span>)<br>    f.write(jsonData)<br>    f.close()<br>    <span class="hljs-comment"># arcpy.AddMessage("Step3 JSON文件生成已完成。JSON文件路径为： " + jsonPath)</span><br>    arcpy.AddMessage(<span class="hljs-string">"Step3 JSON file is created. JSON file path is  "</span> + jsonPath)<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">reviseInfos</span>(<span class="hljs-params">infos</span>):</span><br>    <span class="hljs-comment"># 按road_id排序</span><br>    infos.sort(key=<span class="hljs-keyword">lambda</span> x: x[<span class="hljs-string">'road_id'</span>])<br>    <span class="hljs-comment"># 设置一个哨兵字典,初值为列表第一个元素</span><br>    info_flag = {}<br>    info_flag = infos[<span class="hljs-number">0</span>]<br>    <span class="hljs-comment"># 定义一个新列表，作返回值</span><br>    <span class="hljs-keyword">global</span> infos_new<br>    infos_new = []<br>    infos_new.append(info_flag)<br>    <span class="hljs-comment"># 定义一个info_max存储road_id相等中level最大的字典元素</span><br>    <span class="hljs-comment"># info_max = {}</span><br>    <span class="hljs-comment"># 从列表第二个元素开始</span><br>    <span class="hljs-keyword">global</span> i <br>    i = <span class="hljs-number">1</span> <br>    <span class="hljs-keyword">while</span> i &lt; <span class="hljs-built_in">len</span>(infos):<br>        <span class="hljs-keyword">if</span>(info_flag[<span class="hljs-string">'road_id'</span>] == infos[i][<span class="hljs-string">'road_id'</span>]):<br>            info_max = infos_new[-<span class="hljs-number">1</span>] <span class="hljs-comment"># info_max是待返回列表的最后一个元素,定义一个info_max存储road_id相等中level最大的字典元素</span><br>            <span class="hljs-keyword">if</span>(info_max[<span class="hljs-string">'level'</span>] &lt; infos[i][<span class="hljs-string">'level'</span>]):<br>                info_max = infos[i]<br>                infos_new.pop(-<span class="hljs-number">1</span>)<br>                infos_new.append(info_max)<br>        <span class="hljs-keyword">else</span>:<br>            infos_new.append(infos[i])<br><br>        info_flag = infos[i]<br>        i += <span class="hljs-number">1</span><br><br>        <span class="hljs-comment"># i_new = i</span><br>        <span class="hljs-comment"># i_new += 1</span><br>        <span class="hljs-comment"># i = i_new # python2中没有自增和自减</span><br><br>    <span class="hljs-keyword">return</span> infos_new<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getLegend</span>(<span class="hljs-params">g</span>):</span><br>    <span class="hljs-keyword">if</span> g == <span class="hljs-number">255</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br>    <span class="hljs-keyword">elif</span> g == <span class="hljs-number">203</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0.1</span><br>    <span class="hljs-keyword">elif</span> g == <span class="hljs-number">167</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0.2</span><br>    <span class="hljs-keyword">elif</span> g == <span class="hljs-number">135</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0.3</span><br>    <span class="hljs-keyword">elif</span> g == <span class="hljs-number">96</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0.4</span><br>    <span class="hljs-keyword">elif</span> g == <span class="hljs-number">64</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0.5</span><br>    <span class="hljs-keyword">elif</span> g == <span class="hljs-number">36</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1.0</span><br>    <span class="hljs-keyword">elif</span> g == <span class="hljs-number">0</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1.1</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-comment"># print "g的数值有误"</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getLevelType</span>(<span class="hljs-params">g_legend</span>):</span><br>    <span class="hljs-keyword">if</span> g_legend &lt; <span class="hljs-number">0.1</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"&lt;0.1"</span><br>    <span class="hljs-keyword">elif</span> g_legend &gt;= <span class="hljs-number">0.1</span> <span class="hljs-keyword">and</span> g_legend &lt; <span class="hljs-number">0.3</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"0.1-0.3"</span><br>    <span class="hljs-keyword">elif</span> g_legend &gt;= <span class="hljs-number">0.3</span> <span class="hljs-keyword">and</span> g_legend &lt;= <span class="hljs-number">0.5</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"0.3-0.5"</span><br>    <span class="hljs-keyword">elif</span> g_legend &gt;<span class="hljs-number">0.5</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"&gt;0.5"</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-comment"># print "g_legend数值有误"</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br><br><br>byproductDir = arcpy.GetParameterAsText(<span class="hljs-number">3</span>)<br><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(byproductDir):<br>    os.mkdir(byproductDir)<br><span class="hljs-comment"># byproductDir = 'E:/PondRisk/ArcPyHand/byproduct'</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span>():</span><br>    arcpy.env.overwriteOutput = <span class="hljs-literal">True</span> <span class="hljs-comment"># 允许覆盖已有文件,注意提醒用户</span><br><br>    yp_road_shp = arcpy.GetParameterAsText(<span class="hljs-number">0</span>)<br>    pond_tif = arcpy.GetParameterAsText(<span class="hljs-number">1</span>) <span class="hljs-comment"># tif数据确保包含有两个波段及以上</span><br>    jsonPath = arcpy.GetParameterAsText(<span class="hljs-number">2</span>)<br><br>    <span class="hljs-comment">#pond_tif = 'E:/PondRisk/ArcPyHand/lib/workspace/YP_20190810000000_max.tif'</span><br>    <span class="hljs-comment">#yp_road_shp = 'E:/PondRisk/ArcPyHand/lib/workspace/YP_roads.shp'</span><br>    <span class="hljs-comment">#jsonPath = 'C:/Users/user/Desktop/info.json'</span><br>    <br>    tif_band2_shp_path = TifBand2ToShp(pond_tif)<br>    InteractTwoShps(tif_band2_shp_path, yp_road_shp,jsonPath)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">"__main__"</span>:<br>    main()<br></code></pre></td></tr></tbody></table></figure>
+
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/zh-cn/Python%E4%B8%8BGDAL%E5%92%8COGR%E7%9A%84%E4%BD%BF%E7%94%A8/">Python下GDAL和OGR的使用</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/zh-cn/%E5%8F%B0%E9%A3%8E%E9%A1%B9%E7%9B%AE%E5%9B%9E%E9%A1%BE/">台风项目回顾</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>简体中文</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/ArcGIS%E4%B8%AD%E8%87%AA%E5%AE%9A%E4%B9%89Python%E8%84%9A%E6%9C%AC%E5%B7%A5%E5%85%B7/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/ArcGIS%E4%B8%AD%E8%87%AA%E5%AE%9A%E4%B9%89Python%E8%84%9A%E6%9C%AC%E5%B7%A5%E5%85%B7/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("zh-CN");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索" />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.zh-cn.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>

@@ -26,7 +26,7 @@
 <meta property="og:description" content="我们在前面详细介绍了Spring框架，它的主要功能包括IoC容器、AOP支持、事务支持、MVC开发以及强大的第三方集成功能等。那么SpringBoot又是什么？它和Spring是什么关系？">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-07-14T02:20:48.000Z">
-<meta property="article:modified_time" content="2021-07-24T14:22:07.418Z">
+<meta property="article:modified_time" content="2021-07-25T03:40:30.624Z">
 <meta property="article:author" content="WanZixin">
 <meta name="twitter:card" content="summary">
 
@@ -251,6 +251,22 @@
                     
                     <a class="navbar-item" href="#集成Kafka">11.5&nbsp;&nbsp;集成Kafka</a>
                     
+                    
+                    
+                    <a class="navbar-item" href="#安装Kafka">11.5.1&nbsp;&nbsp;安装Kafka</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用Kafka">11.5.2&nbsp;&nbsp;使用Kafka</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#发送消息">11.5.3&nbsp;&nbsp;发送消息</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#接收消息">11.5.4&nbsp;&nbsp;接收消息</a>
+                    
                 </div>
             </div>
             
@@ -290,7 +306,7 @@
         <span class="column is-narrow">
             
             
-            an hour read (About 11866 words)
+            2 hours read (About 14075 words)
         </span>
         
     </div>
@@ -713,7 +729,57 @@
 <p>Spring Boot提供了AMQP的集成，默认使用RabbitMQ作为AMQP消息服务器。</p>
 <p>使用RabbitMQ发送消息时，理解Exchange如何路由至一个或多个Queue至关重要。</p>
 </blockquote>
-<h3 id="集成Kafka"><a href="#集成Kafka" class="headerlink" title="集成Kafka"></a>集成Kafka</h3><p>// TODO</p>
+<h3 id="集成Kafka"><a href="#集成Kafka" class="headerlink" title="集成Kafka"></a>集成Kafka</h3><p>我们在前面已经介绍了JMS和AMQP，JMS的JavaEE的标准消息接口，Artemis是一个JMS的实现产品，同样的AMQP是一个标准消息接口，RabbitMQ是一个AMQP实现产品。Kafka也是一个消息服务器，它的特点一是快，二是有巨大的吞吐量，那么Kafka实现了什么标准消息接口呢？</p>
+<p>Kafka没有实现任何标准的消息接口，它自己提供的API就是Kafka的接口。</p>
+<p>Kafka本身是Scala编写的，运行在JVM之上。Producer和Consumer都通过Kafka的客户端使用网络来与之通信。从逻辑上讲，Kafka的设计非常简单，它只有一种类似于JMS的Topic的消息通道：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ascii">                              ┌──────────┐<br>                          ┌──&gt;│Consumer-1│<br>                          │   └──────────┘<br>┌────────┐      ┌─────┐   │   ┌──────────┐<br>│Producer│─────&gt;│Topic│───┼──&gt;│Consumer-2│<br>└────────┘      └─────┘   │   └──────────┘<br>                          │   ┌──────────┐<br>                          └──&gt;│Consumer-3│<br>                              └──────────┘<br></code></pre></td></tr></tbody></table></figure>
+
+<p>那么Kafka是如何支持十万甚至百万的并发呢？答案是分区。Kafka的一个Topic可以有一个至多个Partition，并且可以分布到多台机器上：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ascii">            ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐<br>             Topic<br>            │                   │<br>                ┌───────────┐        ┌──────────┐<br>            │┌─&gt;│Partition-1│──┐│┌──&gt;│Consumer-1│<br>             │  └───────────┘  │ │   └──────────┘<br>┌────────┐  ││  ┌───────────┐  │││   ┌──────────┐<br>│Producer│───┼─&gt;│Partition-2│──┼─┼──&gt;│Consumer-2│<br>└────────┘  ││  └───────────┘  │││   └──────────┘<br>             │  ┌───────────┐  │ │   ┌──────────┐<br>            │└─&gt;│Partition-3│──┘│└──&gt;│Consumer-3│<br>                └───────────┘        └──────────┘<br>            └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘<br></code></pre></td></tr></tbody></table></figure>
+
+<p>Kafka只保证在一个Partition内部，消息是有序的，但是，存在多个Partition的情况下，Producer发送的3个消息会依次发送到Partition-1、Partition-2和Partition-3，Consumer从三个Partition接收的消息并不一定是Producer发送消息的顺序。因此，多个Partition只能保证接收消息大概率是按发送时间有序，并不能完全保证按Producer的发送顺序。这一点在使用Kafka作为消息服务器时要特别注意，对发送顺序有严格要求的Topic只能有一个Partition。</p>
+<p>Kafka的另一个特点是消息发送和接收都尽量使用批处理，一次处理几十甚至上百条消息，比一次一条效率高很多。</p>
+<p>另外，Kafka总是将消息写入Partition对应的文件，消息保存多久取决于服务器的配置，可以按照时间删除，也可以按照文件大小删除，因此，只要Consumer在离线期内还没有被删除，再次上线仍然可以接收完整的信息流。这一功能是客户端自己实现的，客户端会存储它接收到的最后一个消息的offsetId，再次上线后按上次的offsetId查询。offsetId是Kafka标识某个Partion的每一条消息的递增整数，客户端通常将它存储在ZooKeeper中。</p>
+<p>有了Kafka消息设计的基本概念，我们来看看如何在SpringBoot中使用Kafka。</p>
+<h4 id="安装Kafka"><a href="#安装Kafka" class="headerlink" title="安装Kafka"></a>安装Kafka</h4><p>首先从Kafka官网<a target="_blank" rel="noopener" href="https://kafka.apache.org/downloads">下载</a>最新版Kafaka，解压后在<code>bin</code>目录找到两个文件：</p>
+<ul>
+<li><code>zookeeper-server-start.sh</code>：启动ZooKeeper（已内置在Kafka中）；</li>
+<li><code>kafka-server-start.sh</code>：启动Kafka。</li>
+</ul>
+<p>先启动ZooKeeper：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ ./zookeeper-server-start.sh ../config/zookeeper.properties <br></code></pre></td></tr></tbody></table></figure>
+
+<p>再启动Kafka：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">./kafka-server-start.sh ../config/server.properties<br></code></pre></td></tr></tbody></table></figure>
+
+<p>看到如下输出表示启动成功：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">... INFO [KafkaServer id=0] started (kafka.server.KafkaServer)<br></code></pre></td></tr></tbody></table></figure>
+
+<p>如果要关闭Kafka和ZooKeeper，依次按Ctrl-C退出即可。注意这是在本地开发时使用Kafka的方式，线上Kafka服务推荐使用云服务厂商托管模式（AWS的MSK，阿里云的消息队列Kafka版）。</p>
+<h4 id="使用Kafka"><a href="#使用Kafka" class="headerlink" title="使用Kafka"></a>使用Kafka</h4><p>在SpringBoot中使用Kafka，首先引入依赖：</p>
+<figure class="highlight xml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.kafka<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-kafka<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>注意这个依赖是<code>spring-kafka</code>项目提供的。</p>
+<p>然后在<code>application.yml</code>中添加Kafka配置：</p>
+<figure class="highlight yaml hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">kafka:</span><br>    <span class="hljs-attr">bootstrap-servers:</span> <span class="hljs-string">localhost:9092</span><br>    <span class="hljs-attr">consumer:</span><br>      <span class="hljs-attr">auto-offset-reset:</span> <span class="hljs-string">latest</span><br>      <span class="hljs-attr">max-poll-records:</span> <span class="hljs-number">100</span><br>      <span class="hljs-attr">max-partition-fetch-bytes:</span> <span class="hljs-number">1000000</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>除了<code>bootstrap-servers</code>必须指定外，<code>consumer</code>相关的配置项均为调优选项。例如，<code>max-poll-records</code>表示一次最多抓取100条消息。配置名称去哪里看？IDE里定义一个<code>KafkaProperties.Consumer</code>的变量：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">KafkaProperties.Consumer c = null;<br></code></pre></td></tr></tbody></table></figure>
+
+<p>然后按住Ctrl查看源码即可。</p>
+<h4 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h4><p>Spring Boot自动为我们创建一个<code>KafkaTemplate</code>用于发送消息。注意到这是一个泛型类，而默认配置总是使用<code>String</code>作为Kafka消息的类型，所以注入<code>KafkaTemplate&lt;String, String&gt;</code>即可：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessagingService</span> </span>{<br>    <span class="hljs-meta">@Autowired</span> ObjectMapper objectMapper;<br><br>    <span class="hljs-meta">@Autowired</span> KafkaTemplate&lt;String, String&gt; kafkaTemplate;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sendRegistrationMessage</span><span class="hljs-params">(RegistrationMessage msg)</span> <span class="hljs-keyword">throws</span> IOException </span>{<br>        send(<span class="hljs-string">"topic_registration"</span>, msg);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sendLoginMessage</span><span class="hljs-params">(LoginMessage msg)</span> <span class="hljs-keyword">throws</span> IOException </span>{<br>        send(<span class="hljs-string">"topic_login"</span>, msg);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">send</span><span class="hljs-params">(String topic, Object msg)</span> <span class="hljs-keyword">throws</span> IOException </span>{<br>        ProducerRecord&lt;String, String&gt; pr = <span class="hljs-keyword">new</span> ProducerRecord&lt;&gt;(topic, objectMapper.writeValueAsString(msg));<br>        pr.headers().add(<span class="hljs-string">"type"</span>, msg.getClass().getName().getBytes(StandardCharsets.UTF_8));<br>        kafkaTemplate.send(pr);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>发送消息时，需指定Topic名称，消息正文。为了发送一个JavaBean，这里我们没有使用<code>MessageConverter</code>来转换JavaBean，而是直接把消息类型作为Header添加到消息中，Header名称为<code>type</code>，值为Class全名。消息正文是序列化的JSON。</p>
+<h4 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h4><p>接收消息可以使用<code>@KafkaListener</code>注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TopicMessageListener</span> </span>{<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Logger logger = LoggerFactory.getLogger(getClass());<br><br>    <span class="hljs-meta">@Autowired</span><br>    ObjectMapper objectMapper;<br><br>    <span class="hljs-meta">@KafkaListener(topics = "topic_registration", groupId = "group1")</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onRegistrationMessage</span><span class="hljs-params">(<span class="hljs-meta">@Payload</span> String message, <span class="hljs-meta">@Header("type")</span> String type)</span> <span class="hljs-keyword">throws</span> Exception </span>{<br>        RegistrationMessage msg = objectMapper.readValue(message, getType(type));<br>        logger.info(<span class="hljs-string">"received registration message: {}"</span>, msg);<br>    }<br><br>    <span class="hljs-meta">@KafkaListener(topics = "topic_login", groupId = "group1")</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onLoginMessage</span><span class="hljs-params">(<span class="hljs-meta">@Payload</span> String message, <span class="hljs-meta">@Header("type")</span> String type)</span> <span class="hljs-keyword">throws</span> Exception </span>{<br>        LoginMessage msg = objectMapper.readValue(message, getType(type));<br>        logger.info(<span class="hljs-string">"received login message: {}"</span>, msg);<br>    }<br><br>    <span class="hljs-meta">@KafkaListener(topics = "topic_login", groupId = "group2")</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">processLoginMessage</span><span class="hljs-params">(<span class="hljs-meta">@Payload</span> String message, <span class="hljs-meta">@Header("type")</span> String type)</span> <span class="hljs-keyword">throws</span> Exception </span>{<br>        LoginMessage msg = objectMapper.readValue(message, getType(type));<br>        logger.info(<span class="hljs-string">"process login message: {}"</span>, msg);<br>    }<br><br>    <span class="hljs-meta">@SuppressWarnings("unchecked")</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> &lt;T&gt; <span class="hljs-function">Class&lt;T&gt; <span class="hljs-title">getType</span><span class="hljs-params">(String type)</span> </span>{<br>        <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> use cache:</span><br>        <span class="hljs-keyword">try</span> {<br>            <span class="hljs-keyword">return</span> (Class&lt;T&gt;) Class.forName(type);<br>        } <span class="hljs-keyword">catch</span> (ClassNotFoundException e) {<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(e);<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>在接收消息的方法中，使用<code>@Payload</code>表示传入的是消息正文，使用<code>@Header</code>可传入消息的指定Header，这里传入<code>@Header("type")</code>，就是我们发送消息时指定的Class全名。接收消息时，我们需要根据Class全名来反序列化获得JavaBean。</p>
+<p>上述代码一共定义了3个Listener，其中有两个方法监听的是同一个Topic，但它们的Group ID不同。假设Producer发送的消息流是A、B、C、D，Group ID不同表示这是两个不同的Consumer，它们将分别收取完整的消息流，即各自均收到A、B、C、D。Group ID相同的多个Consumer实际上被视作一个Consumer，即如果有两个Group ID相同的Consumer，那么它们各自收到的很可能是A、C和B、D。</p>
+<p>因为Group ID不同，同一个消息被两个Consumer分别独立接收。如果把Group ID改为相同，那么同一个消息只会被两者之一接收。所以配置Consumer时，指定Group ID非常重要。</p>
+<p>有细心的童鞋可能会问，在Kafka中是如何创建Topic的？又如何指定某个Topic的分区数量？</p>
+<p>实际上开发使用的Kafka默认允许自动创建Topic，创建Topic时默认的分区数量是2，可以通过<code>server.properties</code>修改默认分区数量。</p>
+<p>在生产环境中通常会关闭自动创建功能，Topic需要由运维人员先创建好。和RabbitMQ相比，Kafka并不提供网页版管理后台，管理Topic需要使用命令行，比较繁琐，只有云服务商通常会提供更友好的管理后台。</p>
 </body></html>
     
     </div>

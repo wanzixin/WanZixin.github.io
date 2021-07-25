@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>注解 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<link href="/%E6%B3%A8%E8%A7%A3/" rel="alternate" hreflang="en" />
+    
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="本节介绍Java程序的一种特殊“注释”—-注解（Annotation）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="注解">
+<meta property="og:url" content="https://wanzixin.github.io/zh-cn/%E6%B3%A8%E8%A7%A3/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="本节介绍Java程序的一种特殊“注释”—-注解（Annotation）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-30T05:05:06.000Z">
+<meta property="article:modified_time" content="2021-05-30T13:32:23.253Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/zh-cn">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="搜索" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="目录">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用注解">1&nbsp;&nbsp;<b>使用注解</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#注解的作用">1.1&nbsp;&nbsp;注解的作用</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#定义注解">2&nbsp;&nbsp;<b>定义注解</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#元注解">2.1&nbsp;&nbsp;元注解</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Target">2.1.1&nbsp;&nbsp;@Target</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Retention">2.1.2&nbsp;&nbsp;@Retention</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Repeatable">2.1.3&nbsp;&nbsp;@Repeatable</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Inherited">2.1.4&nbsp;&nbsp;@Inherited</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#如何定义Annotation">2.2&nbsp;&nbsp;如何定义Annotation</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#处理注解">3&nbsp;&nbsp;<b>处理注解</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用注解-1">3.1&nbsp;&nbsp;使用注解</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            注解
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>4月 30 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/zh-cn/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/zh-cn/categories/Study/Java/">Java</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            16 分钟 读完 (约 2465 字)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>本节介绍Java程序的一种特殊“注释”—-注解（Annotation）。<span id="more"></span></p>
+<h2 id="使用注解"><a href="#使用注解" class="headerlink" title="使用注解"></a>使用注解</h2><p>什么是注解？注解是放在Java源码的类、方法、字段、参数前的一种特殊的“注释”。注释会被编译器直接忽略，注解则可以被编译器打包进class文件，因此，注解是一种用作标注的“元数据”。</p>
+<h3 id="注解的作用"><a href="#注解的作用" class="headerlink" title="注解的作用"></a>注解的作用</h3><p>从JVM的角度看，注解本身对代码逻辑没有任何影响，如何使用注解完全由工具决定。</p>
+<p>Java的注解可以分为三类：</p>
+<p>第一类是由编译器使用的注解，例如：</p>
+<ul>
+<li>@Override：让编译器检查该方法是否正确实现了覆写</li>
+<li>@Suppress：告诉编译器忽略此处代码产生的警告</li>
+</ul>
+<p>这类注解不会被编译进.class文件，它们在编译后就被编译器扔掉了。</p>
+<p>第二类是由工具处理.class文件使用的注解，比如有些工具会在加载class的时候，对class做动态修改，实现一些特殊功能。这类注解会被编译进.class文件，但加载结束后并不会存在于内存中。这类注解只被一些底层库使用，一般我们不必自己处理。</p>
+<p>第三类是在程序运行期能够读取的注解，它们在加载后一直存在于JVM中，这也是最常用的注解。例如，一个配置了<code>@PostConstructor</code>的方法会在调用构造方法后被自动调用（这是Java代码读取该注解实现的功能，JVM并不会识别该注解）。</p>
+<p>定义一个注解时，还可以定义配置参数。配置参数包括：</p>
+<ul>
+<li>所有基本类型</li>
+<li>String</li>
+<li>枚举类型</li>
+<li>基本类型、String、Class以及枚举的数组</li>
+</ul>
+<p>因为配置参数必须是常量，所以，上述限制保证了注解在定义时就已经确定了每个参数的值。</p>
+<p>注解的配置参数可以有默认值，缺少某个配置参数时将使用默认值。</p>
+<p>此外，大部分注解会有一个名为value的配置参数，对此参数赋值，可以只写常量，相当于省略了value参数。</p>
+<p>如果只写注解，相当于全部使用默认值。举个例子。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Hello</span> </span>{<br>    <span class="hljs-meta">@Check(min=0, max=100, value=55)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> n;<br><br>    <span class="hljs-meta">@Check(value=99)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> p;<br><br>    <span class="hljs-meta">@Check(99)</span> <span class="hljs-comment">// @Check(value=99)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> x;<br><br>    <span class="hljs-meta">@Check</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> y;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p><code>@Check</code>就是一个注解。第一个<code>@Check(min=0, max=100, value=55)</code>明确定义了三个参数，第二个<code>@Check(value=99)</code>只定义了一个<code>value</code>参数，它实际上和<code>@Check(99)</code>是完全一样的。最后一个<code>@Check</code>表示所有参数都使用默认值。</p>
+<h2 id="定义注解"><a href="#定义注解" class="headerlink" title="定义注解"></a>定义注解</h2><p>Java语言使用<code>@interface</code>语法来定义注解，它的格式如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Report {<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">type</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 0</span>;<br>    <span class="hljs-function">String <span class="hljs-title">level</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> "info"</span>;<br>    <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> ""</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>注解的参数类似无参数方法，可以用default设定一个默认值（强烈推荐）。最常用的参数应当命名为value。</p>
+<h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><p>有一些注解可以修饰其他注解，这些注解就称为元注解（meta annotation）。Java标准库已经定义了一些元注解，我们只需要使用元注解，通常不需要自己去编写元注解。</p>
+<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p>最常用的元注解是@Target。使用@Target可以定义Annotation，应用于以下位置。</p>
+<ul>
+<li>类或接口：ElementType.TYPE</li>
+<li>字段：ElementType.FIELD</li>
+<li>方法：ElementType.METHOD</li>
+<li>构造方法：ElementType.CONSTRUCTOR</li>
+<li>方法参数：ElementType.PARAMETER</li>
+</ul>
+<p>例如，定义注解@Report用在方法上，我们必须添加一个@Target(ElementType.METHOD)：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Target(ElementType.METHOD)</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Report {<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">type</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 0</span>;<br>    <span class="hljs-function">String <span class="hljs-title">level</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> "info"</span>;<br>    <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> ""</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>定义注解@Report可用在方法或字段上，可以把@Target注解参数变为数组<code>{ElementType.METHOD, ElementType.FIELD}</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Target({</span><br><span class="hljs-meta">    ElementType.METHOD,</span><br><span class="hljs-meta">    ElementType.FIELD</span><br><span class="hljs-meta">})</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Report {<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>实际上，@Target定义的value是ElementType[]数组，只有一个元素时，可以省略数组的写法。</p>
+<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p>@Retention定义了Annotation的生命周期。</p>
+<ul>
+<li>仅编译器：RetentionPolicy.SOURCE</li>
+<li>仅class文件：RetentionPolicy.CLASS</li>
+<li>运行期：RetentionPolicy.RUNTIME</li>
+</ul>
+<p>如果@Retention不存在，则该Annotation默认为CLASS。因为通常我们自定义的Annotation都是RUNTIME，所以务必要加上@Retention(RetentionPolicy.RUNTIME)这个元注解。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Report {<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">type</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 0</span>;<br>    <span class="hljs-function">String <span class="hljs-title">level</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> "info"</span>;<br>    <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> ""</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h4 id="Repeatable"><a href="#Repeatable" class="headerlink" title="@Repeatable"></a>@Repeatable</h4><p>使用@Repeatable这个元注解可以定义Annotation是否可重复。这个注解应用不是特别广泛。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Repeatable(Reports.class)</span><br><span class="hljs-meta">@Target(ElementType.TYPE)</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Report {<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">type</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 0</span>;<br>    <span class="hljs-function">String <span class="hljs-title">level</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> "info"</span>;<br>    <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> ""</span>;<br>}<br><br><span class="hljs-meta">@Target(ElementType.TYPE)</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Reports {<br>    Report[] value();<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>经过@Repeatable修饰后，在某个类型声明处，就可以添加多个@Report注解。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Report(type=1, level="debug")</span><br><span class="hljs-meta">@Report(type=2, level="warning")</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Hello</span> </span>{<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h4 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a>@Inherited</h4><p>使用@Inherited定义子类是否可继承父类定义的Annotation。@Inherited仅针对@Target(ElementType.TYPE)类型的annotation有效，并且仅针对class的继承，对interface的继承无效。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Inherited</span><br><span class="hljs-meta">@Target(ElementType.TYPE)</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Report {<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">type</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 0</span>;<br>    <span class="hljs-function">String <span class="hljs-title">level</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> "info"</span>;<br>    <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> ""</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>在使用时，如果一个类用到了@Report：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Report(type=1)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>则它的子类默认也定义了该注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Person</span> </span>{<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h3 id="如何定义Annotation"><a href="#如何定义Annotation" class="headerlink" title="如何定义Annotation"></a>如何定义Annotation</h3><p>第一步，用@interface定义注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Report {<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>第二步，添加参数、默认值，把最常用的参数定义为value()，推荐所有参数都尽量设置默认值。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Report {<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">type</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 0</span>;<br>    <span class="hljs-function">String <span class="hljs-title">level</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> "info"</span>;<br>    <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> ""</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>第三步，用元注解配置注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Target(ElementType.TYPE)</span><br><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Report {<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">type</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 0</span>;<br>    <span class="hljs-function">String <span class="hljs-title">level</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> "info"</span>;<br>    <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> ""</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>其中，必须设置@Target和@Retention，@Retention一般设置为RUNTIME，因为我们自定义的注解通常要求在运行期读取。一般情况下，不必写@Inherited和@Repeatable。</p>
+<h2 id="处理注解"><a href="#处理注解" class="headerlink" title="处理注解"></a>处理注解</h2><p>Java的注解本身对代码逻辑没有任何影响。根据@Retention的配置：</p>
+<ul>
+<li>SOURCE类型的注解在编译期就被丢掉了；</li>
+<li>CLASS类型的注解仅保存在class文件中，它们不会被加载进JVM；</li>
+<li>RUNTIME类型的注解会被加载进JVM，并且在运行期可以被程序读取。</li>
+</ul>
+<p>如何使用注解完全由工具决定。SOURCE类型的注解主要由编译器使用，因此我们一般只使用，不编写。CLASS类型的注解主要由底层工具库使用，涉及到class的加载，一般我们很少用到。只有RUNTIME类型的注解不但要使用，还经常需要编写。</p>
+<p>因此，我们只讨论如何读取RUNTIME类型的注解。</p>
+<p>注解定义后也是一种class，所有的注解都继承自java.lang.annotation.Annotation，因此，读取注解需要使用反射API。</p>
+<p>Java提供的使用反射API读取Annotation的方法包括：</p>
+<p>判断某个注解是否存在于Class、Field、Method或Constructor：</p>
+<ul>
+<li>Class.isAnnotationPresent(Class)</li>
+<li>Field.isAnnotationPresent(Class)</li>
+<li>Method.isAnnotationPresent(Class)</li>
+<li>Constructor.isAnnotationPresent(Class)</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 判断@Report是否存在于Person类:</span><br>Person.class.isAnnotationPresent(Report.class);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>使用反射API读取Annotation：</p>
+<ul>
+<li>Class.getAnnotation(Class)</li>
+<li>Field.getAnnotation(Class)</li>
+<li>Method.getAnnotation(Class)</li>
+<li>Constructor.getAnnotation(Class)</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 获取Person定义的@Report注解:</span><br>Report report = Person.class.getAnnotation(Report.class);<br><span class="hljs-keyword">int</span> type = report.type();<br>String level = report.level();<br></code></pre></td></tr></tbody></table></figure>
+
+<p>使用反射API读取Annotation有两种方法。</p>
+<p>方法一是先判断Annotation是否存在，如果存在，就直接读取。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">Class cls = Person.class;<br><span class="hljs-keyword">if</span> (cls.isAnnotationPresent(Report.class)) {<br>    Report report = cls.getAnnotation(Report.class);<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>方法二是直接读取Annotation，如果Annotation不存在，将返回null。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">Class cls = Person.class;<br>Report report = cls.getAnnotation(Report.class);<br><span class="hljs-keyword">if</span> (report != <span class="hljs-keyword">null</span>) {<br>   ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>读取方法、字段和构造方法的Annotation和Class类似。但是读取方法参数的Annotation就比较麻烦一点，因为方法参数本身可以看成一个数组，而每个参数又可以定义多个注解，所以一次性获取方法参数的所有注解就必须用一个二维数组来表示。</p>
+<h3 id="使用注解-1"><a href="#使用注解-1" class="headerlink" title="使用注解"></a>使用注解</h3><p>注解如何使用，完全由程序自己决定。例如，JUint是一个测试框架，它会自动运行所有标记为@Test的方法。</p>
+<p>我们来看一个@Range注解，我们希望用它来定义一个String字段的规则：字段长度满足@Range的参数定义。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-meta">@Target(ElementType.FIELD)</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Range {<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">min</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">max</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 255</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>在某个JavaBean中，我们可以使用该注解：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{<br>    <span class="hljs-meta">@Range(min=1, max=20)</span><br>    <span class="hljs-keyword">public</span> String name;<br><br>    <span class="hljs-meta">@Range(max=10)</span><br>    <span class="hljs-keyword">public</span> String city;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>但是，定义了注解，本身对程序逻辑没有任何影响。我们必须自己编写代码来使用注解。这里我们编写一个Person实例的检查方法，它可以检查Person实例的String字段长度是否满足@Range的定义。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">check</span><span class="hljs-params">(Person person)</span> <span class="hljs-keyword">throws</span> IllegalArgumentException, ReflectiveOperationException </span>{<br>    <span class="hljs-comment">// 遍历所有Field:</span><br>    <span class="hljs-keyword">for</span> (Field field : person.getClass().getFields()) {<br>        <span class="hljs-comment">// 获取Field定义的@Range:</span><br>        Range range = field.getAnnotation(Range.class);<br>        <span class="hljs-comment">// 如果@Range存在:</span><br>        <span class="hljs-keyword">if</span> (range != <span class="hljs-keyword">null</span>) {<br>            <span class="hljs-comment">// 获取Field的值:</span><br>            Object value = field.get(person);<br>            <span class="hljs-comment">// 如果值是String:</span><br>            <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">instanceof</span> String) {<br>                String s = (String) value;<br>                <span class="hljs-comment">// 判断值是否满足@Range的min/max:</span><br>                <span class="hljs-keyword">if</span> (s.length() &lt; range.min() || s.length() &gt; range.max()) {<br>                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalArgumentException(<span class="hljs-string">"Invalid field: "</span> + field.getName());<br>                }<br>            }<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这样一来，我们通过@Range注解，配合check()方法，就可以完成Person实例的检查。注意检查逻辑完全是我们自己编写的，JVM不会自动给注解添加任何额外的逻辑。</p>
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/zh-cn/%E6%B3%9B%E5%9E%8B/">泛型</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/zh-cn/%E5%8F%8D%E5%B0%84/">反射</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>简体中文</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/%E6%B3%A8%E8%A7%A3/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/%E6%B3%A8%E8%A7%A3/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("zh-CN");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索" />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.zh-cn.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
