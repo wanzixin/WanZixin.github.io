@@ -2,13 +2,13 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>test - WanZixin</title>
+<title>OpenTSDB概述 - WanZixin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
 
-<link href="/test/" rel="alternate" hreflang="en" />
+<link href="/zh-cn/OpenTSDB%E6%A6%82%E8%BF%B0/" rel="alternate" hreflang="zh-CN" />
     
 
 
@@ -18,15 +18,15 @@
 
 
 
-    <meta name="description" content="hello,here.">
+    <meta name="description" content="OpenTSDB是一个可扩展的时序数据库，可以在不丢失粒度的情况下存储和提供大量时间序列数据。常用于基础监控、[]。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="test">
-<meta property="og:url" content="https://wanzixin.github.io/zh-cn/test/index.html">
+<meta property="og:title" content="OpenTSDB概述">
+<meta property="og:url" content="https://wanzixin.github.io/OpenTSDB%E6%A6%82%E8%BF%B0/index.html">
 <meta property="og:site_name" content="WanZixin">
-<meta property="og:description" content="hello,here.">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-20T02:53:25.000Z">
-<meta property="article:modified_time" content="2021-07-20T03:00:04.423Z">
+<meta property="og:description" content="OpenTSDB是一个可扩展的时序数据库，可以在不丢失粒度的情况下存储和提供大量时间序列数据。常用于基础监控、[]。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-08-07T09:23:46.000Z">
+<meta property="article:modified_time" content="2021-08-13T02:47:39.407Z">
 <meta property="article:author" content="WanZixin">
 <meta name="twitter:card" content="summary">
 
@@ -74,7 +74,7 @@
 <nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
     <div class="container">
         <div class="navbar-brand">
-            <a class="navbar-item navbar-logo" href="/zh-cn">
+            <a class="navbar-item navbar-logo" href="/">
                 
                     
                     WanZixin
@@ -115,17 +115,37 @@
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="搜索" href="javascript:;">
+            <a class="navbar-item search" title="Search" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
             
             <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
-                <a class="navbar-item" title="目录">
+                <a class="navbar-item" title="Table of Contents">
                     <i class="fa fa-list"></i>
                 </a>
                 <div class="navbar-dropdown is-right">
                     
+                    
+                    
+                    
+                    <a class="navbar-item" href="#查询或读取数据">1&nbsp;&nbsp;<b>查询或读取数据</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#基本概念">1.1&nbsp;&nbsp;基本概念</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#查询参数">1.2&nbsp;&nbsp;查询参数</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Times">1.3&nbsp;&nbsp;Times</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Filters">1.4&nbsp;&nbsp;Filters</a>
                     
                 </div>
             </div>
@@ -147,32 +167,115 @@
     <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            test
+            OpenTSDB概述
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
             
-                <span>7月 20 2021</span>
+                <span>Aug 7 2021</span>
             
         </span>
         
         <span class="column is-narrow article-category">
             <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/zh-cn/categories/Diary/">Diary</a>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a><span>></span><a class="article-category-link" href="/categories/Study/Java/OpenTSDB/">OpenTSDB</a>
         </span>
         
         
         <span class="column is-narrow">
             
             
-            几秒 读完 (约 2 字)
+            4 minutes read (About 648 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <html><head></head><body><p>hello,here.</p>
+        <html><head></head><body><p><a target="_blank" rel="noopener" href="http://opentsdb.net/">OpenTSDB</a>是一个可扩展的时序数据库，可以在不丢失粒度的情况下存储和提供大量时间序列数据。常用于基础监控、[]。<span id="more"></span></p>
+<h2 id="查询或读取数据"><a href="#查询或读取数据" class="headerlink" title="查询或读取数据"></a>查询或读取数据</h2><p>OpenTSDB提供了许多方法来提取、处理和分析数据。可以用CLI工具、HTTP API查询数据，并查看GnuPlot图（<a target="_blank" rel="noopener" href="http://www.gnuplot.info/">GnuPlot</a>是一个命令行的交互绘图工具）。开源工具比如Grafana和Bosun也可以连接TSDB。使用 OpenTSDB 的基于标签的系统进行查询可能有点棘手，因此请通读本文档。</p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>TSD 时间序列守护线程</p>
+<p>Metric 指标</p>
+<p>tag 标签</p>
+<p>group 组</p>
+<p>aggregation 聚合</p>
+<h3 id="查询参数"><a href="#查询参数" class="headerlink" title="查询参数"></a>查询参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>数据类型</th>
+<th>必需</th>
+<th>描述</th>
+<th>栗子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Start Time</td>
+<td>String or Integer</td>
+<td>是</td>
+<td>查询的起始时间，可以是绝对时间，也可以是相对时间</td>
+<td>24h-ago</td>
+</tr>
+<tr>
+<td>End Time</td>
+<td>String or Integer</td>
+<td>否</td>
+<td>查询的结束时间，如果没有提供结束时间，则会使用TSD的当前时间作为结束时间</td>
+<td>1h-ago</td>
+</tr>
+<tr>
+<td>Metric</td>
+<td>String</td>
+<td>是</td>
+<td>系统中指标的全称，且是大小写敏感的</td>
+<td>sys.cpu.user</td>
+</tr>
+<tr>
+<td>Aggregation Function</td>
+<td>String</td>
+<td>是</td>
+<td>一个用来合并多条时间线的计算方法</td>
+<td>sum</td>
+</tr>
+<tr>
+<td>Filter</td>
+<td>String</td>
+<td>否</td>
+<td>过滤标签值以减少在查询或组中选取的时间序列数量，并在各种标签上聚合</td>
+<td>host=*,dc=lax</td>
+</tr>
+<tr>
+<td>Downsampler</td>
+<td>String</td>
+<td>否</td>
+<td>用于减少时间段内返回的数据点数量</td>
+<td>1h-avg</td>
+</tr>
+<tr>
+<td>Rate</td>
+<td>String</td>
+<td>否</td>
+<td>用于计算结果每秒变化率</td>
+<td>rate</td>
+</tr>
+<tr>
+<td>Functions</td>
+<td>String</td>
+<td>否</td>
+<td>数据处理功能，如附加过滤、时移等</td>
+<td>highestMax(…)</td>
+</tr>
+<tr>
+<td>Expressions</td>
+<td>String</td>
+<td>否</td>
+<td>时间序列间的数据操作功能</td>
+<td>(m2 / (m1 + m2)) * 100</td>
+</tr>
+</tbody></table>
+<h3 id="Times"><a href="#Times" class="headerlink" title="Times"></a>Times</h3><p>Unix格式的或人类可读的时间戳都支持。因为OpenTSDB可以以毫秒分辨率存储数据，默认情况下查询返回秒分辨率的数据以对现有的工具向后兼容。如果您每秒存储多个数据点，请确保您发出的任何查询都包含 <code>1s-&lt;func&gt;</code> 的采样器以读取正确的数据， 否则将发出不确定的值。</p>
+<p>要以毫秒分辨率提取数据，请使用 <code>/api/query</code> 并指定 msResolution（ms 也可以，但不推荐）JSON 参数或查询字符串标志，它将绕过向下采样（除非指定）并返回 Unix 中的所有时间戳毫秒分辨率。 此外，scan命令返回写入存储的时间戳。</p>
+<h3 id="Filters"><a href="#Filters" class="headerlink" title="Filters"></a>Filters</h3><p>// TODO</p>
 </body></html>
     
     </div>
@@ -184,7 +287,7 @@
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">
             
-            <a href="/zh-cn/%E5%A6%82%E6%9E%9C%E5%8F%AA%E5%89%A9%E4%B8%89%E4%B8%AA%E5%B0%8F%E6%97%B6%E5%B0%B1%E8%A6%81%E5%87%BA%E7%8E%B0%E4%B8%A7%E5%B0%B8%EF%BC%8C%E4%BD%A0%E4%BC%9A%E5%B9%B2%E4%BB%80%E4%B9%88/">如果只剩三个小时就要出现丧尸，你会干什么</a>
+            <a href="/cheese/">Cheese</a>
             
         </span>
     </div>
@@ -235,7 +338,7 @@
                 <span class="icon">
                     <i class="fas fa-globe"></i>
                 </span>
-                <span>简体中文</span>
+                <span>English</span>
                 <span class="icon is-small">
             <i class="fas fa-angle-down" aria-hidden="true"></i>
           </span>
@@ -244,11 +347,11 @@
         <div class="dropdown-menu has-text-left" role="menu">
             <div class="dropdown-content">
             
-                <a href="/test/" class="dropdown-item">
+                <a href="/OpenTSDB%E6%A6%82%E8%BF%B0/" class="dropdown-item">
                     English
                 </a>
             
-                <a href="/zh-cn/test/" class="dropdown-item">
+                <a href="/zh-cn/OpenTSDB%E6%A6%82%E8%BF%B0/" class="dropdown-item">
                     简体中文
                 </a>
             
@@ -285,7 +388,7 @@
     window.FontAwesomeConfig = {
         searchPseudoElements: true
     }
-    moment.locale("zh-CN");
+    moment.locale("en-AU");
 </script>
 
 
@@ -411,7 +514,7 @@
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索" />
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -423,13 +526,13 @@
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: '文章',
-                PAGES: '页面',
-                CATEGORIES: '分类',
-                TAGS: '标签',
-                UNTITLED: '(无标题)',
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
             },
-            CONTENT_URL: '/content.zh-cn.json',
+            CONTENT_URL: '/content.json',
         };
         window.INSIGHT_CONFIG = INSIGHT_CONFIG;
     })(window);
