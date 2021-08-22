@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>函数式编程 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<link href="/zh-cn/Study/Java/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="alternate" hreflang="zh-CN" />
+    
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="本章我们介绍Java的函数式编程。 我们先看看什么是函数。函数是一种最基本的任务，一个大型程序就是一个顶层函数调用若干底层函数，这些被调用的函数又可以调用其他函数，即大任务被一层层拆解并执行。所以，函数就是面向过程程序设计的基本单元。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="函数式编程">
+<meta property="og:url" content="https://wanzixin.github.io/Study/Java/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="本章我们介绍Java的函数式编程。 我们先看看什么是函数。函数是一种最基本的任务，一个大型程序就是一个顶层函数调用若干底层函数，这些被调用的函数又可以调用其他函数，即大任务被一层层拆解并执行。所以，函数就是面向过程程序设计的基本单元。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-05T07:50:38.000Z">
+<meta property="article:modified_time" content="2021-06-10T03:10:50.478Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Lamda基础">1&nbsp;&nbsp;<b>Lamda基础</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#FunctionalInterface">1.1&nbsp;&nbsp;FunctionalInterface</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结">1.2&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#方法引用">2&nbsp;&nbsp;<b>方法引用</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#构造方法引用">2.1&nbsp;&nbsp;构造方法引用</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结-1">2.2&nbsp;&nbsp;小结</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#使用Stream">3&nbsp;&nbsp;<b>使用Stream</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#创建Stream">3.1&nbsp;&nbsp;创建Stream</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Stream-of">3.1.1&nbsp;&nbsp;Stream.of()</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#基于数组或Collection">3.1.2&nbsp;&nbsp;基于数组或Collection</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#基于Supplier">3.1.3&nbsp;&nbsp;基于Supplier</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#其他方法">3.1.4&nbsp;&nbsp;其他方法</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#基本类型">3.1.5&nbsp;&nbsp;基本类型</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用map">3.2&nbsp;&nbsp;使用map</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用filter">3.3&nbsp;&nbsp;使用filter</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#使用reduce">3.4&nbsp;&nbsp;使用reduce</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结-2">3.4.1&nbsp;&nbsp;小结</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#输出集合">3.5&nbsp;&nbsp;输出集合</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#输出为List">3.5.1&nbsp;&nbsp;输出为List</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#输出为数组">3.5.2&nbsp;&nbsp;输出为数组</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#输出为Map">3.5.3&nbsp;&nbsp;输出为Map</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#分组输出">3.5.4&nbsp;&nbsp;分组输出</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#其他操作">3.6&nbsp;&nbsp;其他操作</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#排序">3.6.1&nbsp;&nbsp;排序</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#去重">3.6.2&nbsp;&nbsp;去重</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#截取">3.6.3&nbsp;&nbsp;截取</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#合并">3.6.4&nbsp;&nbsp;合并</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#flatMap">3.6.5&nbsp;&nbsp;flatMap</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#并行">3.6.6&nbsp;&nbsp;并行</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#其他聚合方法">3.6.7&nbsp;&nbsp;其他聚合方法</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#小结-3">3.6.8&nbsp;&nbsp;小结</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            函数式编程
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>Jun 5 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            an hour read (About 7482 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>本章我们介绍Java的函数式编程。</p>
+<p>我们先看看什么是函数。函数是一种最基本的任务，一个大型程序就是一个顶层函数调用若干底层函数，这些被调用的函数又可以调用其他函数，即大任务被一层层拆解并执行。所以，函数就是面向过程程序设计的基本单元。<span id="more"></span></p>
+<p>Java不支持单独定义函数，但可以把静态方式视为独立的函数，把实例方法视为自带<code>this</code>参数的函数。而函数式编程（Functional Programming），虽然也可以归结到面向过程的程序设计，但其思想更接近数学计算。</p>
+<p>我们首先要搞明白计算机（Computer）和计算（Compute）的概念。</p>
+<p>在计算机的层次上，CPU执行的是加减乘除的指令代码，以及各种条件判断和跳转指令，所以，汇编语言是最贴近计算机的语言。</p>
+<p>而计算则指数学意义上的计算，越是抽象的计算，离计算机硬件越远。</p>
+<p>对应到编程语言，就是越低级的语言，越贴近计算机，抽象程度低，执行效率高，比如C语言；越高级的语言，越贴近计算，抽象程度高，执行效率低，比如Lisp语言。</p>
+<p>函数式编程就是一种抽象程度很高的编程范式，纯粹的函数式编程语言编写的函数没有变量，因此，任意一个函数，只要输入是确定的，输出就是确定的，这种纯函数我们称之为没有副作用。而允许使用变量的程序设计语言，由于函数内部的变量状态不确定，同样的输入，可能得到不同的输出，因此，这种函数是有副作用的。</p>
+<p>函数式编程的一个特点就是，允许把函数本身作为参数传入另一个函数，还允许返回一个函数！</p>
+<p>函数式编程最早是数学家<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%98%BF%E9%9A%86%E4%BD%90%C2%B7%E9%82%B1%E5%A5%87">阿隆佐·邱奇</a>研究的一套函数变换逻辑，又称Lambda Calculus（λ-Calculus），所以也经常把函数式编程称为Lambda计算。</p>
+<p>Java平台从Java 8开始，支持函数式编程。</p>
+<h2 id="Lamda基础"><a href="#Lamda基础" class="headerlink" title="Lamda基础"></a>Lamda基础</h2><p>在Java程序中，我们经常遇到一大堆单方法接口，即一个接口只定义了一个方法：</p>
+<ul>
+<li>Comparator</li>
+<li>Runnable</li>
+<li>Callable</li>
+</ul>
+<p>以<code>Comparator</code>为例，我们想要调用<code>Arrays.sort()</code>时，可以传入一个<code>Comparator</code>实例，以匿名类方式编写如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">String[] array = ...<br>Arrays.sort(array, <span class="hljs-keyword">new</span> Comparator&lt;String&gt;() {<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compare</span><span class="hljs-params">(String s1, String s2)</span> </span>{<br>        <span class="hljs-keyword">return</span> s1.compareTo(s2);<br>    }<br>});<br></code></pre></td></tr></tbody></table></figure>
+
+<p>上述写法非常繁琐。从Java 8开始，我们可以用Lambda表达式替换单方法接口。改写代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Arrays;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        String[] array = <span class="hljs-keyword">new</span> String[] { <span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Orange"</span>, <span class="hljs-string">"Banana"</span>, <span class="hljs-string">"Lemon"</span> };<br>        Arrays.sort(array, (s1, s2) -&gt; {<br>            <span class="hljs-keyword">return</span> s1.compareTo(s2);<br>        });<br>        System.out.println(String.join(<span class="hljs-string">", "</span>, array));<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>观察Lamda表达式的写法，它只需要写出方法定义：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">(s1, s2) -&gt; {<br>		<span class="hljs-keyword">return</span> s1.compareTo(s2);<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>其中，参数是<code>(s1, s2)</code>，参数类型可以省略，因为编译器可以自动推断出<code>String</code>类型。<code>-&gt;{...}</code>表示方法体，所有代码写在内部即可。Lamda表达式没有<code>class</code>定义，因此写法非常简洁。如果只有一行<code>return xxx;</code>的代码，还可以使用更简单的方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Arrays.sort(array, (s1, s2) -&gt; s1.compareTo(s2));<br></code></pre></td></tr></tbody></table></figure>
+
+<p>返回值类型，也是由编译器自动推断的，这里推断的返回值是<code>int</code>，因此，只要返回<code>int</code>，编译器就不会报错。</p>
+<h3 id="FunctionalInterface"><a href="#FunctionalInterface" class="headerlink" title="FunctionalInterface"></a>FunctionalInterface</h3><p>我们把定义了单方法的接口称之为<code>FunctionalInterface</code>，用注解<code>@FunctionalInterface</code>标记。例如，<code>Callable</code>接口：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Callable</span>&lt;<span class="hljs-title">V</span>&gt; </span>{<br>    <span class="hljs-function">V <span class="hljs-title">call</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>再来看<code>Comparator</code>接口：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Comparator</span>&lt;<span class="hljs-title">T</span>&gt; </span>{<br><br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">compare</span><span class="hljs-params">(T o1, T o2)</span></span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">equals</span><span class="hljs-params">(Object obj)</span></span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">default</span> Comparator&lt;T&gt; <span class="hljs-title">reversed</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> Collections.reverseOrder(<span class="hljs-keyword">this</span>);<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">default</span> Comparator&lt;T&gt; <span class="hljs-title">thenComparing</span><span class="hljs-params">(Comparator&lt;? <span class="hljs-keyword">super</span> T&gt; other)</span> </span>{<br>        ...<br>    }<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>虽然<code>Comparator</code>接口有很多方法，但只有一个抽象方法<code>int compare(T o1, T o2)</code>，其他的方法都是<code>default</code>方法或<code>static</code>方法。另外注意到<code>boolean equals(Object obj)</code>是<code>Object</code>定义的方法，不算在接口方法内。因此，<code>Comparator</code>也是一个<code>FunctionalInterface</code>。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>单方法接口被称为<code>FunctionalInterface</code>。接收<code>FunctionalInterface</code>作为参数的时候，可以把实例化的匿名类改写为Lambda表达式，能大大简化代码。Lambda表达式的参数和返回值均可由编译器自动推断。</p>
+<h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><p>使用Lambda表达式，我们就可以不必编写<code>FunctionalInterface</code>接口的实现类，从而简化代码：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">Arrays.sort(array, (s1, s2) -&gt; {<br>    <span class="hljs-keyword">return</span> s1.compareTo(s2);<br>});<br></code></pre></td></tr></tbody></table></figure>
+
+<p>实际上，除了Lambda表达式，我们还可以直接传入方法引用。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Arrays;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        String[] array = <span class="hljs-keyword">new</span> String[] { <span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Orange"</span>, <span class="hljs-string">"Banana"</span>, <span class="hljs-string">"Lemon"</span> };<br>        Arrays.sort(array, Main::cmp);<br>        System.out.println(String.join(<span class="hljs-string">", "</span>, array));<br>    }<br><br>    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">cmp</span><span class="hljs-params">(String s1, String s2)</span> </span>{<br>        <span class="hljs-keyword">return</span> s1.compareTo(s2);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>上述代码在<code>Arrays.sort()</code>中传入了静态方法<code>cmp</code>的引用，用<code>Main::cmp</code>表示。</p>
+<p>因为<code>Comparator&lt;String&gt;</code>接口定义的方法是<code>int compare(String, String)</code>，和静态方法<code>int cmp(String, String)</code>相比，除了方法名外，方法参数一致，返回类型相同，因此，我们说两者的方法签名一致，可以直接把方法名作为Lambda表达式传入。</p>
+<p>在这里，方法签名只看参数类型和返回类型，不看方法名称，也不看类的继承关系。</p>
+<p>我们再看看如何引用实例方法，我们把代码改写如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Arrays;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        String[] array = <span class="hljs-keyword">new</span> String[] { <span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Orange"</span>, <span class="hljs-string">"Banana"</span>, <span class="hljs-string">"Lemon"</span> };<br>        Arrays.sort(array, String::compareTo);<br>        System.out.println(String.join(<span class="hljs-string">", "</span>, array));<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>不但可以编译通过，而且运行结果也是一样的，这说明<code>String.compareTo()</code>方法也符合Lamda定义。观察<code>String.compareTo()</code>的方法定义：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">String</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(String o)</span> </span>{<br>        ...<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这个方法的签名只有一个参数，为什么和<code>int Comparator&lt;String&gt;.compare(String, String)</code>能匹配呢？</p>
+<p>因为实例方法有一个隐含的<code>this</code>参数，<code>String</code>类的<code>compareTo()</code>方法在实际调用时，第一个隐含参数总是传入<code>this</code>，相当于静态方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(<span class="hljs-keyword">this</span>, String o)</span></span>;<br></code></pre></td></tr></tbody></table></figure>
+
+<p>所以，<code>String.compareTo()</code>方法也可以作为方法引用传入。</p>
+<h3 id="构造方法引用"><a href="#构造方法引用" class="headerlink" title="构造方法引用"></a>构造方法引用</h3><p>除了静态方法和实例方法，我们还可以引用构造方法。</p>
+<p>我们来看一个例子：如果要把一个<code>List&lt;String&gt;</code>转换为<code>List&lt;Person&gt;</code>，应该怎么办？</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{<br>    String name;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span><span class="hljs-params">(String name)</span> </span>{<br>        <span class="hljs-keyword">this</span>.name = name;<br>    }<br>}<br><br>List&lt;String&gt; names = List.of(<span class="hljs-string">"Bob"</span>, <span class="hljs-string">"Alice"</span>, <span class="hljs-string">"Tim"</span>);<br>List&lt;Person&gt; persons = ???<br></code></pre></td></tr></tbody></table></figure>
+
+<p>传统的做法是先定义一个<code>ArrayList&lt;Person&gt;</code>，然后用<code>for</code>循环填充这个<code>List</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;String&gt; names = List.of(<span class="hljs-string">"Bob"</span>, <span class="hljs-string">"Alice"</span>, <span class="hljs-string">"Tim"</span>);<br>List&lt;Person&gt; persons = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br><span class="hljs-keyword">for</span> (String name : names) {<br>    persons.add(<span class="hljs-keyword">new</span> Person(name));<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>要更简单地实现<code>String</code>到<code>Person</code>的转换，我们可以引用<code>Person</code>的构造方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 引用构造方法</span><br><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> java.util.stream.*;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        List&lt;String&gt; names = List.of(<span class="hljs-string">"Bob"</span>, <span class="hljs-string">"Alice"</span>, <span class="hljs-string">"Tim"</span>);<br>        List&lt;Person&gt; persons = names.stream().map(Person::<span class="hljs-keyword">new</span>).collect(Collectors.toList());<br>        System.out.println(persons);<br>    }<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{<br>    String name;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span><span class="hljs-params">(String name)</span> </span>{<br>        <span class="hljs-keyword">this</span>.name = name;<br>    }<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"Person:"</span> + <span class="hljs-keyword">this</span>.name;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>后面我们会讲到<code>Stream</code>的<code>map()</code>方法。现在我们看到，这里的<code>map()</code>需要传入的FunctionalInterface的定义是：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Function</span>&lt;<span class="hljs-title">T</span>, <span class="hljs-title">R</span>&gt; </span>{<br>    <span class="hljs-function">R <span class="hljs-title">apply</span><span class="hljs-params">(T t)</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>把泛型对应上就是方法签名<code>Person apply(String)</code>，即传入参数<code>String</code>，返回类型<code>Person</code>。而<code>Person</code>类的构造方法恰好满足这个条件，因为构造方法的参数是<code>String</code>，而构造方法虽然没有<code>return</code>语句，但它会隐式地返回<code>this</code>实例，类型就是<code>Person</code>，因此，此处可以引用构造方法。构造方法的引用写法是<code>类名::new</code>，因此，此处传入<code>Person::new</code>。</p>
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p><code>FunctionalInterface</code>允许传入：</p>
+<ul>
+<li>接口的实现类（传统写法，代码较繁琐）</li>
+<li>Lambda表达式（只需列出参数名，由编译器推断类型）</li>
+<li>符合方法签名的静态方法</li>
+<li>符合方法签名的实例方法（实例类型被看做第一个参数类型）</li>
+<li>符合方法签名的构造方法（实例类型被看做返回类型）</li>
+</ul>
+<p><code>FunctionalInterface</code>不强制继承关系，不需要方法名称相同，只要求方法参数（类型和数量）与方法返回类型相同，即认为方法签名相同。</p>
+<h2 id="使用Stream"><a href="#使用Stream" class="headerlink" title="使用Stream"></a>使用Stream</h2><p>从Java 8开始，不但引入了Lamda表达式，还引入了一个全新的流式API：Stream API。它位于<code>java.util.stream</code>包中。</p>
+<p>注意，这个<code>Stream</code>不同于<code>java.io</code>中的<code>InputStream</code>和<code>OutputStream</code>，它代表的是任意Java对象的序列，二者对比如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">java.io</th>
+<th align="center">java.util.stream</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">存储</td>
+<td align="center">顺序读写的<code>byte</code>或<code>char</code></td>
+<td align="center">顺序输出的任意Java对象实例</td>
+</tr>
+<tr>
+<td align="center">用途</td>
+<td align="center">序列化至文件或网络</td>
+<td align="center">内存计算／业务逻辑</td>
+</tr>
+</tbody></table>
+<p>注意，这个<code>Stream</code>和<code>List</code>也不一样，<code>List</code>存储的每个元素都是已经存储在内存中的某个Java对象，而<code>Stream</code>输出的元素可能并没有预先存储到内存中，而是实时计算出来的。换句话说，<code>List</code>的用途是操作一组已存在的Java对象，而<code>Stream</code>实现的是<strong>惰性计算</strong>，二者对比如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">java.util.List</th>
+<th align="center">java.util.stream</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">元素</td>
+<td align="center">已分配并存储在内存</td>
+<td align="center">可能未分配，实时计算</td>
+</tr>
+<tr>
+<td align="center">用途</td>
+<td align="center">操作一组已存在的Java对象</td>
+<td align="center">惰性计算</td>
+</tr>
+</tbody></table>
+<p><code>Stream</code>看上去不太好理解，但我们来举个例子。</p>
+<p>如果我们要表示一个全体自然数的集合，显然，用<code>List</code>是不可能写出来的，因为自然数是无限的，内存再大也没法放到<code>List</code>中：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;BigInteger&gt; list = ??? <span class="hljs-comment">// 全体自然数?</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>但是，用<code>Stream</code>可以做到。写法如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;BigInteger&gt; naturals = createNaturalStream(); <span class="hljs-comment">// 全体自然数</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>我们先不考虑<code>createNaturalStream()</code>这个方法是如何实现的，我们看看如何使用这个<code>Stream</code>。</p>
+<p>首先，我们可以对每个自然数做一个平方，这样我们就把这个<code>Stream</code>转换成了另一个<code>Stream</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;BigInteger&gt; naturals = createNaturalStream(); <span class="hljs-comment">// 全体自然数</span><br>Stream&lt;BigInteger&gt; streamNxN = naturals.map(n -&gt; n.multiply(n)); <span class="hljs-comment">// 全体自然数的平方</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>因为这个<code>streamNxN</code>也有无限多个元素，要打印它，必须首先把无限多个元素变成有限个元素，可以用<code>limit()</code>方法截取前100个元素，最后用<code>forEach()</code>处理每个元素，这样，我们就打印出了前100个自然数的平方：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;BigInteger&gt; naturals = createNaturalStream();<br>naturals.map(n -&gt; n.multiply(n)) <span class="hljs-comment">// 1, 4, 9, 16, 25...</span><br>        .limit(<span class="hljs-number">100</span>)<br>        .forEach(System.out::println);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>我们总结一下<code>Stream</code>的特点：它可以“存储”有限个或无限个元素。这里的存储打了个引号，是因为元素有可能已经全部存储在内存中，也有可能是根据需要实时计算出来的。</p>
+<p><code>Stream</code>的另一个特点是，一个<code>Stream</code>可以轻易地转换为另一个<code>Stream</code>，而不是修改原<code>Stream</code>本身。</p>
+<p>最后，真正的计算通常发生在最后结果的获取，也就是惰性计算。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;BigInteger&gt; naturals = createNaturalStream(); <span class="hljs-comment">// 不计算</span><br>Stream&lt;BigInteger&gt; s2 = naturals.map(BigInteger::multiply); <span class="hljs-comment">// 不计算</span><br>Stream&lt;BigInteger&gt; s3 = s2.limit(<span class="hljs-number">100</span>); <span class="hljs-comment">// 不计算</span><br>s3.forEach(System.out::println); <span class="hljs-comment">// 计算</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>惰性计算的特点是：一个<code>Stream</code>转换为另一个<code>Stream</code>时，实际上只存储了转换规则，并没有任何计算发生。</p>
+<p>例如，创建一个全体自然数的<code>Stream</code>，不会进行计算，把它转换为上述<code>s2</code>这个<code>Stream</code>，也不会进行计算。再把<code>s2</code>这个无限<code>Stream</code>转换为<code>s3</code>这个有限的<code>Stream</code>，也不会进行计算。只有最后，调用<code>forEach</code>确实需要<code>Stream</code>输出的元素时，才进行计算。我们通常把<code>Stream</code>的操作写成链式操作，代码更简洁：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">createNaturalStream()<br>    .map(BigInteger::multiply)<br>    .limit(<span class="hljs-number">100</span>)<br>    .forEach(System.out::println);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>因此，Stream API的基本用法就是：创建一个<code>Stream</code>，然后做若干次转换，最后调用一个求值方法获取真正计算的结果：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">int</span> result = createNaturalStream() <span class="hljs-comment">// 创建Stream</span><br>             .filter(n -&gt; n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>) <span class="hljs-comment">// 任意个转换</span><br>             .map(n -&gt; n * n) <span class="hljs-comment">// 任意个转换</span><br>             .limit(<span class="hljs-number">100</span>) <span class="hljs-comment">// 任意个转换</span><br>             .sum(); <span class="hljs-comment">// 最终计算结果</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>Stream API的特点是：</p>
+<ul>
+<li>Stream API提供了一套新的流式处理的抽象序列；</li>
+<li>Stream API支持函数式编程和链式操作；</li>
+<li>Stream可以表示无限序列，并且大多数情况下是惰性求值的。</li>
+</ul>
+<h3 id="创建Stream"><a href="#创建Stream" class="headerlink" title="创建Stream"></a>创建Stream</h3><p>创建<code>Stream</code>有很多种方法。</p>
+<h4 id="Stream-of"><a href="#Stream-of" class="headerlink" title="Stream.of()"></a>Stream.of()</h4><p>创建Stream最简单的方式是直接用Stream.of()静态方法，传入可变参数即创建了一个能输出确定元素的Stream。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.stream.Stream;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        Stream&lt;String&gt; stream = Stream.of(<span class="hljs-string">"A"</span>, <span class="hljs-string">"B"</span>, <span class="hljs-string">"C"</span>, <span class="hljs-string">"D"</span>);<br>        <span class="hljs-comment">// forEach()方法相当于内部循环调用，</span><br>        <span class="hljs-comment">// 可传入符合Consumer接口的void accept(T t)的方法引用：</span><br>        stream.forEach(System.out::println);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>虽然这种方式没什么实际用途，但测试的时候很方便。</p>
+<h4 id="基于数组或Collection"><a href="#基于数组或Collection" class="headerlink" title="基于数组或Collection"></a>基于数组或Collection</h4><p>第二种创建<code>Stream</code>的方法是基于一个数组或者<code>Collection</code>，这样该<code>Stream</code>输出的元素就是数组或者<code>Collection</code>持有的元素：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> java.util.stream.*;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        Stream&lt;String&gt; stream1 = Arrays.stream(<span class="hljs-keyword">new</span> String[] { <span class="hljs-string">"A"</span>, <span class="hljs-string">"B"</span>, <span class="hljs-string">"C"</span> });<br>        Stream&lt;String&gt; stream2 = List.of(<span class="hljs-string">"X"</span>, <span class="hljs-string">"Y"</span>, <span class="hljs-string">"Z"</span>).stream();<br>        stream1.forEach(System.out::println);<br>        stream2.forEach(System.out::println);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>把数组变成<code>Stream</code>使用<code>Arrays.stream()</code>方法。对于<code>Collection</code>（<code>List</code>、<code>Set</code>、<code>Queue</code>等），直接调用<code>stream()</code>方法就可以获得<code>Stream</code>。</p>
+<p>上述创建<code>Stream</code>的方法都是把一个现有的序列变为<code>Stream</code>，它的元素是固定的。</p>
+<h4 id="基于Supplier"><a href="#基于Supplier" class="headerlink" title="基于Supplier"></a>基于Supplier</h4><p>创建<code>Stream</code>还可以通过<code>Stream.generate()</code>方法，它需要传入一个<code>Supplier</code>对象：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;String&gt; s = Stream.generate(Supplier&lt;String&gt; sp);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>基于<code>Supplier</code>创建的<code>Stream</code>会不断调用<code>Supplier.get()</code>方法来不断产生下一个元素，这种<code>Stream</code>保存的不是元素，而是算法，它可以用来表示无限序列。</p>
+<p>例如，我们编写一个能不断生成自然数的<code>Supplier</code>，它的代码非常简单，每次调用<code>get()</code>方法，就生成下一个自然数：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.function.*;<br><span class="hljs-keyword">import</span> java.util.stream.*;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        Stream&lt;Integer&gt; natual = Stream.generate(<span class="hljs-keyword">new</span> NatualSupplier());<br>        <span class="hljs-comment">// 注意：无限序列必须先变成有限序列再打印:</span><br>        natual.limit(<span class="hljs-number">20</span>).forEach(System.out::println);<br>    }<br>}<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NatualSupplier</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Supplier</span>&lt;<span class="hljs-title">Integer</span>&gt; </span>{<br>    <span class="hljs-keyword">int</span> n = <span class="hljs-number">0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Integer <span class="hljs-title">get</span><span class="hljs-params">()</span> </span>{<br>        n++;<br>        <span class="hljs-keyword">return</span> n;<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>上述代码我们用一个<code>Supplier&lt;Integer&gt;</code>模拟了一个无限序列（当然受<code>int</code>范围限制不是真的无限大）。如果用<code>List</code>表示，即便在<code>int</code>范围内，也会占用巨大的内存，而<code>Stream</code>几乎不占用空间，因为每个元素都是实时计算出来的，用的时候再算。</p>
+<p>对于无限序列，如果直接调用<code>forEach()</code>或者<code>count()</code>这些最终求值操作，会进入死循环，因为永远无法计算完这个序列，所以正确的方法是先把无限序列变成有限序列，例如，用<code>limit()</code>方法可以截取前面若干个元素，这样就变成了一个有限序列，对这个有限序列调用<code>forEach()</code>或者<code>count()</code>操作就没有问题。</p>
+<h4 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h4><p>创建<code>Stream</code>的第三种方法是通过一些API提供的接口，直接获得<code>Stream</code>。</p>
+<p>例如，<code>Files</code>类的<code>lines()</code>方法可以把一个文件变成一个<code>Stream</code>，每个元素代表文件的一行内容：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> (Stream&lt;String&gt; lines = Files.lines(Paths.get(<span class="hljs-string">"/path/to/file.txt"</span>))) {<br>    ...<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>此方法对于按行遍历文本文件十分有用。</p>
+<p>另外，正则表达式的<code>Pattern</code>对象有一个<code>splitAsStream()</code>方法，可以直接把一个长字符串分割成<code>Stream</code>序列而不是数组：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">Pattern p = Pattern.compile(<span class="hljs-string">"\\s+"</span>);<br>Stream&lt;String&gt; s = p.splitAsStream(<span class="hljs-string">"The quick brown fox jumps over the lazy dog"</span>);<br>s.forEach(System.out::println);<br></code></pre></td></tr></tbody></table></figure>
+
+<h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>因为Java的范型不支持基本类型，所以我们无法用<code>Stream&lt;int&gt;</code>这样的类型，会发生编译错误。为了保存<code>int</code>，只能使用<code>Stream&lt;Integer&gt;</code>，但这样会产生频繁的装箱、拆箱操作。为了提高效率，Java标准库提供了<code>IntStream</code>、<code>LongStream</code>和<code>DoubleStream</code>这三种使用基本类型的<code>Stream</code>，它们的使用方法和范型<code>Stream</code>没有大的区别，设计这三个<code>Stream</code>的目的是提高运行效率：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 将int[]数组变为IntStream:</span><br>IntStream is = Arrays.stream(<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> });<br><span class="hljs-comment">// 将Stream&lt;String&gt;转换为LongStream:</span><br>LongStream ls = List.of(<span class="hljs-string">"1"</span>, <span class="hljs-string">"2"</span>, <span class="hljs-string">"3"</span>).stream().mapToLong(Long::parseLong);<br></code></pre></td></tr></tbody></table></figure>
+
+<h3 id="使用map"><a href="#使用map" class="headerlink" title="使用map"></a>使用map</h3><p><code>Stream.map()</code>是<code>Stream</code>最常用的一个转换方法，它把一个<code>Stream</code>转换为另一个<code>Stream</code>。所谓<code>map</code>操作，就是把一种操作运算，映射到一个序列的每一个元素上。</p>
+<p>例如，对<code>x</code>计算它的平方，可以使用函数<code>f(x) = x * x</code>。我们把这个函数映射到一个序列1，2，3，4，5上，就得到了另一个序列1，4，9，16，25。</p>
+<p>可见，map操作把一个Stream的每个元素一一对应到应用了目标函数的结果上。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;Integer&gt; s = Stream.of(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>);<br>Stream&lt;Integer&gt; s2 = s.map(n -&gt; n * n);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>如果我们查看<code>Stream</code>的源码，会发现<code>map()</code>方法接收的对象是<code>Function</code>接口对象。<code>Function</code>接口定义了一个<code>apply()</code>方法，负责把一个<code>T</code>类型转换为<code>R</code>类型。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">&lt;R&gt; <span class="hljs-function">Stream&lt;R&gt; <span class="hljs-title">map</span><span class="hljs-params">(Function&lt;? <span class="hljs-keyword">super</span> T, ? extends R&gt; mapper)</span></span>;<br></code></pre></td></tr></tbody></table></figure>
+
+<p>其中，<code>Function</code>的定义是：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Function</span>&lt;<span class="hljs-title">T</span>, <span class="hljs-title">R</span>&gt; </span>{<br>    <span class="hljs-comment">// 将T类型转换为R:</span><br>    <span class="hljs-function">R <span class="hljs-title">apply</span><span class="hljs-params">(T t)</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>利用<code>map()</code>，不但能完成数学计算，对于字符串操作，以及任何Java对象都是非常有用的。例如：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> java.util.stream.*;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        List.of(<span class="hljs-string">"  Apple "</span>, <span class="hljs-string">" pear "</span>, <span class="hljs-string">" ORANGE"</span>, <span class="hljs-string">" BaNaNa "</span>)<br>                .stream()<br>                .map(String::trim) <span class="hljs-comment">// 去空格</span><br>                .map(String::toLowerCase) <span class="hljs-comment">// 变小写</span><br>                .forEach(System.out::println); <span class="hljs-comment">// 打印</span><br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>通过若干步map转换，可以写出逻辑简单、清晰的代码。</p>
+<h3 id="使用filter"><a href="#使用filter" class="headerlink" title="使用filter"></a>使用filter</h3><p><code>Stream.filter()</code>是<code>Stream</code>的另一个常用转换方法。所谓fliter操作，就是对一个<code>Stream</code>的所有元素一一测试，不满足条件的就被过滤掉了，剩下满足条件的元素就构成了一个新的<code>Stream</code>。</p>
+<p>例如，我们对1，2，3，4，5这个<code>Stream</code>调用<code>filter()</code>，传入的测试函数<code>f(x) = x % 2 != 0</code>用来判断元素是否是奇数，这样就过滤掉偶数，只剩下奇数，因此我们得到了另一个序列1，3，5。</p>
+<p>使用IntStream写出上述逻辑，代码如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.stream.IntStream;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        IntStream.of(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>)<br>                .filter(n -&gt; n % <span class="hljs-number">2</span> != <span class="hljs-number">0</span>)<br>                .forEach(System.out::println);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p><code>filter()</code>方法接收的对象是<code>Predicate</code>接口对象，它定义了一个<code>test()</code>方法，负责判断元素是否符合条件。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Predicate</span>&lt;<span class="hljs-title">T</span>&gt; </span>{<br>    <span class="hljs-comment">// 判断元素t是否符合条件:</span><br>    <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">test</span><span class="hljs-params">(T t)</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p><code>filter()</code>除了常用于数值外，也可应用于任何Java对象。例如，从一组给定的<code>LocalDate</code>中过滤掉工作日，以便得到休息日。</p>
+<h3 id="使用reduce"><a href="#使用reduce" class="headerlink" title="使用reduce"></a>使用reduce</h3><p><code>map()</code>和<code>filter()</code>都是<code>Stream</code>的转换方法，而<code>Stream.reduce()</code>则是<code>Stream</code>的一个聚合方法，他可以把一个<code>Stream</code>的所有元素按照聚合函数聚合成一个结果。</p>
+<p><code>reduce()</code>方法传入的对象是<code>BinaryOperator</code>接口，它定义了一个<code>apply()</code>方法，负责把上次累加的结果和本次的元素进行运算，并返回累加的结果。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">BinaryOperator</span>&lt;<span class="hljs-title">T</span>&gt; </span>{<br>    <span class="hljs-comment">// Bi操作：两个输入，一个输出</span><br>    <span class="hljs-function">T <span class="hljs-title">apply</span><span class="hljs-params">(T t, T u)</span></span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>我们来看一个简单的聚合方法：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">int</span> sum = Stream.of(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>).reduce(<span class="hljs-number">0</span>, (acc, n) -&gt; acc + n);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>上述代码看上去不好理解，我们用<code>for</code>循环改写一下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;Integer&gt; stream = ...<br><span class="hljs-keyword">int</span> sum = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">for</span> (n : stream) {<br>    sum = (sum, n) -&gt; sum + n;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>可见，<code>reduce()</code>操作首先初始化结果为指定值（这里是0），紧接着，<code>reduce()</code>对每个元素调用<code>(acc, n) -&gt; acc + n</code>，其中，acc是上次计算的结果。</p>
+<p>因此，实际上这个<code>reduce()</code>操作是求和。</p>
+<p>如果去掉初始值，我们会得到一个<code>Optional&lt;Integer&gt;</code>。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">Optional&lt;Integer&gt; opt = stream.reduce((acc, n) -&gt; acc + n);<br><span class="hljs-keyword">if</span> (opt.isPresent()) {<br>    System.out.println(opt.get());<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这是因为<code>Stream</code>的元素有可能是0个，这样就没法调用<code>reduce()</code>聚合函数了，因此返回<code>Optional</code>对象，需要进一步判断结果是否存在。</p>
+<p>利用reduce()，我们可以把求和改成求积，代码也十分简单。注意，计算求积时，初始值设为1。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.stream.*;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        <span class="hljs-keyword">int</span> s = Stream.of(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>).reduce(<span class="hljs-number">1</span>, (acc, n) -&gt; acc * n);<br>        System.out.println(s); <span class="hljs-comment">// 362880</span><br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>除了可以对数值进行累积计算外，灵活运用<code>reduce()</code>也可以对Java对象进行操作。下面的代码演示了如何将配置文件的每一行配置通过<code>map()</code>和<code>reduce()</code>聚合成一个<code>Map&lt;String, String&gt;</code>。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        <span class="hljs-comment">// 按行读取配置文件:</span><br>        List&lt;String&gt; props = List.of(<span class="hljs-string">"profile=native"</span>, <span class="hljs-string">"debug=true"</span>, <span class="hljs-string">"logging=warn"</span>, <span class="hljs-string">"interval=500"</span>);<br>        Map&lt;String, String&gt; map = props.stream()<br>                <span class="hljs-comment">// 把k=v转换为Map[k]=v:</span><br>                .map(kv -&gt; {<br>                    String[] ss = kv.split(<span class="hljs-string">"\\="</span>, <span class="hljs-number">2</span>);<br>                    <span class="hljs-keyword">return</span> Map.of(ss[<span class="hljs-number">0</span>], ss[<span class="hljs-number">1</span>]);<br>                })<br>                <span class="hljs-comment">// 把所有Map聚合到一个Map:</span><br>                .reduce(<span class="hljs-keyword">new</span> HashMap&lt;String, String&gt;(), (m, kv) -&gt; {<br>                    m.putAll(kv);<br>                    <span class="hljs-keyword">return</span> m;<br>                });<br>        <span class="hljs-comment">// 打印结果:</span><br>        map.forEach((k, v) -&gt; {<br>            System.out.println(k + <span class="hljs-string">" = "</span> + v);<br>        });<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h4 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h4><p><code>reduce()</code>方法将一个<code>Stream</code>的每个元素依次做用于<code>BinaryOperator</code>，并将结果合并。</p>
+<p><code>reduce()</code>是聚合方法，聚合方法会立刻对<code>Stream</code>进行计算。</p>
+<h3 id="输出集合"><a href="#输出集合" class="headerlink" title="输出集合"></a>输出集合</h3><p>我们介绍了<code>Stream</code>的几个常见操作：<code>map()</code>，<code>filter()</code>，<code>reduce()</code>。这些操作对Stream来说可以分为两类，一类是转换操作，即把一个<code>Stream</code>转换为另一个<code>Stream</code>，例如map()和<code>reduce()</code>；另一类是聚合操作，即对<code>Stream</code>的每个元素进行计算，得到一个确定的结果，例如<code>reduce()</code>。</p>
+<p>区分这两种操作是十分重要的，因为对于<code>Stream</code>来说，对其进行转换操作并不会触发任何计算。因为转换操作只是保存了转换规则，无论我们对一个<code>Stream</code>转换多少次，都不会有实际计算发生。</p>
+<p>而聚合操作则不一样，聚合操作会立即促使<code>Stream</code>输出它的每一个元素，并依次纳入计算，以获得最终结果。可见，聚合操作是真正需要从<code>Stream</code>请求数据的，对一个<code>Stream</code>做聚合计算后，结果就不再是一个<code>Stream</code>了，而是一个Java对象。</p>
+<h4 id="输出为List"><a href="#输出为List" class="headerlink" title="输出为List"></a>输出为List</h4><p>把<code>Stream</code>的每个元素收集到<code>List</code>的方法是调用collect()并传入<code>Collectors.toList()</code>对象，它实际上是一个<code>Collector</code>实例，通过类似<code>reduce()</code>的操作，把每个元素添加到一个收集器中（实际上是<code>ArrayList</code>）。</p>
+<p>类似的，<code>collect(Collectors.toSet())</code>可以把<code>Stream</code>的每个元素收集到<code>Set</code>中。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> java.util.stream.*;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        Stream&lt;String&gt; stream = Stream.of(<span class="hljs-string">"Apple"</span>, <span class="hljs-string">""</span>, <span class="hljs-keyword">null</span>, <span class="hljs-string">"Pear"</span>, <span class="hljs-string">"  "</span>, <span class="hljs-string">"Orange"</span>);<br>        List&lt;String&gt; list = stream.filter(s -&gt; s != <span class="hljs-keyword">null</span> &amp;&amp; !s.isBlank()).collect(Collectors.toList());<br>        System.out.println(list);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h4 id="输出为数组"><a href="#输出为数组" class="headerlink" title="输出为数组"></a>输出为数组</h4><p>和把Stream的元素输出为数组类似输出为List，我们只需要调用toArray()方法，并传入数组的“构造方法”。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;String&gt; list = List.of(<span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Banana"</span>, <span class="hljs-string">"Orange"</span>);<br>String[] array = list.stream().toArray(String[]::<span class="hljs-keyword">new</span>);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>注意到传入的构造方法是<code>String[]::new</code>，它的签名实际上是<code>IntFunction&lt;String[]&gt;</code>定义的<code>String[] apply(int)</code>，即传入<code>int</code>参数，获得<code>Stringp[]</code>数组的返回值。</p>
+<h4 id="输出为Map"><a href="#输出为Map" class="headerlink" title="输出为Map"></a>输出为Map</h4><p>如果我们要把Stream的元素收集到Map中，稍微麻烦一点。因为对于每个元素，添加Map时需要key和value，因此，我们要指定两个映射函数，分别把元素映射为key和value。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> java.util.stream.*;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        Stream&lt;String&gt; stream = Stream.of(<span class="hljs-string">"APPL:Apple"</span>, <span class="hljs-string">"MSFT:Microsoft"</span>);<br>        Map&lt;String, String&gt; map = stream<br>                .collect(Collectors.toMap(<br>                        <span class="hljs-comment">// 把元素s映射为key:</span><br>                        s -&gt; s.substring(<span class="hljs-number">0</span>, s.indexOf(<span class="hljs-string">':'</span>)),<br>                        <span class="hljs-comment">// 把元素s映射为value:</span><br>                        s -&gt; s.substring(s.indexOf(<span class="hljs-string">':'</span>) + <span class="hljs-number">1</span>)));<br>        System.out.println(map);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h4 id="分组输出"><a href="#分组输出" class="headerlink" title="分组输出"></a>分组输出</h4><p><code>Stream</code>还有一个强大的分组功能，可以按组输出。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> java.util.stream.*;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        List&lt;String&gt; list = List.of(<span class="hljs-string">"Apple"</span>, <span class="hljs-string">"Banana"</span>, <span class="hljs-string">"Blackberry"</span>, <span class="hljs-string">"Coconut"</span>, <span class="hljs-string">"Avocado"</span>, <span class="hljs-string">"Cherry"</span>, <span class="hljs-string">"Apricots"</span>);<br>        Map&lt;String, List&lt;String&gt;&gt; groups = list.stream()<br>                .collect(Collectors.groupingBy(s -&gt; s.substring(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>), Collectors.toList()));<br>        System.out.println(groups);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>分组输出使用<code>Collectors.groupingBy()</code>，它需要提供两个函数：一个是分组的key，这里使用<code>s -&gt; s.substring(0, 1)</code>，表示只要首字母相同的<code>String</code>分到一组，第二个是分组的value，这里直接使用<code>Collectors.toList()</code>，表示输出为<code>List</code>，上述代码运行结果如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">{<br>    A=[Apple, Avocado, Apricots],<br>    B=[Banana, Blackberry],<br>    C=[Coconut, Cherry]<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>可见，结果一共有3组，按<code>"A"</code>，<code>"B"</code>，<code>"C"</code>分组，每一组都是一个<code>List</code>。</p>
+<p>假设有这样一个<code>Student</code>类，包含学生姓名、班级和成绩：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span> </span>{<br>    <span class="hljs-keyword">int</span> gradeId; <span class="hljs-comment">// 年级</span><br>    <span class="hljs-keyword">int</span> classId; <span class="hljs-comment">// 班级</span><br>    String name; <span class="hljs-comment">// 名字</span><br>    <span class="hljs-keyword">int</span> score; <span class="hljs-comment">// 分数</span><br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>如果我们有一个<code>Stream&lt;Student&gt;</code>，利用分组输出，可以非常简单地按年级或班级把<code>Student</code>归类。</p>
+<h3 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h3><p>除了前面介绍的转换操作和聚合操作，<code>Stream</code>还提供了一系列非常有用的方法。</p>
+<h4 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h4><p>对<code>Stream</code>的元素进行排序非常简单，只需要调用<code>sorted()</code>方法。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;String&gt; list = List.of(<span class="hljs-string">"Orange"</span>, <span class="hljs-string">"apple"</span>, <span class="hljs-string">"Banana"</span>)<br>    .stream()<br>    .sorted()<br>    .collect(Collectors.toList());<br>System.out.println(list);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>此方法要求<code>Stream</code>的元素必须实现<code>Comparable</code>接口，如果要自定义排序，传入指定的<code>Comparator</code>即可。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;String&gt; list = List.of(<span class="hljs-string">"Orange"</span>, <span class="hljs-string">"apple"</span>, <span class="hljs-string">"Banana"</span>)<br>    .stream()<br>    .sorted(String::compareToIgnoreCase)<br>    .collect(Collectors.toList());<br></code></pre></td></tr></tbody></table></figure>
+
+<p>注意<code>sorted()</code>只是一个转换操作，它会返回一个新的<code>Stream</code>。</p>
+<h4 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h4><p>对一个<code>Stream</code>的元素进行去重，没必要先转换为<code>Set</code>，可以直接用<code>distinct()</code>。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">List.of(<span class="hljs-string">"A"</span>, <span class="hljs-string">"B"</span>, <span class="hljs-string">"A"</span>, <span class="hljs-string">"C"</span>, <span class="hljs-string">"B"</span>, <span class="hljs-string">"D"</span>)<br>    .stream()<br>    .distinct()<br>    .collect(Collectors.toList()); <span class="hljs-comment">// [A, B, C, D]</span><br></code></pre></td></tr></tbody></table></figure>
+
+<h4 id="截取"><a href="#截取" class="headerlink" title="截取"></a>截取</h4><p>截取操作常用于把一个无限<code>Stream</code>转换成有限<code>Stream</code>，<code>skip()</code>用于跳过当前<code>Stream</code>的前N个元素，limit()用于截取当前<code>Stream</code>最多前N个元素。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">List.of(<span class="hljs-string">"A"</span>, <span class="hljs-string">"B"</span>, <span class="hljs-string">"C"</span>, <span class="hljs-string">"D"</span>, <span class="hljs-string">"E"</span>, <span class="hljs-string">"F"</span>)<br>    .stream()<br>    .skip(<span class="hljs-number">2</span>) <span class="hljs-comment">// 跳过A, B</span><br>    .limit(<span class="hljs-number">3</span>) <span class="hljs-comment">// 截取C, D, E</span><br>    .collect(Collectors.toList()); <span class="hljs-comment">// [C, D, E]</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>截取操作也是一个转换操作，将返回新的<code>Stream</code>。</p>
+<h4 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h4><p>将两个<code>Stream</code>合并为一个<code>Stream</code>可以使用<code>Stream</code>的静态方法<code>concat()</code>。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;String&gt; s1 = List.of(<span class="hljs-string">"A"</span>, <span class="hljs-string">"B"</span>, <span class="hljs-string">"C"</span>).stream();<br>Stream&lt;String&gt; s2 = List.of(<span class="hljs-string">"D"</span>, <span class="hljs-string">"E"</span>).stream();<br><span class="hljs-comment">// 合并:</span><br>Stream&lt;String&gt; s = Stream.concat(s1, s2);<br>System.out.println(s.collect(Collectors.toList())); <span class="hljs-comment">// [A, B, C, D, E]</span><br></code></pre></td></tr></tbody></table></figure>
+
+<h4 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h4><p>如果<code>Stream</code>的元素是集合：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;List&lt;Integer&gt;&gt; s = Stream.of(<br>        Arrays.asList(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>),<br>        Arrays.asList(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>),<br>        Arrays.asList(<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>));<br></code></pre></td></tr></tbody></table></figure>
+
+<p>而我们希望把上述<code>Stream</code>转换为<code>Stream&lt;Integer&gt;</code>，就可以使用<code>flatMap()</code>：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;Integer&gt; i = s.flatMap(list -&gt; list.stream());<br></code></pre></td></tr></tbody></table></figure>
+
+<p>所谓<code>flatMap()</code>是指把<code>Stream</code>的每个元素（这里是<code>List</code>）映射为<code>Stream</code>，然后合并为一个新的<code>Stream</code>。</p>
+<h4 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h4><p>通常情况下，对<code>Stream</code>的元素进行处理是单线程的，即一个元素一个元素处理。但是，我们希望可以并行处理<code>Stream</code>的元素，因为在元素数量非常大的情况，并行处理可以大大加快处理速度。</p>
+<p>把一个普通<code>Stream</code>转换为可以并行处理的<code>Stream</code>非常简单，只需要用parallel()进行转换。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;String&gt; s = ...<br>String[] result = s.parallel() <span class="hljs-comment">// 变成一个可以并行处理的Stream</span><br>                   .sorted() <span class="hljs-comment">// 可以进行并行排序</span><br>                   .toArray(String[]::<span class="hljs-keyword">new</span>);<br></code></pre></td></tr></tbody></table></figure>
+
+<p>经过<code>parallel()</code>转换后的<code>Stream</code>只要可能，就会对后续操作并行处理，我们不需要编写任何多线程的代码就可以得到并行处理带来的效率提升。</p>
+<h4 id="其他聚合方法"><a href="#其他聚合方法" class="headerlink" title="其他聚合方法"></a>其他聚合方法</h4><p>除了<code>reduce()</code>和<code>collect()</code>外，<code>Stream</code>还有一些常用的聚合方法：</p>
+<ul>
+<li><code>count()</code>：用于返回元素个数；</li>
+<li><code>max(Comparator&lt;? super T&gt; cp)</code>：找出最大元素；</li>
+<li><code>min(Comparator&lt;? super T&gt; cp)</code>：找出最小元素。</li>
+</ul>
+<p>针对<code>IntStream</code>、<code>LongStream</code>和<code>DoubleStream</code>，还额外提供了以下聚合方法：</p>
+<ul>
+<li><code>sum()</code>：对所有元素求和；</li>
+<li><code>average()</code>：对所有元素求平均数。</li>
+</ul>
+<p>还有一些方法，用来测试<code>Stream</code>的元素是否满足以下条件：</p>
+<ul>
+<li><code>boolean allMatch(Predicate&lt;? super T&gt;)</code>：测试是否所有元素均满足测试条件；</li>
+<li><code>boolean anyMatch(Predicate&lt;? super T&gt;)</code>：测试是否至少有一个元素满足测试条件。</li>
+</ul>
+<p>最后一个常用的方法是<code>forEach()</code>，它可以循环处理<code>Stream</code>的每个元素，我们经常传入<code>System.out::println</code>来打印<code>Stream</code>的元素：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream&lt;String&gt; s = ...<br>s.forEach(str -&gt; {<br>    System.out.println(<span class="hljs-string">"Hello, "</span> + str);<br>});<br></code></pre></td></tr></tbody></table></figure>
+
+<h4 id="小结-3"><a href="#小结-3" class="headerlink" title="小结"></a>小结</h4><p><code>Stream</code>提供的常用操作有：</p>
+<p>转换操作：<code>map()</code>，<code>filter()</code>，<code>sorted()</code>，<code>distinct()</code>；</p>
+<p>合并操作：<code>concat()</code>，<code>flatMap()</code>；</p>
+<p>并行处理：<code>parallel()</code>；</p>
+<p>聚合操作：<code>reduce()</code>，<code>collect()</code>，<code>count()</code>，<code>max()</code>，<code>min()</code>，<code>sum()</code>，<code>average()</code>；</p>
+<p>其他操作：<code>allMatch()</code>, <code>anyMatch()</code>, <code>forEach()</code>。</p>
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/Diary/%E7%AC%AC%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/">第一篇日记</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/Study/Java/JDBC%E7%BC%96%E7%A8%8B/">JDBC编程</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>English</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/Study/Java/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/Study/Java/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>

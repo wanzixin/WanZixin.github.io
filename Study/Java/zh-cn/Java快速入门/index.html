@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>Java快速入门 - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<link href="/Study/Java/zh-cn/Java%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" rel="alternate" hreflang="en" />
+    
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="为什么Java应用最广泛？从互联网到企业平台，Java是应用最广泛的编程语言，原因在于：  Java是基于JVM虚拟机的跨平台语言，一次编写，到处运行； Java程序易于编写，而且有内置垃圾收集，不必考虑内存管理； Java虚拟机拥有工业级的稳定性和高度优化的性能，且经过了长时期的考验； Java拥有最广泛的开源社区支持，各种高质量组件随时可用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java快速入门">
+<meta property="og:url" content="https://wanzixin.github.io/Study/Java/zh-cn/Java%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="为什么Java应用最广泛？从互联网到企业平台，Java是应用最广泛的编程语言，原因在于：  Java是基于JVM虚拟机的跨平台语言，一次编写，到处运行； Java程序易于编写，而且有内置垃圾收集，不必考虑内存管理； Java虚拟机拥有工业级的稳定性和高度优化的性能，且经过了长时期的考验； Java拥有最广泛的开源社区支持，各种高质量组件随时可用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-19T10:14:26.000Z">
+<meta property="article:modified_time" content="2021-05-30T13:31:03.243Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/zh-cn">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="搜索" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="目录">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#1-Java简介">1&nbsp;&nbsp;<b>1.Java简介</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#2-Java程序基础">2&nbsp;&nbsp;<b>2.Java程序基础</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#2-1Java程序基本结构">2.1&nbsp;&nbsp;2.1Java程序基本结构</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#2-2变量和数据类型">2.2&nbsp;&nbsp;2.2变量和数据类型</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#变量">2.2.1&nbsp;&nbsp;变量</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#常量">2.2.2&nbsp;&nbsp;常量</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#var关键字">2.2.3&nbsp;&nbsp;var关键字</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#变量的作用域范围">2.2.4&nbsp;&nbsp;变量的作用域范围</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#2-3整数运算">2.3&nbsp;&nbsp;2.3整数运算</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#2-4浮点数运算">2.4&nbsp;&nbsp;2.4浮点数运算</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#2-5布尔运算">2.5&nbsp;&nbsp;2.5布尔运算</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#2-6字符和字符串">2.6&nbsp;&nbsp;2.6字符和字符串</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#2-7数组类型">2.7&nbsp;&nbsp;2.7数组类型</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#3-流程控制">3&nbsp;&nbsp;<b>3.流程控制</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#3-1输入和输出">3.1&nbsp;&nbsp;3.1输入和输出</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#输入">3.1.1&nbsp;&nbsp;输入</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#输出">3.1.2&nbsp;&nbsp;输出</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#3-2if判断">3.2&nbsp;&nbsp;3.2if判断</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#3-3switch多重选择">3.3&nbsp;&nbsp;3.3switch多重选择</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#3-4while循环">3.4&nbsp;&nbsp;3.4while循环</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#3-5do-while循环">3.5&nbsp;&nbsp;3.5do while循环</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#3-6for循环">3.6&nbsp;&nbsp;3.6for循环</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#3-7break和continue">3.7&nbsp;&nbsp;3.7break和continue</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#4-数组操作">4&nbsp;&nbsp;<b>4.数组操作</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#4-1遍历数组">4.1&nbsp;&nbsp;4.1遍历数组</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#4-2数组排序">4.2&nbsp;&nbsp;4.2数组排序</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#4-3多维数组">4.3&nbsp;&nbsp;4.3多维数组</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#4-4命令行参数">4.4&nbsp;&nbsp;4.4命令行参数</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Java快速入门
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>4月 19 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/zh-cn/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/zh-cn/categories/Study/Java/">Java</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            1 小时 读完 (约 8638 字)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>为什么Java应用最广泛？从互联网到企业平台，Java是应用最广泛的编程语言，原因在于：</p>
+<ul>
+<li>Java是基于JVM虚拟机的跨平台语言，一次编写，到处运行；</li>
+<li>Java程序易于编写，而且有内置垃圾收集，不必考虑内存管理；</li>
+<li>Java虚拟机拥有工业级的稳定性和高度优化的性能，且经过了长时期的考验；</li>
+<li>Java拥有最广泛的开源社区支持，各种高质量组件随时可用。<span id="more"></span></li>
+</ul>
+<p>Java语言常年霸占着三大市场：</p>
+<ul>
+<li>互联网和企业应用，这是Java EE的长期优势和市场地位；</li>
+<li>大数据平台，主要有Hadoop、Spark、Flink等，他们都是Java或Scala（一种运行于JVM的编程语言）开发的；</li>
+<li>Android移动平台。</li>
+</ul>
+<p>这意味着Java拥有最广泛的就业市场。本章内容主要是介绍Java程序的基础知识。</p>
+<h2 id="1-Java简介"><a href="#1-Java简介" class="headerlink" title="1.Java简介"></a>1.Java简介</h2><p>Java介于编译型语言和解释型语言之间。 编译型语言如C、C++，代码是直接编译成机器码执行，但是不同的平台（x86、ARM等）CPU的指令集不同，因此，需要编译出每一种平台的对应机器码。解释型语言如Python、Ruby没有这个问题，可以由解释器直接加载源码然后运行，代价是运行效率太低。而Java是将代码编译为一种字节码，它类似于抽象的CPU指令，然后针对不同的平台编写虚拟机，不同平台的虚拟机负责加载字节码并执行，这样九实现了”一次编写，到处运行“。从实践的角度来看，JVM的兼容性做的非常好，低版本的Java字节码完全可以正常运行在高版本的JVM上。</p>
+<p>随着Java的发展，SUN给Java分出了三个不同的版本。</p>
+<p>Java SE：Standard Edition</p>
+<p>Java EE：Enterprise Edition</p>
+<p>Java ME：Micro Edition</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ascii">┌───────────────────────────┐<br>│Java EE                    │<br>│    ┌────────────────────┐ │<br>│    │Java SE             │ │<br>│    │    ┌─────────────┐ │ │<br>│    │    │   Java ME   │ │ │<br>│    │    └─────────────┘ │ │<br>│    └────────────────────┘ │<br>└───────────────────────────┘<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这三者又是什么关系呢？简单来说，Java SE就是标准版，包含标准的JVM和标准库，而Java EE是企业版，它在Java SE基础上添加了大量的API和库，以方便开发Web应用、数据库、消息服务等，Java EE使用的虚拟机和Java SE完全相同。</p>
+<p>Java ME是一个针对嵌入式设备的”瘦身版“，Java SE的标准库无法在Java ME上使用，Java ME的虚拟机也是”瘦身版“。</p>
+<p>毫无疑问，Java SE是整个Java平台的核心，而Java EE是进一步学习Web应用必须的。我们熟悉的Spring框架就是Java EE开源生态的一部分。而Java ME并没有流行起来，反而是Android成为了移动平台的标准之一。</p>
+<p>因此推荐的Java学习路线如下：</p>
+<ol>
+<li>首先要学习Java SE，掌握Java语言本身、Java核心开发技术以及Java标准库的使用。</li>
+<li>如果继续学习Java EE，那么Spring框架、数据库开发、分布式架构就是需要学习的。</li>
+<li>如果要学习大数据开发，那么Hadoop、Spark、Flink这些大数据平台就是需要学习的，他们都基于Java或Scala开发。</li>
+<li>如果想要学习移动开发，那么就深入Android平台，掌握Android App开发。</li>
+</ol>
+<p>无论怎么选，Java SE的核心是基础。</p>
+<p>初学者学Java，经常听到JDK、JRE这些名词，它们到底是啥？</p>
+<ul>
+<li>JDK：Java Development Kit</li>
+<li>JRE：Java Runtime Environment</li>
+</ul>
+<p>简单地说，JRE就是运行Java字节码的虚拟机。但是，如果只有Java源码，要编译成Java字节码，就需要JDK，因为JDK除了包含JRE，还提供了编译器、调试器等开发工具。要学习Java开发，当然需要安装JDK了。</p>
+<p>那JSR、JCP……又是啥？ </p>
+<ul>
+<li>JSR规范：Java Specification Request</li>
+<li>JCP组织：Java Community Process</li>
+</ul>
+<p>为了保证Java语言的规范性，SUN公司搞了一个JSR规范，凡是想给Java平台加一个功能，比如说访问数据库的功能，大家要先创建一个JSR规范，定义好接口，这样，各个数据库厂商都按照规范写出Java驱动程序，开发者就不用担心自己写的数据库代码在MySQL上能跑，却不能跑在PostgreSQL上。所以JSR是一系列的规范，从JVM的内存模型到Web程序接口，全部都标准化了。而负责审核JSR的组织就是JCP。</p>
+<p>一个JSR规范发布时，为了让大家有个参考，还要同时发布一个“参考实现”，以及一个“兼容性测试套件”：</p>
+<ul>
+<li>RI：Reference Implementation</li>
+<li>TCK：Technology Compatibility Kit</li>
+</ul>
+<p>比如有人提议要搞一个基于Java开发的消息服务器，这个提议很好啊，但是光有提议还不行，得贴出真正能跑的代码，这就是RI。如果有其他人也想开发这样一个消息服务器，如何保证这些消息服务器对开发者来说接口、功能都是相同的？所以还得提供TCK。</p>
+<p>通常来说，RI只是一个“能跑”的正确的代码，它不追求速度，所以，如果真正要选择一个Java的消息服务器，一般是没人用RI的，大家都会选择一个有竞争力的商用或开源产品。</p>
+<h2 id="2-Java程序基础"><a href="#2-Java程序基础" class="headerlink" title="2.Java程序基础"></a>2.Java程序基础</h2><h3 id="2-1Java程序基本结构"><a href="#2-1Java程序基本结构" class="headerlink" title="2.1Java程序基本结构"></a>2.1Java程序基本结构</h3><p>Java是面向对象的语言，一个程序的基本单位是class。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Hello</span></span>{<span class="hljs-comment">//类开始</span><br>    ...<br>}<span class="hljs-comment">//类结束</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>类名的要求：类名必须以英文字母开头，后接字母、数字或下划线的组合；习惯上以大写字母开头。</p>
+<p>public是访问修饰符，表示该类是公开的。</p>
+<p>在class内部可以定义若干方法（method）。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Hello</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{ <span class="hljs-comment">// 方法名是main</span><br>        ...<br>    } <span class="hljs-comment">// 方法定义结束</span><br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这里的方法名是main，返回值是void，表示没有任何返回值。我们注意到public除了可以修饰类，也可以修饰方法。关键字static是另一个访问修饰符，表示这是一个静态方法。方法名也有命名规则，和类的命名规则一样，只不过首字母小写。</p>
+<p>Java入口程序规定的方法必须是静态方法，方法名必须为main，括号内的参数必须是String数组。</p>
+<p>在方法内部，语句才是真正执行的代码。Java的每一行语句必须以分号结束。在Java程序中，注释是给人阅读的文本，编译器会自动忽略注释。</p>
+<p>Java有三种注释，第一种是单行注释，以双斜线开头，直到这一行的行尾结束。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//这是单行注释</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>第二种是多行注释，以/*开始，以*/结束，可以有多行，类似这样：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/*</span><br><span class="hljs-comment">这是注释</span><br><span class="hljs-comment">blablabla...</span><br><span class="hljs-comment">这也是注释</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>还有一种特殊的多行注释，以/**开始，以*/结束，每行以*开头，类似这样：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 可以用来自动创建文档的注释</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * <span class="hljs-doctag">@auther</span> WanZixin</span><br><span class="hljs-comment"> */</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p> 这种特殊的多行注释需要写在类和方法的定义处，可以用于自动创建文档。 </p>
+<h3 id="2-2变量和数据类型"><a href="#2-2变量和数据类型" class="headerlink" title="2.2变量和数据类型"></a>2.2变量和数据类型</h3><p>在Java中，变量分为两种：基本类型的变量和引用类型的变量。在Java中，变量必须先定义后使用，在定义变量的时候，可以给它一个初始值。变量的一个重要特点是可以重新赋值。变量不但可以重新赋值，还可以赋值给其他变量。</p>
+<h4 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h4><p><strong>基本数据类型</strong>是CPU可以直接进行运算的类型。Java定义了以下几种基本数据类型：</p>
+<ul>
+<li>整数类型：byte，short，int，long</li>
+<li>浮点数类型：float，double</li>
+<li>字符类型：char</li>
+<li>布尔类型：boolean</li>
+</ul>
+<p>不同的数据类型占用的字节数不一样。我们看一下Java基本数据类型占用的字节数：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs ascii">       ┌───┐<br>  byte │   │<br>       └───┘<br>       ┌───┬───┐<br> short │   │   │<br>       └───┴───┘<br>       ┌───┬───┬───┬───┐<br>   int │   │   │   │   │<br>       └───┴───┴───┴───┘<br>       ┌───┬───┬───┬───┬───┬───┬───┬───┐<br>  long │   │   │   │   │   │   │   │   │<br>       └───┴───┴───┴───┴───┴───┴───┴───┘<br>       ┌───┬───┬───┬───┐<br> float │   │   │   │   │<br>       └───┴───┴───┴───┘<br>       ┌───┬───┬───┬───┬───┬───┬───┬───┐<br>double │   │   │   │   │   │   │   │   │<br>       └───┴───┴───┴───┴───┴───┴───┴───┘<br>       ┌───┬───┐<br>  char │   │   │<br>       └───┴───┘<br></code></pre></td></tr></tbody></table></figure>
+
+<p>对于整型类型，Java只定义了带符号的整型，因此，最高位的bit表示符号位（0表示正数，1表示负数）。 </p>
+<p>浮点类型的数就是小数，因为小数用科学计数法表示的时候，小数点是可以“浮动”的。对于float类型，需要加上f后缀。浮点数可表示的范围非常大，float类型可最大表示3.4x10^38，而double类型可最大表示1.79x10^308。</p>
+<p>布尔类型boolean只有true和false两个值，布尔类型总是关系运算的计算结果。</p>
+<p>字符类型char表示一个字符。Java的char类型除了可表示标准的ASCII外，还可以表示一个Unicode字符。注意char类型使用单引号<code>'</code>，且仅有一个字符，要和双引号<code>"</code>的字符串类型区分开。 </p>
+<p>除了上述基本类型的变量，剩下的都是<strong>引用类型</strong>，最常见的引用类型就是String字符串。引用类型的变量类似于C语言的指针，它内部存储一个“地址”，指向某个对象在内存的位置。</p>
+<h4 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h4><p>定义变量的时候，如果加上final修饰符，这个变量就成为了常量。常量在定义时进行初始化后就不可再次赋值，再次复制会导致编译错误。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">final</span> <span class="hljs-keyword">double</span> PI = <span class="hljs-number">3.14</span>; <span class="hljs-comment">// PI是一个常量</span><br><span class="hljs-keyword">double</span> r = <span class="hljs-number">5.0</span>;<br><span class="hljs-keyword">double</span> area = PI * r * r;<br>PI = <span class="hljs-number">300</span>; <span class="hljs-comment">// compile error!</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>根据习惯，常量名通常全部大写。常量的作用是用有意义的变量名来避免魔术数字，比如不要在代码中写3.14，而是定义一个常量。如果将来需要提高计算精度，我们只需要在常量的定义处修改，例如，改成3.1416，而不必在所有地方替换3.14。</p>
+<h4 id="var关键字"><a href="#var关键字" class="headerlink" title="var关键字"></a>var关键字</h4><p>有些时候，类型的名字太长，写起来比较麻烦。这个时候，如果想省略变量类型，可以使用<code>var</code>关键字。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//StringBuilder sb = new StringBuilder();</span><br><span class="hljs-keyword">var</span> sb = <span class="hljs-keyword">new</span> StringBuilder();<br><span class="hljs-comment">//编译器会根据赋值语句自动推断出sb的类型，会更换成：</span><br><span class="hljs-comment">//StringBuilder sb = new StringBuilder();</span><br></code></pre></td></tr></tbody></table></figure>
+
+<h4 id="变量的作用域范围"><a href="#变量的作用域范围" class="headerlink" title="变量的作用域范围"></a>变量的作用域范围</h4><p>在Java中，多行语句用{ }括起来。很多控制语句，例如条件判断和循环，都以{ }作为它们自身的范围。只要正确地嵌套这些{ }，编译器就能识别出语句块的开始和结束。而在语句块中定义的变量，它有一个作用域，就是从定义处开始，到语句块结束。超出了作用域引用这些变量，编译器会报错。</p>
+<p>定义变量时，要遵循作用域最小化原则，尽量将变量定义在尽可能小的作用域，并且，不要重复使用变量名。 </p>
+<h3 id="2-3整数运算"><a href="#2-3整数运算" class="headerlink" title="2.3整数运算"></a>2.3整数运算</h3><p>Java的整数运算遵循四则运算规则，可以使用任意嵌套的小括号。四则运算规则和初等数学一致。整数的数值表示不但是精确的，而且整数运算永远是精确的，即使是除法也是精确的，因为两个整数相除只能得到结果的整数部分。求余运算使用<code>%</code>。特别注意：整数的除法对于除数为0时运行时将报错，但编译不会报错。 </p>
+<p>要特别注意，整数由于存在范围限制，如果计算结果超出了范围，就会产生溢出，而溢出不会出错，却会得到一个奇怪的结果。</p>
+<p> 还有一种简写的运算符，即<code>+=</code>，<code>-=</code>，<code>*=</code>，<code>/=</code>。</p>
+<p>自增/自减， <code>++</code>运算和<code>--</code>运算。注意<code>++</code>写在前面和后面计算结果是不同的，<code>++n</code>表示先加1再引用n，<code>n++</code>表示先引用n再加1。不建议把<code>++</code>运算混入到常规运算中，容易自己把自己搞懵了。</p>
+<p>移位运算。可以对整数进行移位运算。对整数<code>7</code>左移1位将得到整数<code>14</code>，左移两位将得到整数<code>28</code>。 如果对一个负数进行右移，最高位的<code>1</code>不动，结果仍然是一个负数。还有一种无符号的右移运算，使用<code>&gt;&gt;&gt;</code>，它的特点是不管符号位，右移后高位总是补<code>0</code>，因此，对一个负数进行<code>&gt;&gt;&gt;</code>右移，它会变成正数，原因是最高位的<code>1</code>变成了<code>0</code>。</p>
+<p>位运算。位运算是按位进行与、或、非和异或的运算。</p>
+<p>类型自动提升。在运算过程中，如果参与运算的两个数类型不一致，那么计算结果为较大类型的整型。</p>
+<p>也可以将结果强制转型，即将大范围的整数转型为小范围的整数。强制转型使用<code>(类型)</code>。 例如，将<code>int</code>强制转型为<code>short</code>。要注意，超出范围的强制转型会得到错误的结果，原因是转型时，<code>int</code>的两个高位字节直接被扔掉，仅保留了低位的两个字节。</p>
+<h3 id="2-4浮点数运算"><a href="#2-4浮点数运算" class="headerlink" title="2.4浮点数运算"></a>2.4浮点数运算</h3><p>浮点数运算和整数运算相比，只能进行加减乘除这些数值计算，不能做位运算和移位运算。在计算机中，浮点数虽然表示的范围大，但是，浮点数有个非常重要的特点，就是浮点数常常无法精确表示。</p>
+<p>因为浮点数常常无法精确表示，因此，浮点数运算会产生误差。由于浮点数存在运算误差，所以比较两个浮点数是否相等常常会出现错误的结果。正确的比较方法是判断两个浮点数之差的绝对值是否小于一个很小的数。浮点数在内存的表示方法和整数比更加复杂。Java的浮点数完全遵循<a target="_blank" rel="noopener" href="https://web.archive.org/web/20070505021348/http://babbage.cs.qc.edu/courses/cs341/IEEE-754references.html">IEEE-754</a>标准，这也是绝大多数计算机平台都支持的浮点数标准表示方法。</p>
+<p>类型提升。如果参与运算的两个数其中一个是整型，那么整型可以自动提升到浮点型。</p>
+<p>溢出。整数运算在除数为<code>0</code>时会报错，而浮点数运算在除数为<code>0</code>时，不会报错，但会返回几个特殊值：</p>
+<ul>
+<li><code>NaN</code>表示Not a Number</li>
+<li><code>Infinity</code>表示无穷大</li>
+<li><code>-Infinity</code>表示负无穷大</li>
+</ul>
+<p>强制转型。可以将浮点数强制转型为整数。在转型时，浮点数的小数部分会被丢掉。如果转型后超过了整型能表示的最大范围，将返回整型的最大值。</p>
+<h3 id="2-5布尔运算"><a href="#2-5布尔运算" class="headerlink" title="2.5布尔运算"></a>2.5布尔运算</h3><p>对于布尔类型boolean，永远只有true和false两个值。</p>
+<p>布尔运算是一种关系运算，包括以下几类：</p>
+<ul>
+<li>比较运算符：<code>&gt;</code>，<code>&gt;=</code>，<code>&lt;</code>，<code>&lt;=</code>，<code>==</code>，<code>!=</code></li>
+<li>与运算 <code>&amp;&amp;</code></li>
+<li>或运算 <code>||</code></li>
+<li>非运算 <code>!</code></li>
+</ul>
+<p>关系运算符的优先级从高到低依次是：</p>
+<ul>
+<li><code>!</code></li>
+<li><code>&gt;</code>，<code>&gt;=</code>，<code>&lt;</code>，<code>&lt;=</code></li>
+<li><code>==</code>，<code>!=</code></li>
+<li><code>&amp;&amp;</code></li>
+<li><code>||</code></li>
+</ul>
+<p>布尔运算的一个重要特点是<strong>短路运算</strong>。如果一个布尔运算的表达式能提前确定结果，则后续的计算不再执行，直接返回结果。</p>
+<p>Java还提供一个<strong>三元运算符</strong><code>b ? x : y</code>，它根据第一个布尔表达式的结果，分别返回后续两个表达式之一的计算结果。注意到三元运算<code>b ? x : y</code>会首先计算<code>b</code>，如果<code>b</code>为<code>true</code>，则只计算<code>x</code>，否则，只计算<code>y</code>。此外，<code>x</code>和<code>y</code>的类型必须相同，因为返回值不是<code>boolean</code>，而是<code>x</code>和<code>y</code>之一。 </p>
+<h3 id="2-6字符和字符串"><a href="#2-6字符和字符串" class="headerlink" title="2.6字符和字符串"></a>2.6字符和字符串</h3><p>在Java中，字符和字符串是两个不同的类型。</p>
+<p>字符类型<code>char</code>是基本数据类型，它是<code>character</code>的缩写。一个<code>char</code>保存一个Unicode字符。因为Java在内存中总是使用Unicode表示字符，所以，一个英文字符和一个中文字符都用一个<code>char</code>类型表示，它们都占用两个字节。要显示一个字符的Unicode编码，只需将<code>char</code>类型直接赋值给<code>int</code>类型即可。还可以直接用转义字符<code>\u</code>+Unicode编码来表示一个字符。</p>
+<p>和<code>char</code>类型不同，字符串类型<code>String</code>是引用类型，我们用双引号<code>"..."</code>表示字符串。一个字符串可以存储0个到任意个字符。</p>
+<p>常见的转义字符包括：</p>
+<ul>
+<li><code>\"</code> 表示字符<code>"</code></li>
+<li><code>\'</code> 表示字符<code>'</code></li>
+<li><code>\\</code> 表示字符<code>\</code></li>
+<li><code>\n</code> 表示换行符</li>
+<li><code>\r</code> 表示回车符</li>
+<li><code>\t</code> 表示Tab</li>
+<li><code>\u####</code> 表示一个Unicode编码的字符</li>
+</ul>
+<p>Java编译器对字符串做了特殊照顾，可以用<code>+</code>连接任意字符串和其他数据类型，极大的方便了字符串的处理。如果用<code>+</code>连接字符串和其他数据类型，会将其他数据类型先自动转型为字符串，再连接。</p>
+<p>如果我们要表示多行字符串，使用<code>+</code>连接会非常不方便。从Java 13开始，可以用<code>"""..."""</code>表示多行字符串。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">String s = <span class="hljs-string">""</span><span class="hljs-string">"</span><br><span class="hljs-string">    SELECT * FROM</span><br><span class="hljs-string">    users</span><br><span class="hljs-string">    WHERE id &gt; 100</span><br><span class="hljs-string">    ORDER BY name DESC</span><br><span class="hljs-string">    "</span><span class="hljs-string">""</span>;<br></code></pre></td></tr></tbody></table></figure>
+
+<p>Java字符串还有个重要特点是不可变特性，是指字符串内容不可变。JVM在执行<code>String s = "hello";</code>时，先创建字符串<code>"hello"</code>，然后把字符串变量<code>s</code>指向它。在重新给<code>s</code>复制时，<code>s = "world";</code>时，同样的，JVM先创建字符串<code>"world"</code>，再把<code>s</code>指向它。原来的字符串<code>"hello"</code>还在，只是我们没法通过变量<code>s</code>访问它了。</p>
+<p>引用类型的变量可以指向一个空值<code>null</code>，它表示不存在，即该变量不指向任何对象。</p>
+<h3 id="2-7数组类型"><a href="#2-7数组类型" class="headerlink" title="2.7数组类型"></a>2.7数组类型</h3><p>数组是同一数据类型的集合。数组元素可以是值类型或引用类型，但数组本身是引用类型。</p>
+<p>定义一个数组类型的变量，使用数组类型“类型[]”，例如，<code>int[]</code>。和单个基本类型变量不同，数组变量初始化必须使用<code>new int[5]</code>表示创建一个可容纳5个<code>int</code>元素的数组。</p>
+<p>Java的数组有两个特点：</p>
+<ul>
+<li>数组所有元素初始化为默认值，整形是0，浮点型是0.0，布尔型是false。</li>
+<li>数组一旦创建，大小就不可改变。</li>
+</ul>
+<p>要访问数组中的某一个元素，需要使用索引。数组索引从0开始。可以修改数组中的某一个元素，使用赋值语句。用<code>数组变量.length</code>获取数组大小。数组是索引类型，在使用索引访问数组元素时，如果索引超出范围，运行时会报错。也可以在定义数组时直接指定初始化的元素，这样就不必写出数组大小，而是由编译器自动推算数组大小。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">int</span>[] ns = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">68</span>, <span class="hljs-number">79</span>, <span class="hljs-number">91</span>, <span class="hljs-number">85</span>, <span class="hljs-number">62</span> };<br><span class="hljs-comment">//还可以进一步简写成</span><br><span class="hljs-keyword">int</span>[] ns = { <span class="hljs-number">68</span>, <span class="hljs-number">79</span>, <span class="hljs-number">91</span>, <span class="hljs-number">85</span>, <span class="hljs-number">62</span> };<br></code></pre></td></tr></tbody></table></figure>
+
+<h2 id="3-流程控制"><a href="#3-流程控制" class="headerlink" title="3.流程控制"></a>3.流程控制</h2><h3 id="3-1输入和输出"><a href="#3-1输入和输出" class="headerlink" title="3.1输入和输出"></a>3.1输入和输出</h3><h4 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h4><p>我们总是使用<code>System.out.println()</code>来向屏幕输出一些内容。<code>println</code>是<code>print line</code>的缩写，表示输出并换行。如果不想换行，可以用<code>print()</code>。</p>
+<p>Java还提供了格式化输出的功能。为什么要格式化输出？因为计算机表示的数据不一定适合人阅读。格式化输出使用<code>System.out.printf()</code>，通过使用占位符<code>%?</code>，<code>printf()</code>可以把后面的参数格式化成指定格式。Java的格式化功能提供了多种占位符，可以把各种数据类型“格式化”成指定的字符串。</p>
+<table>
+<thead>
+<tr>
+<th>占位符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%d</td>
+<td>格式化输出整数</td>
+</tr>
+<tr>
+<td>%x</td>
+<td>格式化输出十六进制整数</td>
+</tr>
+<tr>
+<td>%f</td>
+<td>格式化输出浮点数</td>
+</tr>
+<tr>
+<td>%e</td>
+<td>格式化输出科学计数法表示的浮点数</td>
+</tr>
+<tr>
+<td>%s</td>
+<td>格式化字符串</td>
+</tr>
+</tbody></table>
+<p>%表示占位符。占位符本身还可以有更详细的格式化参数。更详细的格式化参数参考JDK文档<a target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Formatter.html">java.util.Formatter</a>。</p>
+<h4 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h4><p>和输出相比，Java的输入就要复杂得多。</p>
+<p>我们先看一个从控制台读取一个字符串和一个整数的例子：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Scanner;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        Scanner scanner = <span class="hljs-keyword">new</span> Scanner(System.in); <span class="hljs-comment">// 创建Scanner对象</span><br>        System.out.print(<span class="hljs-string">"Input your name: "</span>); <span class="hljs-comment">// 打印提示</span><br>        String name = scanner.nextLine(); <span class="hljs-comment">// 读取一行输入并获取字符串</span><br>        System.out.print(<span class="hljs-string">"Input your age: "</span>); <span class="hljs-comment">// 打印提示</span><br>        <span class="hljs-keyword">int</span> age = scanner.nextInt(); <span class="hljs-comment">// 读取一行输入并获取整数</span><br>        System.out.printf(<span class="hljs-string">"Hi, %s, you are %d\n"</span>, name, age); <span class="hljs-comment">// 格式化输出</span><br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>首先，我们通过<code>import</code>语句导入<code>java.util.Scanner</code>，<code>import</code>是导入某个类的语句，必须放到Java源代码的开头。</p>
+<p>然后，创建<code>Scanner</code>对象并传入<code>System.in</code>。<code>System.out</code>代表标准输出流，而<code>System.in</code>代表标准输入流。直接使用<code>System.in</code>读取用户输入虽然是可以的，但需要更复杂的代码，而通过<code>Scanner</code>就可以简化后续的代码。</p>
+<p>有了<code>Scanner</code>对象后，要读取用户输入的字符串，使用<code>scanner.nextLine()</code>，要读取用户输入的整数，使用<code>scanner.nextInt()</code>。<code>Scanner</code>会自动转换数据类型，因此不必手动转换。</p>
+<h3 id="3-2if判断"><a href="#3-2if判断" class="headerlink" title="3.2if判断"></a>3.2if判断</h3><p>Java中根据条件来决定是否执行某一段代码，需要使用if语句。根据if的计算结果（true还是false），JVM决定是否执行if语句块（即花括号{}包含的所有语句）。 当if语句块只有一行语句时，可以省略花括号{}。</p>
+<p>if语句还可以编写一个else { … }，当条件判断为false时，将执行else的语句块。</p>
+<p>还可以用多个if … else if …串联。 在串联使用多个if时，要特别注意判断顺序。 </p>
+<p>在Java中，判断值类型的变量是否相等，可以使用<code>==</code>运算符。但是，判断引用类型的变量是否相等，<code>==</code>表示“引用是否相等”，或者说，是否指向同一个对象。例如，下面的两个String类型，它们的内容是相同的，但是，分别指向不同的对象，用<code>==</code>判断，结果为<code>false</code>。要判断引用类型的变量内容是否相等，必须使用<code>equals()</code>方法。</p>
+<h3 id="3-3switch多重选择"><a href="#3-3switch多重选择" class="headerlink" title="3.3switch多重选择"></a>3.3switch多重选择</h3><p>除了if语句外，还有一种条件判断，是根据某个表达式的结果，分别去执行不同的分支。</p>
+<p><code>switch</code>语句根据<code>switch (表达式)</code>计算的结果，跳转到匹配的<code>case</code>结果，然后继续执行后续语句，直到遇到<code>break</code>结束执行。<code>switch</code>的计算结果必须是整型、字符串或枚举类型。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        <span class="hljs-keyword">int</span> option = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">switch</span> (option) {<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>            System.out.println(<span class="hljs-string">"Selected 1"</span>);<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>            System.out.println(<span class="hljs-string">"Selected 2"</span>);<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>            System.out.println(<span class="hljs-string">"Selected 3"</span>);<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">default</span>:<br>            System.out.println(<span class="hljs-string">"Not selected"</span>);<br>            <span class="hljs-keyword">break</span>;<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>如果option的值没有匹配到任何case，那么switch语句不会执行任何语句。加一个default后，当没有匹配到任何case时，执行default。</p>
+<p>使用switch时，注意case语句没有花括号，而且case语句具有穿透性，漏写break将导致意想不到的结果。</p>
+<p>如果有几个case语句执行的是同一组语句块，可以这么写：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        <span class="hljs-keyword">int</span> option = <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">switch</span> (option) {<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>            System.out.println(<span class="hljs-string">"Selected 1"</span>);<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>            System.out.println(<span class="hljs-string">"Selected 2, 3"</span>);<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">default</span>:<br>            System.out.println(<span class="hljs-string">"Not selected"</span>);<br>            <span class="hljs-keyword">break</span>;<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>使用switch语句时，只要保证有break，case的顺序不影响程序逻辑。但是仍然建议按照自然顺序排列，便于阅读。</p>
+<p>switch语句还可以匹配字符串，字符串匹配时，是比较内容是否相等。</p>
+<p>使用switch时，如果遗漏了break，会造成严重的逻辑错误，而且不易在源代码中发现。从Java 12开始，switch语句升级为更简单的表达式语法，使用类似模式匹配的方法，保证只会有一种路径会执行，并且不需要break语句。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        String fruit = <span class="hljs-string">"apple"</span>;<br>        <span class="hljs-keyword">switch</span> (fruit) {<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">"apple"</span> -&gt; System.out.println(<span class="hljs-string">"Selected apple"</span>);<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">"pear"</span> -&gt; System.out.println(<span class="hljs-string">"Selected pear"</span>);<br>        <span class="hljs-keyword">case</span> <span class="hljs-string">"mango"</span> -&gt; {<br>            System.out.println(<span class="hljs-string">"Selected mango"</span>);<br>            System.out.println(<span class="hljs-string">"Good choice!"</span>);<br>        }<br>        <span class="hljs-keyword">default</span> -&gt; System.out.println(<span class="hljs-string">"No fruit selected"</span>);<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>注意，新语法使用<code>-&gt;</code>，如果有多条语句，需要用花括号括起来。</p>
+<p>大多数时候，在switch表达式内部，我们会返回简单的值。但是，如果需要复杂的语句，我们也可以写很多语句放在花括号里，用yield返回一个值作为switch语句的返回值。</p>
+<h3 id="3-4while循环"><a href="#3-4while循环" class="headerlink" title="3.4while循环"></a>3.4while循环</h3><p>循环语句就是让计算机根据条件做循环计算，在条件满足时继续循环，条件不满足时退出循环。我们先看Java提供的while条件循环，它的基本用法是：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">while</span>(条件表达式){<br>    循环语句<br>}<br><span class="hljs-comment">// 执行后续代码</span><br></code></pre></td></tr></tbody></table></figure>
+
+<p>while循环在每次循环开始之前，首先判断条件是否成立。如果计算结果是true，就把循环体内的语句执行一遍，如果计算结果为false，那就直接跳到while循环的末尾，继续往下执行。</p>
+<p>注意到while循环是先判断循环条件再循环，因此有可能一次循环都不做。</p>
+<p>对于循环条件判断，以及自增变量的处理，要特别注意边界条件。</p>
+<p>如果循环条件永远满足，那这个循环就成了死循环。死循环将导致100%的CPU占用，用户会感觉电脑运行缓慢，应避免编写死循环代码。</p>
+<h3 id="3-5do-while循环"><a href="#3-5do-while循环" class="headerlink" title="3.5do while循环"></a>3.5do while循环</h3><p>do while循环是先执行循环，再判断条件，条件满足时继续循环，条件不满足时退出循环。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">do</span>{<br>    循环语句<br>}<span class="hljs-keyword">while</span>(条件表达式)<br></code></pre></td></tr></tbody></table></figure>
+
+<p>可见do while循环至少会循环一次。</p>
+<h3 id="3-6for循环"><a href="#3-6for循环" class="headerlink" title="3.6for循环"></a>3.6for循环</h3><p>for循环的功能非常强大，它使用计数器实现循环。for循环会先初始化计数器，然后，在每次循环前检测循环条件，在每次循环后更新计数器，计数器变量通常命名为i。</p>
+<p>for循环的用法是：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">for</span>(初始条件:循环检测条件:循环后更新计数器){<br>    <span class="hljs-comment">// 执行语句</span><br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>在for循环执行之前，会先执行初始化语句，然后循环前先检测循环条件，循环后自动执行计数器更新语句。因此，和while循环相比，for循环把更新计数器的代码放到了一起，在for循环内部不再需要更新计数器。</p>
+<p>注意for循环的初始化计数器总是被执行，并且for循环也可能循环0次。而且尽量不要在循环体内部修改计数器，容易导致莫名其妙的逻辑错误。</p>
+<p>for循环还可以缺少初始化语句、循环语句和计数器更新语句。</p>
+<p>for循环经常用来遍历数组，因为通过计数器可以根据索引来访问数组的每个元素。但是，很多时候，我们实际上真正要访问的是数组的每个元素的值。Java还提供了一个for each循环，它可以更简单的遍历数组。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        <span class="hljs-keyword">int</span>[] ns = { <span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">25</span> };<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> n : ns) {<br>            System.out.println(n);<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>和for循环相比，for each循环的变量n不再是计数器，而是直接对应到数组的每个元素。for each循环的写法也更简洁。但是，for each循环无法指定遍历顺序，也无法获取数组的索引。</p>
+<p>除了数组外，for each循环能够遍历所有“可迭代”的数据类型，包括后面的List，Map等。</p>
+<h3 id="3-7break和continue"><a href="#3-7break和continue" class="headerlink" title="3.7break和continue"></a>3.7break和continue</h3><p>在循环过程中，可以使用break语句跳出当前循环。break语句通常配合if语句使用。要特别注意，break语句总是跳出自己所在的那一层循环。</p>
+<p>break会跳出当前循环，也就是整个循环都不会执行了。而continue则是提前结束本次循环，直接执行下次循环。在多层嵌套的循环中，continue语句同样是结束本次自己所在的循环。</p>
+<h2 id="4-数组操作"><a href="#4-数组操作" class="headerlink" title="4.数组操作"></a>4.数组操作</h2><h3 id="4-1遍历数组"><a href="#4-1遍历数组" class="headerlink" title="4.1遍历数组"></a>4.1遍历数组</h3><p>为了实现for循环遍历，初始条件i=0，因为索引总是从0开始，继续循环的条件是i&lt;ns.length，因为当i=ns.length时，i已经超出了索引范围（索引范围是0~ns.length-1），每次循环后i++。</p>
+<p>第二种方式是使用for each循环，直接迭代数组的每个元素。注意，在for(int n:ns)循环中，变量n直接拿到ns数组的元素，而不是索引。</p>
+<p>显然for each循环更加简洁。但是，for each循环无法拿到数组的索引，因此，使用哪一种for循环，取决于我们的需要。</p>
+<h3 id="4-2数组排序"><a href="#4-2数组排序" class="headerlink" title="4.2数组排序"></a>4.2数组排序</h3><p>常用的排序算法有冒泡排序、插入排序和快速排序等； </p>
+<p>Java的标准库已经内置了排序功能，我们只需要调用JDK提供的Arrays.sort()就可以排序。</p>
+<p>对数组排序会直接修改数组本身。</p>
+<h3 id="4-3多维数组"><a href="#4-3多维数组" class="headerlink" title="4.3多维数组"></a>4.3多维数组</h3><p>二维数组就是数组的数组。访问二维数组的一个元素使用array[row][col]。</p>
+<p>要打印一个二维数组，可以使用两层嵌套的for循环，或者使用Java标准库的Arrays.deepToString()。</p>
+<p>理论上我们能定义任意维数组，但在实际应用上，除了二维数组在某些情况下还用得上，更高维的数组很少使用。</p>
+<h3 id="4-4命令行参数"><a href="#4-4命令行参数" class="headerlink" title="4.4命令行参数"></a>4.4命令行参数</h3><p>Java程序的入口方法是main方法，而main方法可以接受一个命令行参数，它是一个String[]数组。这个命令行参数由JVM接受用户输入并传给main方法。我们可以利用接收到的命令行参数，根据不同的参数执行不同的代码。例如，实现一个-version参数，打印程序版本号。</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{<br>        <span class="hljs-keyword">for</span> (String arg : args) {<br>            <span class="hljs-keyword">if</span> (<span class="hljs-string">"-version"</span>.equals(arg)) {<br>                System.out.println(<span class="hljs-string">"v 1.0"</span>);<br>                <span class="hljs-keyword">break</span>;<br>            }<br>        }<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这样，程序就可以根据传入的命令行参数做出不同的响应。</p>
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/Study/Java/zh-cn/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%9F%BA%E7%A1%80/">面向对象基础</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/Study/zh-cn/PostgreSQL%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/">PostgreSQL常用命令记录</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>简体中文</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/Study/Java/zh-cn/Java%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/Study/Java/zh-cn/Java%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("zh-CN");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索" />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.zh-cn.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
