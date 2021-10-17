@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>Flink基础（一） - WanZixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<link href="/zh-cn/Study/Java/Flink/Flink%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89/" rel="alternate" hreflang="zh-CN" />
+    
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="本文主要参考资料为 1.Flink官方网站 2.《Flink原理和实践》–鲁蔚征编著">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink基础（一）">
+<meta property="og:url" content="https://wanzixin.github.io/Study/Java/Flink/Flink%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="WanZixin">
+<meta property="og:description" content="本文主要参考资料为 1.Flink官方网站 2.《Flink原理和实践》–鲁蔚征编著">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_6">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_15">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_32">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_33">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_35">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_37">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_44">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_45">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_46">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_48">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_49">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_50">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_51">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_37157088_55">
+<meta property="article:published_time" content="2021-10-16T05:03:14.000Z">
+<meta property="article:modified_time" content="2021-10-17T12:07:13.277Z">
+<meta property="article:author" content="WanZixin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://res.weread.qq.com/wrepub/epub_37157088_6">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    WanZixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#前言">1&nbsp;&nbsp;<b>前言</b></a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#流处理的一些基本概念">2&nbsp;&nbsp;<b>流处理的一些基本概念</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#延迟和吞吐">2.1&nbsp;&nbsp;延迟和吞吐</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#窗口">2.2&nbsp;&nbsp;窗口</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#时间">2.3&nbsp;&nbsp;时间</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Watermark">2.4&nbsp;&nbsp;Watermark</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#状态">2.5&nbsp;&nbsp;状态</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#检查点">2.6&nbsp;&nbsp;检查点</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#数据一致性保障">2.7&nbsp;&nbsp;数据一致性保障</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#Flink概述">3&nbsp;&nbsp;<b>Flink概述</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Flink数据流图">3.1&nbsp;&nbsp;Flink数据流图</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Flink分布式架构与核心组件">3.2&nbsp;&nbsp;Flink分布式架构与核心组件</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Flink作业提交过程">3.3&nbsp;&nbsp;Flink作业提交过程</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Flink核心组件">3.4&nbsp;&nbsp;Flink核心组件</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Client">3.4.1&nbsp;&nbsp;Client</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Dispatcher">3.4.2&nbsp;&nbsp;Dispatcher</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#JobManager">3.4.3&nbsp;&nbsp;JobManager</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#ResourceManager">3.4.4&nbsp;&nbsp;ResourceManager</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#TaskManager">3.4.5&nbsp;&nbsp;TaskManager</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#任务执行与资源划分">3.5&nbsp;&nbsp;任务执行与资源划分</a>
+                    
+                    
+                    <hr class="navbar-divider">
+                    
+                    
+                    <a class="navbar-item" href="#DataStream-API的介绍和使用">4&nbsp;&nbsp;<b>DataStream API的介绍和使用</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Flink程序的骨架结构">4.1&nbsp;&nbsp;Flink程序的骨架结构</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#常见Transformation的使用用法">4.2&nbsp;&nbsp;常见Transformation的使用用法</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#单数据流基本转换">4.2.1&nbsp;&nbsp;单数据流基本转换</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#基于Key的分组转换">4.2.2&nbsp;&nbsp;基于Key的分组转换</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#多数据流转换">4.2.3&nbsp;&nbsp;多数据流转换</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#并行度和数据重分布">4.2.4&nbsp;&nbsp;并行度和数据重分布</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#数据类型和序列化">4.3&nbsp;&nbsp;数据类型和序列化</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Flink支持的数据类型">4.3.1&nbsp;&nbsp;Flink支持的数据类型</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#用户自定义函数">4.4&nbsp;&nbsp;用户自定义函数</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#接口、Lamda表达式">4.4.1&nbsp;&nbsp;接口、Lamda表达式</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#Rich函数类">4.4.2&nbsp;&nbsp;Rich函数类</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Flink基础（一）
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>Oct 16 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a><span>></span><a class="article-category-link" href="/categories/Study/Java/Flink/">Flink</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            an hour read (About 7010 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><blockquote class="colorquote info"><p>本文主要参考资料为</p>
+<p>1.<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.14//docs/try-flink/local_installation/">Flink官方网站</a></p>
+<p>2.《Flink原理和实践》–鲁蔚征编著</p>
+</blockquote><span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>大数据的特点被归纳为5个V。</p>
+<table>
+<thead>
+<tr>
+<th align="center">V</th>
+<th align="center">content</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">volume</td>
+<td align="center">数据量大</td>
+</tr>
+<tr>
+<td align="center">velocity</td>
+<td align="center">数据产生速度快</td>
+</tr>
+<tr>
+<td align="center">variety</td>
+<td align="center">数据类型繁多</td>
+</tr>
+<tr>
+<td align="center">veracity</td>
+<td align="center">数据真实性</td>
+</tr>
+<tr>
+<td align="center">value</td>
+<td align="center">数据价值</td>
+</tr>
+</tbody></table>
+<p>计算机诞生之后，一般是在单台计算机上处理数据。大数据时代到来后，传统的数据处理方法逐渐无法满足大数据的处理需求。将一组计算机组织为一个集群，利用集群的力量来处理大数据逐渐成为主流。这种使用集群进行计算的方式被称为分布式计算，当前几乎所有的大数据系统都在使用集群进行分布式计算。分布式计算背后的思想很朴素，即分而治之，又称分治法，指将一个原始问题分解为多个子问题，多个子问题分别在多台计算机上求解，借助必要的数据交换和合并策略，将子结果汇总即可求出最终结果的方法。</p>
+<p>我们简单介绍了大数据的5个V的特点，大数据的分治法，而实际面对海量数据和各不相同的业务逻辑，很难用一套技术或一套方案来解决所有大数据问题。实际上，大数据技术是一整套方案，包括存储、计算和提供在线服务等多个重要部分，而且与数据形态、业务逻辑、提供何种价值等多方面的因素有关。</p>
+<p>大数据的5个V中提到，数据量大且产生速度快。从时间维度讲，数据源源不断产生，形成一个无界数据流（Bounded Data Stream）。如图所示，单条数据被称为事件（Event），事件按照时序排列会形成一个数据流。例如，我们每时每刻的运动数据都会累积到手机传感器上，金融交易随时随地都在发生。数据流中的某段有界数据流（Bounded Data Stream）可以组成一个数据集。我们通常所说的对某份数据进行分析，指的是对某个数据集进行分析。相对应地，数据以流（Stream）的方式持续不断地产生着的，流处理（Stream Processing）就是对数据流进行处理，批处理（Batch Processing）是指对一批数据进行处理。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_6" alt="有界数据与无界数据" style="zoom:50%;"></div>
+
+<h2 id="流处理的一些基本概念"><a href="#流处理的一些基本概念" class="headerlink" title="流处理的一些基本概念"></a>流处理的一些基本概念</h2><h3 id="延迟和吞吐"><a href="#延迟和吞吐" class="headerlink" title="延迟和吞吐"></a>延迟和吞吐</h3><p>延迟表示一个事件被系统处理的总时间，一般以毫秒为单位。吞吐表示一个系统最多能处理多少事件，一般以单位时间处理的事件数量为标准。延迟与吞吐其实并不是相互孤立的，它们相互影响。如果延迟高，那么很可能吞吐较低，系统处理不了太多数据。</p>
+<h3 id="窗口"><a href="#窗口" class="headerlink" title="窗口"></a>窗口</h3><p>在流处理场景下，数据以源源不断的流的形式存在，数据一直在产生，没有始末，因此在处理时往往需要明确一个时间窗口。常见的时间窗口有三种：滚动窗口、滑动窗口、会话窗口。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_15" alt="三种窗口" style="zoom:40%;"></div>
+
+<ul>
+<li><p>滚动窗口（Tumbling Window）模式一般定义一个固定的窗口长度，长度是一个时间间隔，比如小时级的窗口或分钟级的窗口。窗口像车轮一样，滚动向前，任意两个窗口之间不会包含同样的数据。</p>
+</li>
+<li><p>滑动窗口（Sliding Window）模式也设有一个固定的窗口长度。假如我们想每分钟开启一个窗口，统计10分钟内的股票价格波动，就使用滑动窗口模式。当窗口的长度大于滑动的间隔，可能会导致两个窗口之间包含同样的事件。其实，滚动窗口模式是滑动窗口模式的一个特例，滚动窗口模式中滑动的间隔正好等于窗口的大小。</p>
+</li>
+<li><p>会话窗口（Session Window）模式的窗口长度不固定，而是通过一个间隔来确定窗口，这个间隔被称为会话间隔（Session Gap）。当两个事件之间的间隔大于会话间隔，则两个事件被划分到不同的窗口中；当事件之间的间隔小于会话间隔，则两个事件被划分到同一窗口。</p>
+<blockquote>
+<p>会话（Session）本身是一个用户交互概念，常常出现在互联网应用上，一般指用户在某App或某网站上短期内产生的一系列行为。比如，用户在手机淘宝上短时间大量的搜索和点击的行为，这系列行为事件组成了一个会话。接着可能因为一些其他因素，用户暂停了与App的交互，过一会用户又使用App，经过一系列搜索、点击、与客服沟通，最终下单。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h3><p>常见的时间语义有：</p>
+<ul>
+<li>Event Time：事件实际发生的事件</li>
+<li>Processing Time：事件被流处理引擎处理的事件</li>
+</ul>
+<p>对于一个事件，自其发生起，Event Time就已经确定不会改变。因各类延迟、流处理引擎各个模块先后处理顺序等因素，不同节点、系统内不同模块、同一数据不同次处理都会产生不同的Processing Time。</p>
+<h3 id="Watermark"><a href="#Watermark" class="headerlink" title="Watermark"></a>Watermark</h3><p>虽然使用Event Time更准确，但问题在于，因为各种不可控因素，事件上报会有延迟，那么最多要等待多长时间呢？从服务器的角度来看，在事件到达之前，我们也无法确定是否有事件发生了延迟，如何设置等待时间是一个很难的问题。数据的实时性和准确性二者不可兼得，Watermark是一种折中解决方案，它假设某个时间点上，不会有比这个时间点更晚的上报数据</p>
+<h3 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h3><p>状态是流处理区别于批处理的特有概念。举一个温度报警的例子，当系统在监听到“高温”事件后10分钟内又监听到“冒烟”事件，系统必须及时报警。在这个场景下，流处理引擎把“高温”事件作为状态记录下来，并判断这个状态接下来十分钟内是否有“冒烟”事件。</p>
+<h3 id="检查点"><a href="#检查点" class="headerlink" title="检查点"></a>检查点</h3><p>检查点（Checkpoint）机制其实并不是一个新鲜事物，它广泛存在于各类计算任务上，主要作用是将中间数据保存下来。当计算任务出现问题，重启后可以根据Checkpoint中保存的数据重新恢复任务。在流处理中，Checkpoint主要保存状态数据。</p>
+<h3 id="数据一致性保障"><a href="#数据一致性保障" class="headerlink" title="数据一致性保障"></a>数据一致性保障</h3><p>流处理任务可能因为各种原因出现故障，比如数据量暴涨导致内存溢出、输入数据发生变化而无法解析、网络故障、集群维护等。事件进入流处理引擎，如果遇到故障并重启，该事件是否被成功处理了呢？</p>
+<ul>
+<li>At-Most-Once：每个事件最多被处理一次，也就是说，有可能某些事件直接被丢弃，不进行任何处理。这种投递保障最不安全，因为一个流处理系统完全可以把接收到的所有事件都丢弃。</li>
+<li>At-Least-Once：无论遇到何种状况，流处理引擎能够保证接收到的事件至少被处理一次，有些事件可能被处理多次。例如，我们统计文本数据流中的单词出现次数，事件被处理多次会导致统计结果并不准确。</li>
+<li>Exactly-Once：无论是否有故障重启，每个事件只被处理一次。Exactly-Once意味着事件不能有任何丢失，也不能被多次处理。比起前两种保障，Exactly-Once的实现难度非常高。如遇故障重启，Exactly-Once就必须确认哪些事件已经被处理、哪些还未被处理。Flink在某些情况下能提供Exactly-Once的保障。</li>
+</ul>
+<h2 id="Flink概述"><a href="#Flink概述" class="headerlink" title="Flink概述"></a>Flink概述</h2><p>Flink是由德国3所大学发起的学术项目，后来不断发展壮大，并于2014年年末成为Apache顶级项目之一，在2015年前后逐渐成熟的Flink是一个支持在有界和无界数据流上做有状态计算的大数据处理框架。在德语中，“fink”表示快速、敏捷，以此来表征这款计算框架的特点。</p>
+<h3 id="Flink数据流图"><a href="#Flink数据流图" class="headerlink" title="Flink数据流图"></a>Flink数据流图</h3><p>Flink程序分为三大部分，第1部分读取数据源（Source），第2部分对数据做转换操作（Transformation），第3部分将转换结果输出到一个目的地（Sink）。</p>
+<h3 id="Flink分布式架构与核心组件"><a href="#Flink分布式架构与核心组件" class="headerlink" title="Flink分布式架构与核心组件"></a>Flink分布式架构与核心组件</h3><p>为了支持分布式执行，Flink跟其他大数据框架一样，采用了主从（Master-Worker）架构。Flink执行时主要包括如下两个组件。Master是一个Flink作业的主进程。它起到了协调管理的作用。TaskManager，又被称为Worker或Slave，是执行计算任务的进程。它拥有CPU、内存等计算资源。Flink作业需要将计算任务分发到多个TaskManager上并行执行。</p>
+<p>考虑到数据分布在多个节点的情况，逻辑视图只是一种抽象，需要将逻辑视图转化为物理执行图，才能在分布式环境下执行。在物理视图中，数据流分布在2个分区上。空心箭头部分表示数据流分区，圆圈部分表示算子在分区上的算子子任务（Operator Subtask）。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_32" alt="逻辑视图" style="zoom:50%;"></div>
+
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_33" alt="物理执行图" style="zoom:50%;"></div>
+
+<h3 id="Flink作业提交过程"><a href="#Flink作业提交过程" class="headerlink" title="Flink作业提交过程"></a>Flink作业提交过程</h3><div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_35" alt="Flink任务提交流程" style="zoom:50%;"></div>
+
+<ol>
+<li>用户编写应用程序代码，并通过Flink客户端（Client）提交作业。程序一般为Java或Scala语言，调用Flink API，构建逻辑视图。代码和相关配置文件被编译打包，被提交到Master的Dispatcher，形成一个应用作业（Application）</li>
+<li>Dispatcher接收到这个作业，启动JobManager，这个JobManager会负责本次作业的各项协调工</li>
+<li>JobManager向ResourceManager申请本次作业所需资源</li>
+<li>由于在第0步中TaskManager已经向ResourceManager中注册了资源，这时闲置的TaskManager会被反馈给JobManager</li>
+<li>JobManager将用户作业中的逻辑视图转化为图所示的并行化的物理执行图，将计算任务分发部署到多个TaskManager上。至此，一个Flink作业就开始执行了</li>
+</ol>
+<h3 id="Flink核心组件"><a href="#Flink核心组件" class="headerlink" title="Flink核心组件"></a>Flink核心组件</h3><p>在作业提交流程上，我们对涉及的各个组件进行更详细的介绍。</p>
+<h4 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h4><p>用户一般使用Client提交作业，比如Flink主目录下bin目录中提供的命令行工具。Client会对用户提交的Flink作业进行预处理，并把作业提交到Flink集群上。Client提交作业时需要配置一些必要的参数，比如使用Standalone集群还是YARN集群等。整个作业被打成了JAR包，DataStream API被转换成了JobGraph，JobGraph是一种类似图3-2所示的逻辑视图。</p>
+<h4 id="Dispatcher"><a href="#Dispatcher" class="headerlink" title="Dispatcher"></a>Dispatcher</h4><p>Dispatcher可以接收多个作业，每接收一个作业，Dispatcher都会为这个作业分配一个JobManager。Dispatcher对外提供一个表述性状态转移（RepresentationalState Transfer，REST）式的接口，以超文本传输协议（Hyper Text TransferProtocal，HTTP）来对外提供服务。</p>
+<h4 id="JobManager"><a href="#JobManager" class="headerlink" title="JobManager"></a>JobManager</h4><p>JobManager是单个Flink作业的协调者，一个作业会有一个JobManager来负责。JobManager会将Client提交的JobGraph转化为ExecutionGraph，ExecutionGraph是类似图3-3所示的并行的物理执行图。JobManager会向ResourceManager申请必要的资源，当获取足够的资源后，JobManager将ExecutionGraph以及具体的计算任务分发部署到多个TaskManager上。同时，JobManager还负责管理多个TaskManager，包括收集作业的状态信息、生成检查点、必要时进行故障恢复等。</p>
+<h4 id="ResourceManager"><a href="#ResourceManager" class="headerlink" title="ResourceManager"></a>ResourceManager</h4><p>如前文所述，Flink现在可以部署在Standalone、YARN或Kubernetes等环境上，不同环境中对计算资源的管理模式略有不同，Flink使用一个名为ResourceManager的模块来统一处理资源分配上的问题。在Flink中，计算资源的基本单位是TaskManager上的任务槽位（Task Slot，简称Slot）。ResourceManager的职责主要是从YARN等资源提供方获取计算资源，当JobManager有计算需求时，将空闲的Slot分配给JobManager。当计算任务结束时，ResourceManager还会重新收回这些Slot。</p>
+<h4 id="TaskManager"><a href="#TaskManager" class="headerlink" title="TaskManager"></a>TaskManager</h4><p>TaskManager是实际负责执行计算的节点。一般地，一个Flink作业是分布在多个TaskManager上执行的，单个TaskManager上提供一定量的Slot。一个TaskManager启动后，相关Slot信息会被注册到ResourceManager中。当某个Flink作业提交后，ResourceManager会将空闲的Slot提供给JobManager。JobManager获取到空闲的Slot后会将具体的计算任务部署到空闲Slot之上，任务开始在这些Slot上执行。在执行过程，由于要进行数据交换，TaskManager还要和其他TaskManager进行必要的数据通信。总之，TaskManager负责具体计算任务的执行，启动时它会将Slot资源向ResourceManager注册。</p>
+<h3 id="任务执行与资源划分"><a href="#任务执行与资源划分" class="headerlink" title="任务执行与资源划分"></a>任务执行与资源划分</h3><p>了解了Flink的分布式架构和核心组件，这里我们从更细粒度上来介绍从逻辑视图转化为物理执行图的过程，该过程可以分成4层：StreamGraph→JobGraph→ExecutionGraph→物理执行图。我们根据下图来大致了解这些图的功能。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_37" alt="Flink的四种图" style="zoom:50%;"></div>
+
+
+
+<ul>
+<li>StreamGraph：根据用户编写的代码生成的最初的图，用来表示一个Flink流处理作业的拓扑结构。在StreamGraph中，节点StreamNode就是算子。</li>
+<li>JobGraph：JobGraph是被提交给JobManager的数据结构。StreamGraph经过优化后生成了JobGraph，主要的优化为，将多个符合条件的节点链接在一起作为一个JobVertex节点，这样可以减少数据交换所需要的传输开销。这个链接的过程叫算子链（Operator Chain）</li>
+<li>ExecutionGraph：JobManager将JobGraph转化为ExecutionGraph。ExecutionGraph是JobGraph的并行化版本：假如某个JobVertex的并行度是2，那么它将被划分为2个ExecutionVertex，ExecutionVertex表示一个算子子任务，它监控着单个子任务的执行情况。每个ExecutionVertex会输出一个IntermediateResultPartition，这是单个子任务的输出，再经过ExecutionEdge输出到下游节点。ExecutionJobVertex是这些并行子任务的合集，它监控着整个算子的执行情况。ExecutionGraph是调度层非常核心的数据结构。</li>
+<li>物理执行图：JobManager根据ExecutionGraph对作业进行调度后，在各个TaskManager上部署具体的任务，物理执行图并不是一个具体的数据结构。</li>
+</ul>
+<h2 id="DataStream-API的介绍和使用"><a href="#DataStream-API的介绍和使用" class="headerlink" title="DataStream API的介绍和使用"></a>DataStream API的介绍和使用</h2><h3 id="Flink程序的骨架结构"><a href="#Flink程序的骨架结构" class="headerlink" title="Flink程序的骨架结构"></a>Flink程序的骨架结构</h3><p>一个Flink程序的核心业务逻辑主要包括：设置执行环境、进行Source、Transformation和Sink操作，最后要调用执行环境的execute()方法。</p>
+<h3 id="常见Transformation的使用用法"><a href="#常见Transformation的使用用法" class="headerlink" title="常见Transformation的使用用法"></a>常见Transformation的使用用法</h3><p>Flink的Transformation主要包括4种：单数据流基本转换、基于Key的分组转换、多数据流转换和数据重分布转换。</p>
+<h4 id="单数据流基本转换"><a href="#单数据流基本转换" class="headerlink" title="单数据流基本转换"></a>单数据流基本转换</h4><h5 id="map"><a href="#map" class="headerlink" title="map()"></a>map()</h5><p>对一个DataStream中的每个元素使用用户自定义的Mapper函数进行处理，每个输入元素对应一个输出元素，最终整个数据流被转换成一个新的DataStream。我们可以重写MapFunction或RichMapFunction来自定义map()，RichMapFunction类是一种RichFunction类，它除了提供MapFunction类的基础功能，还提供了一系列其他方法，包括open()、close()、getRuntimeContext()和setRuntimeContext()等方法，重写这些方法可以创建状态数据、对数据进行广播、获取累加器和计数器等。下图展示了map()的工作原理。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_44" alt="map图示" style="zoom:50%;"></div>
+
+<h5 id="filter"><a href="#filter" class="headerlink" title="filter()"></a>filter()</h5><p>filter()对每个元素进行过滤，过滤的过程使用一个Filter函数进行逻辑判断。也可以继承FilterFunction或RichFilterFunction，然后重写filter()方法，下图展示了filter()的工作原理。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_45" alt="filter图示" style="zoom:50%;"></div>
+
+<h5 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap()"></a>flatMap()</h5><p>输入是包含圆形或正方形的列表，fatMap()过滤掉圆形，正方形列表被展平，以单个元素的形式输出。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_46" alt="flatMap图示" style="zoom:50%;"></div>
+
+<h4 id="基于Key的分组转换"><a href="#基于Key的分组转换" class="headerlink" title="基于Key的分组转换"></a>基于Key的分组转换</h4><h5 id="keyBy"><a href="#keyBy" class="headerlink" title="keyBy()"></a>keyBy()</h5><p>大多数情况下，我们要根据事件的某种属性或数据的某个字段进行分组，然后对一个分组内的数据进行处理。keyBy()将DataStream转换成一个KeyedStream。KeyedStream是一种特殊的DataStream，事实上，KeyedStream继承了DataStream，DataStream的各元素随机分布在各算子子任务中，KeyedStream的各元素按照Key分组，相同Key的数据会被分配到同一算子子任务中。我们需要向keyBy()传递一个参数，以告知Flink以什么作为Key进行分组。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_48" alt="keyBy图示" style="zoom:50%;"></div>
+
+<p>指定Key本质上是实现一个KeySelector，在Flink源码中，它定义如下：</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// IN为数据流元素，KEY为所选择的Key </span><br><span class="hljs-meta">@FunctionalInterface</span> <br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">KeySelector</span>&lt;<span class="hljs-title">IN</span>, <span class="hljs-title">KEY</span>&gt; <span class="hljs-keyword">extends</span> <span class="hljs-title">Function</span>, <span class="hljs-title">Serializable</span> </span>{ <br>    <span class="hljs-comment">// 选择一个字段作为Key </span><br>    <span class="hljs-function">KEY <span class="hljs-title">getKey</span><span class="hljs-params">(IN value)</span> <span class="hljs-keyword">throws</span> Exception</span>; <br>} <br></code></pre></td></tr></tbody></table></figure>
+
+<p>我们可以重写getKey()</p>
+<figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Word</span> </span>{ <br>    <span class="hljs-keyword">public</span> String word; <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> count; <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Word</span><span class="hljs-params">()</span> </span>{} <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Word</span><span class="hljs-params">(String word, <span class="hljs-keyword">int</span> count)</span> </span>{ <br>        <span class="hljs-keyword">this</span>.word = word; <br>        <span class="hljs-keyword">this</span>.count = count; <br>    } <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Word <span class="hljs-title">of</span><span class="hljs-params">(String word, <span class="hljs-keyword">int</span> count)</span> </span>{ <br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Word(word, count); <br>    } <br>    <span class="hljs-meta">@Override</span> <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>{ <br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.word + <span class="hljs-string">": "</span> + <span class="hljs-keyword">this</span>.count; <br>    } <br>} <br><br>DataStream&lt;Word&gt; wordStream = senv.fromElements( <br>    Word.of(<span class="hljs-string">"Hello"</span>, <span class="hljs-number">1</span>), Word.of(<span class="hljs-string">"Flink"</span>, <span class="hljs-number">1</span>), <br>    Word.of(<span class="hljs-string">"Hello"</span>, <span class="hljs-number">2</span>), Word.of(<span class="hljs-string">"Flink"</span>, <span class="hljs-number">2</span>) <br>); <br><br><span class="hljs-comment">// 使用KeySelector </span><br>DataStream&lt;Word&gt; keySelectorStream = wordStream.keyBy(<span class="hljs-keyword">new</span> KeySelector&lt;Word, String&gt; { <br>    <span class="hljs-meta">@Override</span> <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getKey</span><span class="hljs-params">(Word in)</span> </span>{ <br>      <span class="hljs-keyword">return</span> in.word; <br>    } <br>}).sum(<span class="hljs-string">"count"</span>);<br></code></pre></td></tr></tbody></table></figure>
+
+<h5 id="Aggregation"><a href="#Aggregation" class="headerlink" title="Aggregation"></a>Aggregation</h5><p>常见的聚合（Aggregation）函数有sum()、max()、min()等，这些聚合函数统称为聚合。使用聚合函数时，我们需要一个参数来指定按照哪个字段进行聚合。跟keyBy()相似，我们可以使用数字位置来指定对哪个字段进行聚合，也可以实现一个KeySelector。</p>
+<ul>
+<li>sum()对该字段进行加和，并将结果保存在该字段中，它无法确定其他字段的数值，或者说无法保证其他字段的计算结果。</li>
+<li>max()/min()对该字段求最大值，并将结果保存在该字段中。对于其他字段，该函数并不能保证其数值的计算结果。</li>
+<li>maxBy()/minBy()对该字段求最大值，maxBy()与max()的区别在于，maxBy()同时保留其他字段的数值，即maxBy()返回数据流中最大的整个元素，包括其他字段。</li>
+</ul>
+<p>其实，这些聚合函数里已经使用了状态数据，比如，sum()内部记录了当前的和，max()内部记录了当前的最大值。聚合函数的计算过程其实就是不断更新状态数据的过程。由于内部使用了状态数据，而且状态数据并不会被清除，因此一定要慎重地在一个无限数据流上使用这些聚合函数。对于一个KeyedStream，一次只能使用一个聚合函数，无法链式使用多个。</p>
+<h5 id="reduce"><a href="#reduce" class="headerlink" title="reduce"></a>reduce</h5><p>reduce()的原理：reduce()在KeyedStream上生效，它接受两个输入，生成一个输出，即两两合一地进行汇总操作，生成一个同类型的新元素。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_49" alt="reduce图示" style="zoom:50%;"></div>
+
+<h4 id="多数据流转换"><a href="#多数据流转换" class="headerlink" title="多数据流转换"></a>多数据流转换</h4><h5 id="union"><a href="#union" class="headerlink" title="union"></a>union</h5><p>在DataStream上使用union()可以合并多个同类型的数据流，或者说，可以将多个DataStream合并为一个新的DataStream。数据将按照先进先出（First In First Out）的模式合并，且不去重。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_50" alt="union图示" style="zoom:50%;"></div>
+
+<h5 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h5><p>union()虽然可以合并多个数据流，但有一个限制：多个数据流的数据类型必须相同。connect()提供了和union()类似的功能，即连接两个数据流，它与union()的区别如下：</p>
+<ul>
+<li>connect()只能连接两个数据流，union()可以连接多个数据流</li>
+<li>connect()所连接的两个数据流的数据类型可以不一致，union()所连接的两个或多个数据流的数据类型必须一致</li>
+<li>两个DataStream经过connect()之后被转化为ConnectedStreams，ConnectedStreams会对两个流的数据应用不同的处理方法，且两个流之间可以共享状态。如图所示，connect()经常被应用于使用一个控制流对另一个数据流进行控制的场景，控制流可以是阈值、规则、机器学习模型或其他参数</li>
+</ul>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_51" alt="connect图示" style="zoom:50%;"></div>
+
+<p>两个DataStream经过connect()之后被转化为ConnectedStreams。对于ConnectedStreams，我们需要重写CoMapFunction或CoFlatMapFunction。这两个接口都提供了3个泛型。这3个泛型分别对应第一个输入流的数据类型、第二个输入流的数据类型和输出流的数据类型。在重写函数时，对于CoMapFunction，map1()方法处理第一个流的数据，map2()方法处理第二个流的数据；对于CoFlatMapFunction，fatMap1()方法处理第一个流的数据，fatMap2()方法处理第二个流的数据。</p>
+<p>Flink并不能保证map1()/fatMap1()和map2()/fatMap2()两个方法调用的顺序，两个方法的调用顺序依赖于两个数据流中数据流入的先后顺序，即第一个数据流有数据到达时，map1()方法或fatMap1()方法会被调用，第二个数据流有数据到达时，map2()方法或fatMap2()方法会被调用。</p>
+<h4 id="并行度和数据重分布"><a href="#并行度和数据重分布" class="headerlink" title="并行度和数据重分布"></a>并行度和数据重分布</h4><h5 id="并行度"><a href="#并行度" class="headerlink" title="并行度"></a>并行度</h5><p>Flink使用并行度来定义某个算子被切分为多少个算子子任务，并行度可以在一个Flink作业的执行环境层面统一设置，这样将影响该作业所有算子并行度，也可以对某个算子单独设置其并行度。如果不进行任何设置，默认情况下，一个作业所有算子的并行度会依赖于这个作业的执行环境。</p>
+<h5 id="数据重分布"><a href="#数据重分布" class="headerlink" title="数据重分布"></a>数据重分布</h5><p>默认情况下，数据是自动分配到多个子任务上的。有的时候，我们需要手动在多个子任务上进行数据分布。例如，我们知道某个子任务上的数据过多，其他子任务上的数据较少，产生了数据倾斜，这时需要将数据均匀分布到各个子任务上，以避免部分子任务负载过重。数据倾斜问题会导致整个作业的计算时间过长或者内存不足等问题。</p>
+<p>本节涉及的各个数据重分布算子的输入是DataStream，输出也是DataStream。</p>
+<ul>
+<li>shuffle：shuffe()基于正态分布，将数据随机分布到下游各算子子任务上。</li>
+<li>rebalance和rescale；rebalance()使用Round-Ribon方法将数据均匀分布到各子任务上。Round-Ribon是负载均衡领域经常使用的均匀分布的方法，上游的数据会轮询式地均匀分布到下游的所有的子任务上。rescale()与rebalance()很像，也是将数据均匀分布到下游各子任务上，但它的传输开销更小，因为rescale()并不是将每个数据轮询地发送给下游每个子任务，而是就近发送给下游子任务。</li>
+<li>broadcast；数据被复制并广播发送给下游的所有子任务上。</li>
+<li>global：global()会将所有数据发送给下游算子的第一个子任务上，使用global()时要小心，以免造成严重的性能问题。</li>
+<li>partitionCustom：partitionCustom()表示我们可以在DataStream上使用partitionCustom()来自定义数据重分布逻辑。partitionCustom()它有两个参数：第一个参数是自定义的Partitioner，我们需要重写里面的partition()方法，partition()方法返回一个整数，表示该元素将被分配到下游第几个子任务。；第二个参数表示对数据流哪个字段使用partiton()方法。</li>
+</ul>
+<h3 id="数据类型和序列化"><a href="#数据类型和序列化" class="headerlink" title="数据类型和序列化"></a>数据类型和序列化</h3><p>几乎所有的大数据框架都要面临分布式计算、数据传输和持久化问题。数据传输过程前后要进行数据的序列化和反序列化：序列化就是将一个内存对象转换成二进制串，形成可网络传输或者可持久化的数据流。反序列化将二进制串转换为内存对象，这样就可以直接在编程语言中读/写和操作这个对象。一种最简单的序列化方法就是将复杂数据结构转化成JavaScript对象表示法（JavaScript ObjectNotation，JSON）格式。</p>
+<h4 id="Flink支持的数据类型"><a href="#Flink支持的数据类型" class="headerlink" title="Flink支持的数据类型"></a>Flink支持的数据类型</h4><div align="center"><img src="https://res.weread.qq.com/wrepub/epub_37157088_55" alt="Flink支持的数据类型" style="zoom:50%;"></div>
+
+
+
+<h3 id="用户自定义函数"><a href="#用户自定义函数" class="headerlink" title="用户自定义函数"></a>用户自定义函数</h3><h4 id="接口、Lamda表达式"><a href="#接口、Lamda表达式" class="headerlink" title="接口、Lamda表达式"></a>接口、Lamda表达式</h4><p>对于map()、fatMap()、reduce()等函数，我们可以实现MapFunction、FlatMapFunction、ReduceFunction等接口。这些接口签名中都有泛型参数，用来定义该函数的输入或输出的数据类型。我们要继承这些类，并重写里面的自定义函数。</p>
+<h4 id="Rich函数类"><a href="#Rich函数类" class="headerlink" title="Rich函数类"></a>Rich函数类</h4><p>在上面两种自定义方法的基础上，Flink还提供了RichFunction函数类。从名称上来看，这种接口在普通的接口上增加了Rich前缀，比如RichMapFunction、RichFlatMapFunction或RichReduceFunction等。比起不带Rich前缀的函数类，Rich函数类增加了如下方法。</p>
+<ul>
+<li>open()方法：Flink在算子调用前会执行这个方法，可以用来进行一些初始化工作。</li>
+<li>close()方法：Flink在算子最后一次调用结束后执行这个方法，可以用来释放一些资源。</li>
+<li>getRuntimeContext()方法：获取运行时上下文。每个并行的算子子任务都有一个运行时上下文，上下文记录了这个算子执行过程中的一些信息，包括算子当前的并行度、算子子任务序号、广播数据、累加器、监控数据。最重要的是，我们可以从上下文里获取状态数据。</li>
+</ul>
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/Study/English/Melancholy/">Melancholy</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 WanZixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>English</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/Study/Java/Flink/Flink%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/Study/Java/Flink/Flink%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
