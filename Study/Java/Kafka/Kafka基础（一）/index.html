@@ -35,8 +35,9 @@
 <meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_25462424_43">
 <meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_25462424_61">
 <meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_25462424_80">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_25462424_130">
 <meta property="article:published_time" content="2021-10-31T02:03:36.000Z">
-<meta property="article:modified_time" content="2021-10-31T09:39:10.290Z">
+<meta property="article:modified_time" content="2021-11-02T03:14:07.375Z">
 <meta property="article:author" content="wanzixin">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://res.weread.qq.com/wrepub/epub_25462424_4">
@@ -266,6 +267,30 @@
                     
                     <a class="navbar-item" href="#消费消息">3.2.4&nbsp;&nbsp;消费消息</a>
                     
+                    
+                    
+                    <a class="navbar-item" href="#位移提交">3.2.5&nbsp;&nbsp;位移提交</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#控制或关闭消费">3.2.6&nbsp;&nbsp;控制或关闭消费</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#指定位移消费">3.2.7&nbsp;&nbsp;指定位移消费</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#再均衡">3.2.8&nbsp;&nbsp;再均衡</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#消费者拦截器">3.2.9&nbsp;&nbsp;消费者拦截器</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#重要的消费者参数">3.2.10&nbsp;&nbsp;重要的消费者参数</a>
+                    
                 </div>
             </div>
             
@@ -305,7 +330,7 @@
         <span class="column is-narrow">
             
             
-            an hour read (About 12859 words)
+            2 hours read (About 13951 words)
         </span>
         
     </div>
@@ -333,7 +358,7 @@
 <h4 id="主题、分区"><a href="#主题、分区" class="headerlink" title="主题、分区"></a>主题、分区</h4><p>在Kafka中还有两个特别重要的概念—主题（Topic）与分区（Partition）。Kafka中的消息以主题为单位进行归类，生产者负责将消息发送到特定的主题（发送到Kafka集群中的每一条消息都要指定一个主题），而消费者负责订阅主题并进行消费。</p>
 <p>主题是一个逻辑上的概念，它还可以细分为多个分区，一个分区只属于单个主题，很多时候也会把分区称为主题分区（Topic-Partition）。同一主题下的不同分区包含的消息是不同的，分区在存储层面可以看作一个可追加的日志（Log）文件，消息在被追加到分区日志文件的时候都会分配一个特定的偏移量（offset）。offset是消息在分区中的唯一标识，Kafka通过它来保证消息在分区内的顺序性，不过offset并不跨越分区，也就是说，Kafka保证的是分区有序而不是主题有序。</p>
 <p>如图所示，主题中有 4 个分区，消息被顺序追加到每个分区日志文件的尾部。Kafka中的分区可以分布在不同的服务器（broker）上，也就是说，一个主题可以横跨多个broker，以此来提供比单个broker更强大的性能。</p>
-<img src="https://res.weread.qq.com/wrepub/epub_25462424_4" alt="消息追加写入" style="zoom:80%;">
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_4" alt="消息追加写入" style="zoom:80%;"></div>
 
 <p>每一条消息被发送到broker之前，会根据分区规则选择存储到哪个具体的分区。如果分区规则设定得合理，所有的消息都可以均匀地分配到不同的分区中。如果一个主题只对应一个文件，那么这个文件所在的机器 I/O 将会成为这个主题的性能瓶颈，而分区解决了这个问题。在创建主题的时候可以通过指定的参数来设置分区的个数，当然也可以在主题创建完成之后去修改分区的数量，通过增加分区的数量可以实现水平扩展。</p>
 <p>Kafka 为分区引入了多副本（Replica）机制，通过增加副本数量可以提升容灾能力。同一分区的不同副本中保存的是相同的消息（在同一时刻，副本之间并非完全一样），副本之间是“一主多从”的关系，其中leader副本负责处理读写请求，follower副本只负责与leader副本的消息同步。副本处于不同的broker中，当leader副本出现故障时，从follower副本中重新选举新的leader副本对外提供服务。Kafka通过多副本机制实现了故障的自动转移，当Kafka集群中某个broker失效时仍然能保证服务可用。</p>
@@ -341,20 +366,20 @@
 <p>分区中的所有副本统称为AR（Assigned Replicas）。所有与leader副本保持一定程度同步的副本（包括leader副本在内）组成ISR（In-Sync Replicas），ISR集合是AR集合中的一个子集。消息会先发送到leader副本，然后follower副本才能从leader副本中拉取消息进行同步，同步期间内follower副本相对于leader副本而言会有一定程度的滞后。前面所说的“一定程度的同步”是指可忍受的滞后范围，这个范围可以通过参数进行配置。与leader副本同步滞后过多的副本（不包括leader副本）组成OSR（Out-of-Sync Replicas），由此可见，AR=ISR+OSR。在正常情况下，所有的 follower 副本都应该与 leader 副本保持一定程度的同步，即AR=ISR，OSR集合为空。</p>
 <p>leader副本负责维护和跟踪ISR集合中所有follower副本的滞后状态，当follower副本落后太多或失效时，leader副本会把它从ISR集合中剔除。如果OSR集合中有follower副本“追上”了leader副本，那么leader副本会把它从OSR集合转移至ISR集合。默认情况下，当leader副本发生故障时，只有在ISR集合中的副本才有资格被选举为新的leader，而在OSR集合中的副本则没有任何机会（不过这个原则也可以通过修改相应的参数配置来改变）。</p>
 <p>ISR与HW和LEO也有紧密的关系。HW是High Watermark的缩写，俗称高水位，它标识了一个特定的消息偏移量（offset），消费者只能拉取到这个offset之前的消息。如图所示，它代表一个日志文件，这个日志文件中有 9 条消息，第一条消息的 offset（LogStartOffset）为0，最后一条消息的offset为8，offset为9的消息用虚线框表示，代表下一条待写入的消息。日志文件的HW为6，表示消费者只能拉取到offset在0至5之间的消息，而offset为6的消息对消费者而言是不可见的。</p>
-<img src="https://res.weread.qq.com/wrepub/epub_25462424_6" alt="分区中各种偏移量的说明" style="zoom:80%;">
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_6" alt="分区中各种偏移量的说明" style="zoom:80%;"></div>
 
 <p>LEO是Log End Offset的缩写，它标识当前日志文件中下一条待写入消息的offset，上图中offset为9的位置即为当前日志文件的LEO，LEO的大小相当于当前日志分区中最后一条消息的offset值加1。分区ISR集合中的每个副本都会维护自身的LEO，而ISR集合中最小的LEO即为分区的HW，对消费者而言只能消费HW之前的消息。</p>
 <p>我们来举一个栗子。</p>
 <p>假设某个分区的ISR集合中有3个副本，即一个leader副本和2个follower副本，此时分区的LEO和HW都为3。消息3和消息4从生产者发出之后会被先存入leader副本，如图所示。</p>
-<img src="https://res.weread.qq.com/wrepub/epub_25462424_7" alt="写入消息（情形一）" style="zoom:50%;">
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_7" alt="写入消息（情形一）" style="zoom:50%;"></div>
 
-<img src="https://res.weread.qq.com/wrepub/epub_25462424_8" alt="写入消息（情形二）" style="zoom:50%;">
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_8" alt="写入消息（情形二）" style="zoom:50%;"></div>
 
 <p>在消息写入leader副本之后，follower副本会发送拉取请求来拉取消息3和消息4以进行消息同步。在同步过程中，不同的 follower 副本的同步效率也不尽相同。如图所示，在某一时刻follower1完全跟上了leader副本而follower2只同步了消息3，如此leader副本的LEO为5，follower1的LEO为5，follower2的LEO为4，那么当前分区的HW取最小值4，此时消费者可以消费到offset为0至3之间的消息。</p>
-<img src="https://res.weread.qq.com/wrepub/epub_25462424_9" alt="写入消息（情形三）" style="zoom:70%;">
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_9" alt="写入消息（情形三）" style="zoom:70%;"></div>
 
 <p>如图所示，所有的副本都成功写入了消息3和消息4，整个分区的HW和LEO都变为5，因此消费者可以消费到offset为4的消息了。</p>
-<img src="https://res.weread.qq.com/wrepub/epub_25462424_10" alt="写入消息（情形四）" style="zoom:50%;">
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_10" alt="写入消息（情形四）" style="zoom:50%;"></div>
 
 <p>由此可见，Kafka 的复制机制既不是完全的同步复制，也不是单纯的异步复制。事实上，同步复制要求所有能工作的 follower 副本都复制完，这条消息才会被确认为已成功提交，这种复制方式极大地影响了性能。而在异步复制方式下，follower副本异步地从leader副本中复制数据，数据只要被leader副本写入就被认为已经成功提交。在这种情况下，如果follower副本都还没有复制完而落后于leader副本，突然leader副本宕机，则会造成数据丢失。Kafka使用的这种ISR的方式则有效地权衡了数据可靠性和性能之间的关系。</p>
 <h2 id="生产者"><a href="#生产者" class="headerlink" title="生产者"></a>生产者</h2><h3 id="客户端开发"><a href="#客户端开发" class="headerlink" title="客户端开发"></a>客户端开发</h3><p>一个正常的生产逻辑需要具备以下几个步骤：</p>
@@ -364,10 +389,10 @@
 <li>发送消息。</li>
 <li>关闭生产者实例。</li>
 </ol>
-<img src="https://res.weread.qq.com/wrepub/epub_25462424_42" alt="生产者客户端示例代码" style="zoom:80%;">
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_42" alt="生产者客户端示例代码" style="zoom:80%;"></div>
 
 <p>这里有单独说明下构建的消息对象 ProducerRecord，它并不是单纯意义上的消息，它包含了多个属性，原本需要发送的与业务相关的消息体只是其中的一个value 属性，比如“Hello，Kafka！”只是ProducerRecord对象中的一个属性。ProducerRecord类的定义如下（只截取成员变量）：</p>
-<img src="https://res.weread.qq.com/wrepub/epub_25462424_43" alt="ProducerRecord类的定义节选" style="zoom:80%;">
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_43" alt="ProducerRecord类的定义节选" style="zoom:80%;"></div>
 
 <p>其中topic和partition字段分别代表消息要发往的主题和分区号。headers字段是消息的头部，Kafka 0.11.x版本才引入这个属性，它大多用来设定一些与应用相关的信息，如无需要也可以不用设置。key是用来指定消息的键，它不仅是消息的附加信息，还可以用来计算分区号进而可以让消息发往特定的分区。前面提及消息以主题为单位进行归类，而这个key可以让消息再进行二次归类，同一个key的消息会被划分到同一个分区中。有key的消息还可以支持日志压缩的功能。value是指消息体，一般不为空，如果为空则表示特定的消息—墓碑消息。timestamp是指消息的时间戳，它有CreateTime和LogAppendTime两种类型，前者表示消息创建的时间，后者表示消息追加到日志文件的事件。</p>
 <h4 id="必要的参数配置"><a href="#必要的参数配置" class="headerlink" title="必要的参数配置"></a>必要的参数配置</h4><p>在Kafka生产者客户端中有三个参数是必填的：</p>
@@ -394,7 +419,7 @@
 <li>close()：是一个空方法，若实现此方法，则必须保证该方法的幂等性，因为该方法会被KafkaProducer调用多次</li>
 </ul>
 <p>生产者使用的序列化器和消费者使用的反序列化器是需要一一对应的，如果生产者使用了某种序列化器，比如StringSerializer，而消费者使用了另一种序列化器，比如IntegerSerializer，那么是无法解析出想要的数据的。</p>
-<img src="https://res.weread.qq.com/wrepub/epub_25462424_61" alt="StringSerializer的代码实现" style="zoom:80%;">
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_61" alt="StringSerializer的代码实现" style="zoom:80%;"></div>
 
 <h4 id="分区器"><a href="#分区器" class="headerlink" title="分区器"></a>分区器</h4><p>消息在通过<code>send()</code>方法发往broker的过程中，有可能需要经过拦截器（Interceptor）、序列化器（Serializer）和分区器（Partitioner）的一系列作用之后才能被真正地发往 broker。拦截器一般不是必需的，而序列化器是必需的。消息经过序列化之后就需要确定它发往的分区，如果消息<code>ProducerRecord</code>中指定了partition字段，那么就不需要分区器的作用，因为partition代表的就是所要发往的分区号。</p>
 <p>如果消息<code>ProducerRecord</code>中没有指定partition字段，那么就需要依赖分区器，根据key这个字段来计算partition的值。分区器的作用就是为消息分配分区。</p>
@@ -424,7 +449,7 @@
 
 <p>KafkaProducer中不仅可以指定一个拦截器，还可以指定多个拦截器以形成拦截链。拦截链会按照 <code>interceptor.classes</code> 参数配置的拦截器的顺序来一一执行（配置的时候，各个拦截器之间使用逗号隔开）。</p>
 <h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><h4 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h4><p>我们来看一下生产者客户端的整体架构。</p>
-<img src="https://res.weread.qq.com/wrepub/epub_25462424_80" alt="生产者客户端的整体架构" style="zoom:80%;">
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_80" alt="生产者客户端的整体架构" style="zoom:80%;"></div>
 
 <p>整个生产者客户端由两个线程协调运行，这两个线程分别为主线程和Sender线程（发送线程）。在主线程中由KafkaProducer创建消息，然后通过可能的拦截器、序列化器和分区器的作用之后缓存到消息累加器（RecordAccumulator，也称为消息收集器）中。Sender 线程负责从RecordAccumulator中获取消息并将其发送到Kafka中。</p>
 <p>RecordAccumulator 主要用来缓存消息以便 Sender 线程可以批量发送，进而减少网络传输的资源消耗以提升性能。RecordAccumulator 缓存的大小可以通过生产者客户端参数<code>buffer.memory</code> 配置，默认值为 33554432B，即 32MB。如果生产者发送消息的速度超过发送到服务器的速度，则会导致生产者空间不足，这个时候KafkaProducer的<code>send()</code>方法调用要么被阻塞，要么抛出异常，这个取决于参数<code>max.block.ms</code>的配置，此参数的默认值为60000，即60秒。</p>
@@ -490,7 +515,24 @@
 <figure class="highlight java hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">configure</span><span class="hljs-params">(Map＜String，？＞ configs，<span class="hljs-keyword">boolean</span> isKey)</span></span>;<span class="hljs-comment">//配置当前类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">byte</span>[] serialize(String topic，T data);<span class="hljs-comment">//执行反序列化</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">close</span><span class="hljs-params">()</span></span>;<span class="hljs-comment">//关闭当前反序列化器</span><br></code></pre></td></tr></tbody></table></figure>
 
 <p>在实际应用中，在Kafka提供的序列化器和反序列化器满足不了应用需求的前提下，推荐使用Avro、JSON、Thrift、ProtoBuf或Protostuff等通用的序列化工具来包装，以求尽可能实现得更加通用且前后兼容。使用通用的序列化工具也需要实现Serializer 和 Deserializer 接口，因为Kafka客户端的序列化和反序列化入口必须是这两个类型。</p>
-<h4 id="消费消息"><a href="#消费消息" class="headerlink" title="消费消息"></a>消费消息</h4></body></html>
+<h4 id="消费消息"><a href="#消费消息" class="headerlink" title="消费消息"></a>消费消息</h4><p>Kafka中的消费是基于拉模式的。消息的消费一般有两种模式：推模式和拉模式。推模式是服务端主动将消息推送给消费者，而拉模式是消费者主动向服务端发起请求来拉取消息。</p>
+<h4 id="位移提交"><a href="#位移提交" class="headerlink" title="位移提交"></a>位移提交</h4><p>对于Kafka中的分区而言，它的每条消息都有唯一的offset，用来表示消息在分区中对应的位置。对于消费者而言，它也有一个offset的概念，消费者使用offset来表示消费到分区中某个消息所在的位置。</p>
+<p>每次调用<code>poll()</code>方法时，它返回的是还没有消费过的消息集。要做到这一点，就需要记录上一次消费时的消费位移，而且这个消费位移必须持久化保存，否则消费者重启后就无法知晓之前的消费位移。此外，当新消费者加入时的再均衡动作同样需要消费位移，才能顺利把分区分配给新的消费者。</p>
+<p>我们把消费位移存储起来的动作称为提交，消费者在消费完消息后需要执行消费位移的提交。</p>
+<p>如图所示，x表示某一次某一次拉取操作中此分区消息的最大偏移量，假设当前消费者已经消费到位置x，我们就说该消费者的消费位移是x，图中也用了lastConsumedOffset来标识。</p>
+<div align="center"><img src="https://res.weread.qq.com/wrepub/epub_25462424_130" alt="消费位移" style="zoom:50%;"></div>
+
+<p>此外，当消费者需要提交的消费位移并不是x，而是x+1，也就是图中的position，它表示下一条需要拉取的消息位置。</p>
+<p>KafkaConsumer 类提供了 position（TopicPartition）和 committed（TopicPartition）两个方法来分别获取上面所说的position和committed offset的值。</p>
+<p>在 Kafka 中默认的消费位移的提交方式是自动提交，这个由消费者客户端参数<code>enable.auto.commit</code> 配置，默认值为 true。当然这个默认的自动提交不是每消费一条消息就提交一次，而是定期提交，这个定期的周期时间由客户端参数<code>auto.commit.interval.ms</code>配置，默认值为5秒，此参数生效的前提是<code>enable.auto.commit</code>参数为true。</p>
+<h4 id="控制或关闭消费"><a href="#控制或关闭消费" class="headerlink" title="控制或关闭消费"></a>控制或关闭消费</h4><p>KafkaConsumer 提供了对消费速度进行控制的方法，在有些应用场景下我们可能需要暂停某些分区的消费而先消费其他分区，当达到一定条件时再恢复这些分区的消费。KafkaConsumer中使用<code>pause()</code>来实现暂停某些分区在拉取操作时返回数据，使用<code>resume()</code>来恢复某些分区向客户端返回数据。</p>
+<p>KafkaConsumer还提供了一个无参的<code>paused()</code>来返回被暂停的分区集合。</p>
+<h4 id="指定位移消费"><a href="#指定位移消费" class="headerlink" title="指定位移消费"></a>指定位移消费</h4><p>略</p>
+<h4 id="再均衡"><a href="#再均衡" class="headerlink" title="再均衡"></a>再均衡</h4><p>再均衡是指分区的所属权从一个消费者转移到另一消费者的行为，它为消费组具备高可用性和伸缩性提供保障，使我们可以既方便又安全地删除消费组内的消费者或往消费组内添加消费者。不过在再均衡发生期间，消费组内的消费者是无法读取消息的。也就是说，在再均衡发生期间的这一小段时间内，消费组会变得不可用。另外，当一个分区被重新分配给另一个消费者时，消费者当前的状态也会丢失。</p>
+<h4 id="消费者拦截器"><a href="#消费者拦截器" class="headerlink" title="消费者拦截器"></a>消费者拦截器</h4><p>消费者拦截器主要在消费到消息或在提交消费位移时进行一些定制化的操作。</p>
+<h4 id="重要的消费者参数"><a href="#重要的消费者参数" class="headerlink" title="重要的消费者参数"></a>重要的消费者参数</h4><h5 id="fetch-min-bytes"><a href="#fetch-min-bytes" class="headerlink" title="fetch.min.bytes"></a>fetch.min.bytes</h5><p>该参数用来配置Consumer在一次拉取请求（调用poll（）方法）中能从Kafka中拉取的最小数据量，默认值为1（B）。</p>
+<h5 id="fetch-max-bytes"><a href="#fetch-max-bytes" class="headerlink" title="fetch.max.bytes"></a>fetch.max.bytes</h5><p>该参数与fetch.max.bytes参数对应，它用来配置Consumer在一次拉取请求中从Kafka中拉取的最大数据量，默认值为 52428800（B），也就是 50MB。</p>
+</body></html>
     
     </div>
     
