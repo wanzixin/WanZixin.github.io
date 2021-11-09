@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>Kafka基础（二） - wanzixin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<link href="/zh-cn/Study/Java/Kafka/Kafka%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="alternate" hreflang="zh-CN" />
+    
+
+
+<meta name="description" content="">
+
+
+
+
+
+    <meta name="description" content="本文主要参考资料为 1.Kafka官网 http:&#x2F;&#x2F;kafka.apache.org&#x2F; 2.《深入理解Kafka：核心设计与实践原理》–朱忠华编著">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka基础（二）">
+<meta property="og:url" content="https://wanzixin.github.io/Study/Java/Kafka/Kafka%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="wanzixin">
+<meta property="og:description" content="本文主要参考资料为 1.Kafka官网 http:&#x2F;&#x2F;kafka.apache.org&#x2F; 2.《深入理解Kafka：核心设计与实践原理》–朱忠华编著">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://res.weread.qq.com/wrepub/epub_25462424_208">
+<meta property="article:published_time" content="2021-11-08T03:04:47.000Z">
+<meta property="article:modified_time" content="2021-11-09T03:05:35.680Z">
+<meta property="article:author" content="wanzixin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://res.weread.qq.com/wrepub/epub_25462424_208">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    wanzixin
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+            <a class="navbar-item "
+               href="/categories/Diary">Diary</a>
+            
+            <a class="navbar-item "
+               href="/categories/Gallery">Gallery</a>
+            
+            <a class="navbar-item "
+               href="/categories/Study">Study</a>
+            
+            <a class="navbar-item "
+               href="/categories/Item">Item</a>
+            
+            <a class="navbar-item "
+               href="/about">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            <div class="navbar-item is-hoverable has-dropdown is-hidden-mobile is-hidden-tablet-only toc">
+                <a class="navbar-item" title="Table of Contents">
+                    <i class="fa fa-list"></i>
+                </a>
+                <div class="navbar-dropdown is-right">
+                    
+                    
+                    
+                    
+                    <a class="navbar-item" href="#主题与分区">1&nbsp;&nbsp;<b>主题与分区</b></a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#主题的管理">1.1&nbsp;&nbsp;主题的管理</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#配置管理">1.1.1&nbsp;&nbsp;配置管理</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#初识KafkaAdminClient">1.2&nbsp;&nbsp;初识KafkaAdminClient</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#基本使用">1.2.1&nbsp;&nbsp;基本使用</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#主题合法性验证">1.2.2&nbsp;&nbsp;主题合法性验证</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#分区管理">1.3&nbsp;&nbsp;分区管理</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#优先副本的选择">1.3.1&nbsp;&nbsp;优先副本的选择</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#分区重分配">1.3.2&nbsp;&nbsp;分区重分配</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#复制限流">1.3.3&nbsp;&nbsp;复制限流</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#修改副本因子">1.3.4&nbsp;&nbsp;修改副本因子</a>
+                    
+                    
+                    
+                    <a class="navbar-item" href="#如何选择合适的分区数">1.4&nbsp;&nbsp;如何选择合适的分区数</a>
+                    
+                </div>
+            </div>
+            
+            
+            <a class="navbar-item" title="GitHub" target="_blank" rel="noopener" href="https://github.com/wanzixin">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Kafka基础（二）
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <span>Nov 8 2021</span>
+            
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Study/">Study</a><span>></span><a class="article-category-link" href="/categories/Study/Java/">Java</a><span>></span><a class="article-category-link" href="/categories/Study/Java/Kafka/">Kafka</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            24 minutes read (About 3546 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><blockquote class="colorquote info"><p>本文主要参考资料为</p>
+<p>1.Kafka官网 <a target="_blank" rel="noopener" href="http://kafka.apache.org/">http://kafka.apache.org/</a></p>
+<p>2.《深入理解Kafka：核心设计与实践原理》–朱忠华编著</p>
+</blockquote><span id="more"></span>
+
+<h2 id="主题与分区"><a href="#主题与分区" class="headerlink" title="主题与分区"></a>主题与分区</h2><h3 id="主题的管理"><a href="#主题的管理" class="headerlink" title="主题的管理"></a>主题的管理</h3><p>主题、分区、副本和 Log（日志）的关系如图所示，主题和分区都是提供给上层用户的抽象，而在副本层面或更加确切地说是Log层面才有实际物理上的存在。同一个分区中的多个副本必须分布在不同的broker中，这样才能提供有效的数据冗余。</p>
+<img src="https://res.weread.qq.com/wrepub/epub_25462424_208" alt="主题、分区、副本和Log之间的关系" style="zoom:70%;">
+
+<p>Kafka不支持减少分区，只允许增加分区。</p>
+<p>主题管理</p>
+<p>推荐也更加通用的方式是通过<code>kafka-topics.sh</code>脚本来管理主题。</p>
+<p><code>kafka-topics.sh</code>脚本有5种指令类型：<code>create</code>、<code>list</code>、<code>describe</code>、<code>alter</code>和<code>delete</code>。其中<code>list</code>和<code>describe</code>指令可以用来方便地查看主题信息。修改功能由<code>alter</code>提供。</p>
+<h4 id="配置管理"><a href="#配置管理" class="headerlink" title="配置管理"></a>配置管理</h4><p><code>kafka-configs.sh</code> 脚本是专门用来对配置进行操作的，这里的操作是指在运行状态下修改原有的配置，如此可以达到动态变更的目的。<code>kafka-configs.sh</code>脚本包含变更配置<code>alter</code>和查看配置<code>describe</code>这两种指令类型。同使用<code>kafka-topics.sh</code>脚本变更配置的原则一样，增、删、改的行为都可以看作变更操作，不过<code>kafka-configs.sh</code>脚本不仅可以支持操作主题相关的配置，还可以支持操作broker、用户和客户端这3个类型的配置。</p>
+<h3 id="初识KafkaAdminClient"><a href="#初识KafkaAdminClient" class="headerlink" title="初识KafkaAdminClient"></a>初识KafkaAdminClient</h3><p>一般情况下，我们都习惯使用<code>kafka-topics.sh</code>脚本来管理主题，但有些时候我们希望将主题管理类的功能集成到公司内部的系统中，打造集管理、监控、运维、告警为一体的生态平台，那么就需要以程序调用API的方式去实现。</p>
+<h4 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h4><p>一般情况下，Kafka 生产环境中的 <code>auto.create.topics.enable</code> 参数会被设置为<code>false</code>，即自动创建主题这条路会被堵住。<code>kafka-topics.sh</code>脚本创建的方式一般由运维人员操作，普通用户无权过问。那么KafkaAdminClient就为普通用户提供了一个“口子”，或者将其集成到公司内部的资源申请、审核系统中会更加方便。普通用户在创建主题的时候，有可能由于误操作或其他原因而创建了不符合运维规范的主题，比如命名不规范，副本因子数太低等，这些都会影响后期的系统运维。如果创建主题的操作封装在资源申请、审核系统中，那么在前端就可以根据规则过滤不符合规范的申请操作。</p>
+<h4 id="主题合法性验证"><a href="#主题合法性验证" class="headerlink" title="主题合法性验证"></a>主题合法性验证</h4><p>Kafka broker 端有一个这样的参数：<code>create.topic.policy.class.name</code>，默认值为<code>null</code>，它提供了一个入口用来验证主题创建的合法性。使用方式很简单，只需要自定义实现<code>org.apache.kafka.server.policy.CreateTopicPolicy</code> 接口，比如下面示例中的 <code>PolicyDemo</code>。然后在broker 端的配置文件 <code>config/server.properties</code> 中配置参数 <code>create.topic.policy.class.name</code>的值为<code>org.apache.kafka.server.policy.PolicyDemo</code>，最后启动服务。PolicyDemo的代码参考代码清单4-6，主要实现接口中的<code>configure()</code>、<code>close()</code>及<code>validate()</code>方法，<code>configure()</code>方法会在Kafka服务启动的时候执行，<code>validate()</code>方法用来鉴定主题参数的合法性，其在创建主题时执行，<code>close()</code>方法在关闭Kafka服务时执行。</p>
+<h3 id="分区管理"><a href="#分区管理" class="headerlink" title="分区管理"></a>分区管理</h3><p>本节主要介绍与分区相关的知识和操作，包括优先副本的选举、分区重分配、复制限流、修改副本因子等内容。</p>
+<h4 id="优先副本的选择"><a href="#优先副本的选择" class="headerlink" title="优先副本的选择"></a>优先副本的选择</h4><p>分区使用多副本机制来提升可靠性，但只有leader副本对外提供读写服务，而follower副本只负责在内部进行消息的同步。如果一个分区的leader副本不可用，那么就意味着整个分区变得不可用，此时就需要Kafka从剩余的follower副本中挑选一个新的leader副本来继续对外提供服务。</p>
+<p>在创建主题的时候，该主题的分区及副本会尽可能均匀地分布到 Kafka 集群的各个broker节点上，对应的leader副本的分配也比较均匀。</p>
+<p>针对同一个分区而言，同一个broker节点中不可能出现它的多个副本，即Kafka集群的一个broker中最多只能有它的一个副本，我们可以将leader副本所在的broker节点叫作分区的leader节点，而follower副本所在的broker节点叫作分区的follower节点。</p>
+<p>随着时间的更替，Kafka 集群的broker 节点不可避免地会遇到宕机或崩溃的问题，当分区的leader节点发生故障时，其中一个follower节点就会成为新的leader节点，这样就会导致集群的负载不均衡，从而影响整体的健壮性和稳定性。当原来的leader节点恢复之后重新加入集群时，它只能成为一个新的follower节点而不再对外提供服务。</p>
+<p>为了能够有效地治理负载失衡的情况，Kafka引入了优先副本（preferredreplica）的概念。所谓的优先副本是指在 AR 集合列表中的第一个副本。理想情况下，优先副本就是该分区的leader副本，所以也可以称之为preferred leader。Kafka要确保所有主题的优先副本在Kafka集群中均匀分布，这样就保证了所有分区的leader均衡分布。如果leader分布过于集中，就会造成集群负载不均衡。</p>
+<p>所谓的优先副本的选举是指通过一定的方式促使优先副本选举为leader副本，以此来促进集群的负载均衡，这一行为也可以称为“分区平衡”。</p>
+<p>需要注意的是，分区平衡并不意味着Kafka集群的负载均衡，因为还要考虑集群中的分区分配是否均衡。更进一步，每个分区的leader副本的负载也是各不相同的，有些leader副本的负载很高，比如需要承载TPS为30000的负荷，而有些leader副本只需承载个位数的负荷。也就是说，就算集群中的分区分配均衡、leader 分配均衡，也并不能确保整个集群的负载就是均衡的，还需要其他一些硬性的指标来做进一步的衡量，这个会在后面的章节中涉及，本节只探讨优先副本的选举。</p>
+<p>在 Kafka 中可以提供分区自动平衡的功能，与此对应的 broker 端参数是<code>auto.leader.rebalance.enable</code>，此参数的默认值为<code>true</code>，即默认情况下此功能是开启的。如果开启分区自动平衡的功能，则 Kafka 的控制器会启动一个定时任务，这个定时任务会轮询所有的 broker节点，计算每个broker节点的分区不平衡率（broker中的不平衡率=非优先副本的leader个数/分区总数）是否超过<code>leader.imbalance.per.broker.percentage</code>参数配置的比值，默认值为 <code>10%</code>，如果超过设定的比值则会自动执行优先副本的选举动作以求分区平衡。执行周期由参数<code>leader.imbalance.check.interval.seconds</code>控制，默认值为300秒，即5分钟。</p>
+<p>不过在生产环境中不建议将auto.leader.rebalance.enable设置为默认的true，因为这可能引起负面的性能问题，也有可能引起客户端一定时间的阻塞。因为执行的时间无法自主掌控，如果在关键时期（比如电商大促波峰期）执行关键任务的关卡上执行优先副本的自动选举操作，势必会有业务阻塞、频繁超时之类的风险。前面也分析过，分区及副本的均衡也不能完全确保集群整体的均衡，并且集群中一定程度上的不均衡也是可以忍受的，为防止出现关键时期“掉链子”的行为，笔者建议还是将掌控权把控在自己的手中，可以针对此类相关的埋点指标设置相应的告警，在合适的时机执行合适的操作，而这个“合适的操作”就是指手动执行分区平衡。</p>
+<p>Kafka中<code>kafka-perferred-replica-election.sh</code>脚本提供了对分区leader副本进行重新平衡的功能。优先副本的选举过程是一个安全的过程，Kafka客户端可以自动感知分区leader副本的变更。</p>
+<p>在实际生产环境中，一般通过<code>kafka-perferred-replica-election.sh</code>脚本使用 <code>path-to-json-file</code> 参数来分批、手动地执行优先副本的选举操作。尤其是在应对大规模的 Kafka 集群时，理应杜绝采用非 <code>path-to-json-file</code>参数的选举操作方式。同时，优先副本的选举操作也要注意避开业务高峰期，以免带来性能方面的负面影响。</p>
+<h4 id="分区重分配"><a href="#分区重分配" class="headerlink" title="分区重分配"></a>分区重分配</h4><p>当集群中新增broker节点时，只有新创建的主题分区才有可能被分配到这个节点上，而之前的主题分区并不会自动分配到新加入的节点中，因为在它们被创建时还没有这个新节点，这样新节点的负载和原先节点的负载之间严重不均衡。为了解决上述问题，需要让分区副本再次进行合理的分配，也就是所谓的分区重分配。Kafka提供了 <code>kafka-reassign-partitions.sh</code> 脚本来执行分区重分配的工作，它可以在集群扩容、broker节点失效的场景下对分区进行迁移。</p>
+<h4 id="复制限流"><a href="#复制限流" class="headerlink" title="复制限流"></a>复制限流</h4><p>我们了解了分区重分配的本质在于数据复制，先增加新的副本，然后进行数据同步，最后删除旧的副本。数据复制会占用额外的资源，如果重分配的量太大必然会严重影响整体性能，尤其是处于业务高峰期的时候。减小重分配的粒度，以小批次的方式来操作是一种可行的解决思路。如果集群中某个主题或某个分区的流量在某段时间内特别大，那么只靠减小粒度是不足以应对的，这时就需要有一个限流的机制，可以对副本间的复制流量加以限制来保证重分配期间整体服务不会受太大的影响。</p>
+<p>副本间的复制限流有两种实现方式：<code>kafka-config.sh</code>脚本和<code>kafka-reassign-partitions.sh</code>脚本。</p>
+<p><code>kafka-config.sh</code>脚本主要以动态配置的方式来达到限流的目的，在broker级别有两个与复制限流相关的配置参数：<code>follower.replication.throttled.rate</code>和<code>leader.replication.throttled.rate</code>，前者用于设置follower副本复制的速度，后者用于设置leader副本传输的速度，它们的单位都是<code>B/s</code>。通常情况下，两者的配置值是相同的。</p>
+<p>在主题级别也有两个相关的参数来限制复制的速度：<code>leader.replication.throttled.replicas</code> 和 <code>follower.replication.throttled.replicas</code>，它们分别用来配置被限制速度的主题所对应的leader副本列表和follower副本列表。</p>
+<h4 id="修改副本因子"><a href="#修改副本因子" class="headerlink" title="修改副本因子"></a>修改副本因子</h4><p>在创建主题时填写了错误的副本因子数而需要修改，或者运行一段时间之后想要通过增加副本因子数来提高容错性和可靠性。创建主题之后我们还可以修改分区的个数，可以修改副本因子（副本数）。修改（指增加或减少）副本因子的功能也是通过<code>kafka-reassign-partition.sh</code>脚本实现的。</p>
+<h3 id="如何选择合适的分区数"><a href="#如何选择合适的分区数" class="headerlink" title="如何选择合适的分区数"></a>如何选择合适的分区数</h3><p>随着分区数的增加，相应的吞吐量也会有所增长。一旦分区数超过了某个阈值之后，整体的吞吐量也是不升反降的，同样说明了分区数越多并不会使吞吐量一直增长。</p>
+<p>如何选择合适的分区数？从某种意思来说，考验的是决策者的实战经验，更透彻地说，是对Kafka本身、业务应用、硬件资源、环境配置等多方面的考量而做出的选择。在设定完分区数，或者更确切地说是创建主题之后，还要对其追踪、监控、调优以求更好地利用它。</p>
+<blockquote class="colorquote danger"><p>对Kafka的学习就先到这里，基本上已经够大部分场景使用。这本书总的来说没有Flink那本写的好，要从原理、架构、思想的角度去阐述，怎么使用只是技术，有了核心思想，具体技术才能更好地理解，才能驾轻就熟。</p>
+</blockquote>
+
+</body></html>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/Study/Java/Kafka/Kafka%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89/">Kafka基础（一）</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=608c1408daac690012507aa2&amp;product=sop' async='async'></script>
+
+</div>
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 wanzixin&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" target="_blank" rel="noopener" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+<div class="column is-narrow has-text-centered">
+    <div class="dropdown is-up is-right is-hoverable" style="margin-top: -0.2em;">
+        <div class="dropdown-trigger">
+            <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu7">
+                <span class="icon">
+                    <i class="fas fa-globe"></i>
+                </span>
+                <span>English</span>
+                <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+            </button>
+        </div>
+        <div class="dropdown-menu has-text-left" role="menu">
+            <div class="dropdown-content">
+            
+                <a href="/Study/Java/Kafka/Kafka%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C%EF%BC%89/" class="dropdown-item">
+                    English
+                </a>
+            
+                <a href="/zh-cn/Study/Java/Kafka/Kafka%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C%EF%BC%89/" class="dropdown-item">
+                    简体中文
+                </a>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
